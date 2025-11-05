@@ -54,8 +54,7 @@ jobs:
       run: |
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
 
-    # Install CURL library on Linux runners for model downloading capabilities
-    # This enables dynamic attention allocation for system dependencies in distributed cognition frameworks
+    # Install CURL library on Linux runners to enable model downloading from URLs
     - name: Install libcurl (Linux)
       if: runner.os == 'Linux'
       run: |
@@ -82,8 +81,7 @@ jobs:
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: ctest --build-config ${{ matrix.build_type }}
 
-  # Alternative build path: Demonstrates building without CURL dependency
-  # This enables kernel tensor adaptation for environments where CURL is unnecessary
+  # Alternative build path: Build without CURL dependency using -DLLAMA_CURL=OFF
   # Useful for embedded systems, air-gapped environments, or minimal dependency configurations
   build-no-curl:
     runs-on: ${{ matrix.os }}
@@ -94,7 +92,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
         build_type: [Release]
-        c_compiler: [gcc, cl]
+        c_compiler: [gcc, clang, cl]
         include:
           - os: windows-latest
             c_compiler: cl
@@ -102,9 +100,14 @@ jobs:
           - os: ubuntu-latest
             c_compiler: gcc
             cpp_compiler: g++
+          - os: ubuntu-latest
+            c_compiler: clang
+            cpp_compiler: clang++
         exclude:
           - os: windows-latest
             c_compiler: gcc
+          - os: windows-latest
+            c_compiler: clang
           - os: ubuntu-latest
             c_compiler: cl
 
@@ -117,12 +120,11 @@ jobs:
       run: |
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
 
-    # Note: CURL library installation is intentionally omitted in this workflow
-    # Demonstrates building with -DLLAMA_CURL=OFF for minimal dependency configuration
+    # Note: CURL library installation is intentionally omitted in this build job
+    # to demonstrate building with minimal dependencies using -DLLAMA_CURL=OFF
 
     - name: Configure CMake (No CURL)
-      # Configure with CURL disabled for environments where it's unnecessary
-      # This demonstrates transcendently precise YAML engineering for dual pathway support
+      # Configure with CURL disabled for environments where it's not needed
       run: >
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
         -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
