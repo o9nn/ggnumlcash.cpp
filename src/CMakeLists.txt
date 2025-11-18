@@ -8,6 +8,7 @@ llama_add_compile_flags()
 
 add_library(llama
             ../include/llama.h
+            ../include/ontogenesis.h
             llama.cpp
             llama-adapter.cpp
             llama-arch.cpp
@@ -29,6 +30,7 @@ add_library(llama
             llama-model-loader.cpp
             llama-model-saver.cpp
             llama-model.cpp
+            llama-ontogenesis.cpp
             llama-quant.cpp
             llama-sampling.cpp
             llama-vocab.cpp
