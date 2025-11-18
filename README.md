@@ -17,6 +17,7 @@ GGNuCash is a specialized financial hardware platform built on the GGML tensor l
 - **Enterprise Security**: SOX, Basel III, MiFID II, and GDPR compliance built-in
 - **Real-time Analytics**: Portfolio risk management and options pricing at scale
 - **Cross-Platform**: Support for x86-64, ARM64, and specialized financial processors
+- **Ontogenesis**: Self-generating, evolving kernels through differential operators and genetic algorithms
 
 ## 📚 Comprehensive Documentation
 
@@ -75,7 +76,51 @@ llama-cli -hf ggml-org/gemma-3-1b-it-GGUF
 
 # Launch OpenAI-compatible API server
 llama-server -hf ggml-org/gemma-3-1b-it-GGUF
+
+# Run ontogenesis: self-generating kernels
+llama-ontogenesis
+
+# Run financial circuit simulation
+llama-financial-sim --demo
 ```
+
+## Ontogenesis: Self-Generating Kernels
+
+**NEW**: GGNuCash now includes **Ontogenesis**, a revolutionary system for self-generating, evolving computational kernels through differential operators and genetic algorithms.
+
+### What is Ontogenesis?
+
+Ontogenesis enables mathematical kernels to behave like living organisms:
+
+- **Self-Generate**: Create offspring through recursive self-composition using the chain rule
+- **Self-Optimize**: Improve computational "grip" through gradient ascent
+- **Self-Reproduce**: Combine genetic material via crossover and mutation
+- **Evolve**: Progress through life stages and improve fitness over generations
+
+### Quick Example
+
+```sh
+# Run all ontogenesis demonstrations
+./build/bin/llama-ontogenesis
+
+# Run specific example
+./build/bin/llama-ontogenesis 1  # Self-generation
+./build/bin/llama-ontogenesis 4  # Multi-generation evolution
+
+# Run tests
+./build/bin/test-ontogenesis
+```
+
+**Documentation**: See [`examples/ontogenesis/README.md`](examples/ontogenesis/README.md) for comprehensive documentation, mathematical foundations, and usage examples.
+
+**Key Features**:
+- B-series expansion as genetic code
+- Differential operators for reproduction (chain, product, quotient rules)
+- Development stages: Embryonic → Juvenile → Mature → Senescent
+- Tournament selection and genetic algorithms
+- Lineage tracking across generations
+
+This implements von Neumann's concept of self-reproducing automata at a higher mathematical level, creating "living mathematics" that adapts to computational domains.
 
 ## Description
 
