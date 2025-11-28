@@ -15,6 +15,16 @@ install(TARGETS ${ADMIN_TARGET} RUNTIME)
 target_link_libraries(${ADMIN_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 target_compile_features(${ADMIN_TARGET} PRIVATE cxx_std_17)
 
+# Virtual Device Demo (standalone, no model required)
+set(DEMO_TARGET demo-virtual-device)
+add_executable(${DEMO_TARGET}
+    demo-virtual-device.cpp
+    virtual-device.cpp
+    financial-device-driver.cpp
+)
+target_link_libraries(${DEMO_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${DEMO_TARGET} PRIVATE cxx_std_17)
+
 # Test for virtual device (no model required)
 set(VDEV_TEST_TARGET test-virtual-device)
 add_executable(${VDEV_TEST_TARGET}
