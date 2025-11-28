@@ -90,10 +90,12 @@ bool FinancialDeviceDriver::probe() {
         return false;
     }
     
-    // Test pin access
+    // Test pin access - verify we can read states
     for (const auto& pair : account_pins) {
         PinState state = device->get_pin_state(pair.second.pin_number);
-        (void)state;  // Suppress unused variable warning
+        if (state == PinState::FLOATING) {
+            // Expected for uninitialized pins
+        }
     }
     
     std::cout << "Hardware probe completed successfully.\n";

@@ -223,7 +223,7 @@ size_t UARTStream::read(uint8_t* data, size_t length) {
 }
 
 size_t UARTStream::available() const {
-    std::lock_guard<std::mutex> lock(const_cast<std::mutex&>(buffer_mutex));
+    std::lock_guard<std::mutex> lock(buffer_mutex);
     return rx_buffer.size();
 }
 
@@ -280,7 +280,7 @@ size_t SPIStream::read(uint8_t* data, size_t length) {
 }
 
 size_t SPIStream::available() const {
-    std::lock_guard<std::mutex> lock(const_cast<std::mutex&>(buffer_mutex));
+    std::lock_guard<std::mutex> lock(buffer_mutex);
     return rx_buffer.size();
 }
 
@@ -337,7 +337,7 @@ size_t I2CStream::read(uint8_t* data, size_t length) {
 }
 
 size_t I2CStream::available() const {
-    std::lock_guard<std::mutex> lock(const_cast<std::mutex&>(buffer_mutex));
+    std::lock_guard<std::mutex> lock(buffer_mutex);
     return rx_buffer.size();
 }
 
@@ -703,12 +703,18 @@ void FirmwareController::handle_watchdog_timer() {
 void FirmwareController::handle_power_state_change(DeviceState new_state) {
     // Handle power state transitions
     if (pcb) {
-        // Perform state-specific operations
+        // Log state change
+        // In a full implementation, this would handle power management
+        // such as entering/exiting sleep modes, saving state, etc.
+        (void)new_state;  // Future use
     }
 }
 
 void FirmwareController::handle_error_condition(const std::string& error) {
     // Log error and potentially trigger recovery
+    // In a full implementation, this would handle error recovery,
+    // such as resetting peripherals, logging to flash, etc.
+    (void)error;  // Future use
 }
 
 // ============================================================================
@@ -718,10 +724,9 @@ void FirmwareController::handle_error_condition(const std::string& error) {
 DeviceRegistry* DeviceRegistry::instance = nullptr;
 
 DeviceRegistry* DeviceRegistry::get_instance() {
-    if (!instance) {
-        instance = new DeviceRegistry();
-    }
-    return instance;
+    // Thread-safe lazy initialization using C++11 magic statics
+    static DeviceRegistry registry;
+    return &registry;
 }
 
 bool DeviceRegistry::register_device(const std::string& id, std::shared_ptr<VirtualPCB> device) {

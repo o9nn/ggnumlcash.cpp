@@ -116,7 +116,7 @@ protected:
     std::queue<uint8_t> tx_buffer;
     size_t rx_buffer_size;
     size_t tx_buffer_size;
-    std::mutex buffer_mutex;
+    mutable std::mutex buffer_mutex;  // mutable for const member functions
     
 public:
     IOStream(BusProtocol proto, size_t rx_size = 1024, size_t tx_size = 1024)
