@@ -59,6 +59,11 @@ public:
         double from_rate = get_rate(from_currency);
         double to_rate = get_rate(to_currency);
         
+        // Validate rates to prevent division by zero
+        if (from_rate == 0.0 || to_rate == 0.0) {
+            return amount; // Return original amount if rates are invalid
+        }
+        
         // Convert to base currency, then to target currency
         double base_amount = amount / from_rate;
         return base_amount * to_rate;

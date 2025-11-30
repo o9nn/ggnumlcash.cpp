@@ -12,7 +12,7 @@ private:
     int passed_tests = 0;
     
 public:
-    void run_test(const std::string& test_name, std::function<void()> test_func) {
+    void run_test(const std::string& test_name, const std::function<void()>& test_func) {
         total_tests++;
         std::cout << "Testing " << test_name << "...\n";
         try {

@@ -82,7 +82,24 @@ public:
         }
         
         accounts[code] = Account(code, name, type, parent, depth);
-        accounts[code].metadata.currency = Currency(currency, "$", "US Dollar", 2);
+        
+        // Set appropriate currency symbol and name based on currency code
+        std::string symbol = "$";
+        std::string name_str = "US Dollar";
+        int decimal_places = 2;
+        
+        if (currency == "EUR") { symbol = "€"; name_str = "Euro"; }
+        else if (currency == "GBP") { symbol = "£"; name_str = "British Pound"; }
+        else if (currency == "JPY") { symbol = "¥"; name_str = "Japanese Yen"; decimal_places = 0; }
+        else if (currency == "CAD") { symbol = "C$"; name_str = "Canadian Dollar"; }
+        else if (currency == "AUD") { symbol = "A$"; name_str = "Australian Dollar"; }
+        else if (currency == "CHF") { symbol = "Fr"; name_str = "Swiss Franc"; }
+        else if (currency == "CNY") { symbol = "¥"; name_str = "Chinese Yuan"; }
+        else if (currency == "INR") { symbol = "₹"; name_str = "Indian Rupee"; }
+        else if (currency == "BRL") { symbol = "R$"; name_str = "Brazilian Real"; }
+        else if (currency == "MXN") { symbol = "$"; name_str = "Mexican Peso"; }
+        
+        accounts[code].metadata.currency = Currency(currency, symbol, name_str, decimal_places);
         
         if (!parent.empty() && accounts.find(parent) != accounts.end()) {
             accounts[parent].children.push_back(code);
