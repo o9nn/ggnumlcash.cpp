@@ -275,9 +275,12 @@ double FormulaEngine::parse_expression(const std::string& expression,
             if (is_whole_word) {
                 std::stringstream ss;
                 ss << std::fixed << std::setprecision(10) << pair.second;
-                expr.replace(pos, pair.first.length(), ss.str());
+                std::string replacement = ss.str();
+                expr.replace(pos, pair.first.length(), replacement);
+                pos += replacement.length(); // Advance by replacement length, not variable length
+            } else {
+                pos += pair.first.length();
             }
-            pos += pair.first.length();
         }
     }
     
@@ -294,7 +297,13 @@ double FormulaEngine::parse_expression(const std::string& expression,
             if (op == '+') result += value;
             else if (op == '-') result -= value;
             else if (op == '*') result *= value;
-            else if (op == '/') result /= value;
+            else if (op == '/') {
+                if (std::abs(value) < 1e-10) {
+                    // Division by zero protection
+                    return 0.0; // or throw exception, depending on requirements
+                }
+                result /= value;
+            }
         } catch (...) {
             // Token might be an operator
             if (token.length() == 1 && (token[0] == '+' || token[0] == '-' || 
@@ -423,8 +432,8 @@ FinancialReport FinancialReportGenerator::generate_balance_sheet(
     cache_report(cache_key, report);
     ReportingPerformanceMonitor::instance().record_report_generation(report.generation_duration);
     
-    (void)coa; // Suppress unused warning for now
-    (void)comparative;
+    [[maybe_unused]] const ChartOfAccounts& _coa = coa; // Placeholder for future integration
+    [[maybe_unused]] bool _comparative = comparative;
     
     return report;
 }
@@ -575,17 +584,20 @@ std::vector<FinancialReport> FinancialReportGenerator::generate_batch_reports(
     
     for (size_t i = 0; i < count; i++) {
         for (const auto& report_type : report_types) {
-            futures.push_back(std::async(std::launch::async, [this, &coa, &report_type, &period]() {
-                if (report_type == "balance_sheet") {
-                    return generate_balance_sheet(coa, period);
-                } else if (report_type == "income_statement") {
-                    return generate_income_statement(coa, period);
-                } else if (report_type == "cash_flow") {
-                    return generate_cash_flow_statement(coa, period);
-                } else {
-                    return FinancialReport();
+            // Capture by value to avoid dangling references
+            futures.push_back(std::async(std::launch::async, 
+                [this, coa, report_type, period]() -> FinancialReport {
+                    if (report_type == "balance_sheet") {
+                        return generate_balance_sheet(coa, period);
+                    } else if (report_type == "income_statement") {
+                        return generate_income_statement(coa, period);
+                    } else if (report_type == "cash_flow") {
+                        return generate_cash_flow_statement(coa, period);
+                    } else {
+                        return FinancialReport();
+                    }
                 }
-            }));
+            ));
         }
     }
     

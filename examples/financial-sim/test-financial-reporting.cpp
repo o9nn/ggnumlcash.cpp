@@ -325,7 +325,8 @@ TEST(batch_report_generation_10k) {
     std::vector<std::string> report_types = {"balance_sheet", "income_statement", "cash_flow"};
     ReportPeriod period;
     
-    const size_t count = 3334; // 3334 * 3 types = 10,002 reports
+    const size_t target_count = 10000;
+    const size_t count = (target_count + report_types.size() - 1) / report_types.size(); // Calculate to reach target
     
     auto start = std::chrono::high_resolution_clock::now();
     auto reports = generator.generate_batch_reports(coa, report_types, period, count);
@@ -333,7 +334,7 @@ TEST(batch_report_generation_10k) {
     
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
     
-    ASSERT(reports.size() >= 10000);
+    ASSERT(reports.size() >= target_count);
     
     double avg_ms = static_cast<double>(duration.count()) / reports.size();
     
@@ -360,8 +361,6 @@ TEST(performance_monitor) {
     auto metrics = ReportingPerformanceMonitor::instance().get_metrics();
     
     ASSERT(metrics.total_reports_generated >= 10);
-    // Average generation time can be 0 if reports are very fast (< 1ms)
-    // ASSERT(metrics.avg_generation_time.count() >= 0); // Changed from > 0
     ASSERT(metrics.min_generation_time <= metrics.max_generation_time);
     
     std::string metrics_str = metrics.to_string();
