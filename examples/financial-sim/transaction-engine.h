@@ -42,6 +42,11 @@ private:
     static uint32_t sigma1(uint32_t x);
 };
 
+// Constants
+namespace TransactionConstants {
+    constexpr double BALANCE_TOLERANCE = 0.01; // Tolerance for floating point comparison
+}
+
 // ============================================================================
 // Transaction Entry - represents signal flow between nodes
 // ============================================================================
@@ -85,7 +90,7 @@ struct Transaction {
             total_debits += entry.debit_amount;
             total_credits += entry.credit_amount;
         }
-        return std::abs(total_debits - total_credits) < 0.01; // Allow small floating point errors
+        return std::abs(total_debits - total_credits) < TransactionConstants::BALANCE_TOLERANCE;
     }
     
     // Generate timestamp

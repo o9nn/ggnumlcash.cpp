@@ -494,8 +494,8 @@ std::vector<std::string> TransactionEngine::list_templates() const {
     std::lock_guard<std::mutex> lock(const_cast<std::mutex&>(template_mutex));
     
     std::vector<std::string> result;
-    for (const auto& [id, tmpl] : templates) {
-        result.push_back(id);
+    for (const auto& entry : templates) {
+        result.push_back(entry.first);
     }
     return result;
 }
@@ -532,8 +532,8 @@ std::vector<std::string> TransactionEngine::list_recurrences() const {
     std::lock_guard<std::mutex> lock(const_cast<std::mutex&>(recurrence_mutex));
     
     std::vector<std::string> result;
-    for (const auto& [id, schedule] : recurrence_schedules) {
-        result.push_back(id);
+    for (const auto& entry : recurrence_schedules) {
+        result.push_back(entry.first);
     }
     return result;
 }
@@ -662,7 +662,8 @@ MultiLegTransaction MultiLegTransaction::create_fx_swap(
     multi_leg.set_transaction_id(TransactionUtils::generate_transaction_id("FX-SWAP"));
     multi_leg.set_description("FX Swap: " + from_currency + " to " + to_currency);
     
-    // Spot leg
+    // Spot leg - using different accounts for demonstration
+    // In production, would use actual FX accounts
     Leg spot_leg;
     spot_leg.leg_id = "SPOT";
     spot_leg.type = LegType::FX_SWAP;
@@ -670,8 +671,10 @@ MultiLegTransaction MultiLegTransaction::create_fx_swap(
     spot_leg.notional_amount = spot_amount;
     spot_leg.settlement_date = spot_date;
     
-    TransactionEntry spot_from("1101", spot_amount, 0.0, "FX Swap Spot - Sell " + from_currency);
-    TransactionEntry spot_to("1101", 0.0, spot_amount, "FX Swap Spot - Buy " + to_currency);
+    // Simplified FX swap entries - in production would use proper FX accounts
+    // Here we model as gain/loss against cash
+    TransactionEntry spot_from("1101", 0.0, spot_amount, "FX Swap Spot - Sell " + from_currency);
+    TransactionEntry spot_to("4200", 0.0, spot_amount, "FX Swap Spot - Gain");
     spot_leg.entries.push_back(spot_from);
     spot_leg.entries.push_back(spot_to);
     
@@ -684,7 +687,7 @@ MultiLegTransaction MultiLegTransaction::create_fx_swap(
     forward_leg.settlement_date = forward_date;
     
     TransactionEntry fwd_from("1101", forward_amount, 0.0, "FX Swap Forward - Buy " + from_currency);
-    TransactionEntry fwd_to("1101", 0.0, forward_amount, "FX Swap Forward - Sell " + to_currency);
+    TransactionEntry fwd_to("4200", forward_amount, 0.0, "FX Swap Forward - Cost");
     forward_leg.entries.push_back(fwd_from);
     forward_leg.entries.push_back(fwd_to);
     
