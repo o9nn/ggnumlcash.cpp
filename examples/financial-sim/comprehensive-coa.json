@@ -1,0 +1,4666 @@
+{
+  "chart_of_accounts": {
+    "name": "Comprehensive Standard Chart of Accounts",
+    "description": "Comprehensive CoA with 500+ accounts covering multiple industries and business types",
+    "version": "1.0",
+    "base_currency": "USD",
+    "regulation_frameworks": [
+      "SOX",
+      "Basel III",
+      "MiFID II",
+      "GDPR"
+    ],
+    "account_count": 664,
+    "accounts": [
+      {
+        "code": "1000",
+        "name": "Assets",
+        "type": "ASSET",
+        "parent": null,
+        "currency": "USD",
+        "regulation": ""
+      },
+      {
+        "code": "1100",
+        "name": "Current Assets",
+        "type": "ASSET",
+        "parent": "1000",
+        "currency": "USD"
+      },
+      {
+        "code": "1101",
+        "name": "Petty Cash",
+        "type": "ASSET",
+        "parent": "1100",
+        "currency": "USD"
+      },
+      {
+        "code": "1102",
+        "name": "Cash - Operating Account",
+        "type": "ASSET",
+        "parent": "1100",
+        "currency": "USD"
+      },
+      {
+        "code": "1103",
+        "name": "Cash - Payroll Account",
+        "type": "ASSET",
+        "parent": "1100",
+        "currency": "USD"
+      },
+      {
+        "code": "1104",
+        "name": "Cash - Savings Account",
+        "type": "ASSET",
+        "parent": "1100",
+        "currency": "USD"
+      },
+      {
+        "code": "1105",
+        "name": "Cash - Money Market",
+        "type": "ASSET",
+        "parent": "1100",
+        "currency": "USD"
+      },
+      {
+        "code": "1106",
+        "name": "Cash - Foreign Currency - EUR",
+        "type": "ASSET",
+        "parent": "1100",
+        "currency": "EUR"
+      },
+      {
+        "code": "1107",
+        "name": "Cash - Foreign Currency - GBP",
+        "type": "ASSET",
+        "parent": "1100",
+        "currency": "GBP"
+      },
+      {
+        "code": "1108",
+        "name": "Cash - Foreign Currency - JPY",
+        "type": "ASSET",
+        "parent": "1100",
+        "currency": "JPY"
+      },
+      {
+        "code": "1110",
+        "name": "Accounts Receivable",
+        "type": "ASSET",
+        "parent": "1100",
+        "currency": "USD"
+      },
+      {
+        "code": "1111",
+        "name": "AR - Trade",
+        "type": "ASSET",
+        "parent": "1110",
+        "currency": "USD"
+      },
+      {
+        "code": "1112",
+        "name": "AR - Related Parties",
+        "type": "ASSET",
+        "parent": "1110",
+        "currency": "USD"
+      },
+      {
+        "code": "1113",
+        "name": "AR - Employees",
+        "type": "ASSET",
+        "parent": "1110",
+        "currency": "USD"
+      },
+      {
+        "code": "1114",
+        "name": "AR - Insurance Claims",
+        "type": "ASSET",
+        "parent": "1110",
+        "currency": "USD"
+      },
+      {
+        "code": "1115",
+        "name": "Allowance for Doubtful Accounts",
+        "type": "ASSET",
+        "parent": "1110",
+        "currency": "USD"
+      },
+      {
+        "code": "1116",
+        "name": "AR - Government Contracts",
+        "type": "ASSET",
+        "parent": "1110",
+        "currency": "USD"
+      },
+      {
+        "code": "1117",
+        "name": "AR - International",
+        "type": "ASSET",
+        "parent": "1110",
+        "currency": "USD"
+      },
+      {
+        "code": "1130",
+        "name": "Inventory",
+        "type": "ASSET",
+        "parent": "1100",
+        "currency": "USD"
+      },
+      {
+        "code": "1131",
+        "name": "Raw Materials",
+        "type": "ASSET",
+        "parent": "1130",
+        "currency": "USD"
+      },
+      {
+        "code": "1132",
+        "name": "Work in Process",
+        "type": "ASSET",
+        "parent": "1130",
+        "currency": "USD"
+      },
+      {
+        "code": "1133",
+        "name": "Finished Goods",
+        "type": "ASSET",
+        "parent": "1130",
+        "currency": "USD"
+      },
+      {
+        "code": "1134",
+        "name": "Merchandise Inventory",
+        "type": "ASSET",
+        "parent": "1130",
+        "currency": "USD"
+      },
+      {
+        "code": "1135",
+        "name": "Supplies Inventory",
+        "type": "ASSET",
+        "parent": "1130",
+        "currency": "USD"
+      },
+      {
+        "code": "1136",
+        "name": "Packaging Materials",
+        "type": "ASSET",
+        "parent": "1130",
+        "currency": "USD"
+      },
+      {
+        "code": "1137",
+        "name": "Manufacturing Supplies",
+        "type": "ASSET",
+        "parent": "1130",
+        "currency": "USD"
+      },
+      {
+        "code": "1138",
+        "name": "Inventory in Transit",
+        "type": "ASSET",
+        "parent": "1130",
+        "currency": "USD"
+      },
+      {
+        "code": "1139",
+        "name": "Obsolete Inventory",
+        "type": "ASSET",
+        "parent": "1130",
+        "currency": "USD"
+      },
+      {
+        "code": "1140",
+        "name": "Prepaid Expenses",
+        "type": "ASSET",
+        "parent": "1100",
+        "currency": "USD"
+      },
+      {
+        "code": "1141",
+        "name": "Prepaid Insurance",
+        "type": "ASSET",
+        "parent": "1140",
+        "currency": "USD"
+      },
+      {
+        "code": "1142",
+        "name": "Prepaid Rent",
+        "type": "ASSET",
+        "parent": "1140",
+        "currency": "USD"
+      },
+      {
+        "code": "1143",
+        "name": "Prepaid Taxes",
+        "type": "ASSET",
+        "parent": "1140",
+        "currency": "USD"
+      },
+      {
+        "code": "1144",
+        "name": "Prepaid Subscriptions",
+        "type": "ASSET",
+        "parent": "1140",
+        "currency": "USD"
+      },
+      {
+        "code": "1145",
+        "name": "Prepaid Licenses",
+        "type": "ASSET",
+        "parent": "1140",
+        "currency": "USD"
+      },
+      {
+        "code": "1150",
+        "name": "Short-term Investments",
+        "type": "ASSET",
+        "parent": "1100",
+        "currency": "USD"
+      },
+      {
+        "code": "1151",
+        "name": "Marketable Securities",
+        "type": "ASSET",
+        "parent": "1150",
+        "currency": "USD"
+      },
+      {
+        "code": "1152",
+        "name": "Treasury Bills",
+        "type": "ASSET",
+        "parent": "1150",
+        "currency": "USD"
+      },
+      {
+        "code": "1153",
+        "name": "Commercial Paper",
+        "type": "ASSET",
+        "parent": "1150",
+        "currency": "USD"
+      },
+      {
+        "code": "1154",
+        "name": "Certificates of Deposit",
+        "type": "ASSET",
+        "parent": "1150",
+        "currency": "USD"
+      },
+      {
+        "code": "1200",
+        "name": "Fixed Assets",
+        "type": "ASSET",
+        "parent": "1000",
+        "currency": "USD"
+      },
+      {
+        "code": "1210",
+        "name": "Land",
+        "type": "ASSET",
+        "parent": "1200",
+        "currency": "USD"
+      },
+      {
+        "code": "1220",
+        "name": "Buildings",
+        "type": "ASSET",
+        "parent": "1200",
+        "currency": "USD"
+      },
+      {
+        "code": "1221",
+        "name": "Buildings - Office",
+        "type": "ASSET",
+        "parent": "1220",
+        "currency": "USD"
+      },
+      {
+        "code": "1222",
+        "name": "Buildings - Warehouse",
+        "type": "ASSET",
+        "parent": "1220",
+        "currency": "USD"
+      },
+      {
+        "code": "1223",
+        "name": "Buildings - Manufacturing",
+        "type": "ASSET",
+        "parent": "1220",
+        "currency": "USD"
+      },
+      {
+        "code": "1224",
+        "name": "Buildings - Retail",
+        "type": "ASSET",
+        "parent": "1220",
+        "currency": "USD"
+      },
+      {
+        "code": "1225",
+        "name": "Accumulated Depreciation - Buildings",
+        "type": "ASSET",
+        "parent": "1220",
+        "currency": "USD"
+      },
+      {
+        "code": "1230",
+        "name": "Leasehold Improvements",
+        "type": "ASSET",
+        "parent": "1200",
+        "currency": "USD"
+      },
+      {
+        "code": "1235",
+        "name": "Accumulated Amortization - Leasehold",
+        "type": "ASSET",
+        "parent": "1230",
+        "currency": "USD"
+      },
+      {
+        "code": "1240",
+        "name": "Equipment",
+        "type": "ASSET",
+        "parent": "1200",
+        "currency": "USD"
+      },
+      {
+        "code": "1241",
+        "name": "Manufacturing Equipment",
+        "type": "ASSET",
+        "parent": "1240",
+        "currency": "USD"
+      },
+      {
+        "code": "1242",
+        "name": "Office Equipment",
+        "type": "ASSET",
+        "parent": "1240",
+        "currency": "USD"
+      },
+      {
+        "code": "1243",
+        "name": "Computer Equipment",
+        "type": "ASSET",
+        "parent": "1240",
+        "currency": "USD"
+      },
+      {
+        "code": "1244",
+        "name": "Network Equipment",
+        "type": "ASSET",
+        "parent": "1240",
+        "currency": "USD"
+      },
+      {
+        "code": "1245",
+        "name": "Accumulated Depreciation - Equipment",
+        "type": "ASSET",
+        "parent": "1240",
+        "currency": "USD"
+      },
+      {
+        "code": "1250",
+        "name": "Vehicles",
+        "type": "ASSET",
+        "parent": "1200",
+        "currency": "USD"
+      },
+      {
+        "code": "1255",
+        "name": "Accumulated Depreciation - Vehicles",
+        "type": "ASSET",
+        "parent": "1250",
+        "currency": "USD"
+      },
+      {
+        "code": "1260",
+        "name": "Furniture and Fixtures",
+        "type": "ASSET",
+        "parent": "1200",
+        "currency": "USD"
+      },
+      {
+        "code": "1265",
+        "name": "Accumulated Depreciation - Furniture",
+        "type": "ASSET",
+        "parent": "1260",
+        "currency": "USD"
+      },
+      {
+        "code": "1300",
+        "name": "Intangible Assets",
+        "type": "ASSET",
+        "parent": "1000",
+        "currency": "USD"
+      },
+      {
+        "code": "1310",
+        "name": "Patents",
+        "type": "ASSET",
+        "parent": "1300",
+        "currency": "USD"
+      },
+      {
+        "code": "1315",
+        "name": "Accumulated Amortization - Patents",
+        "type": "ASSET",
+        "parent": "1300",
+        "currency": "USD"
+      },
+      {
+        "code": "1320",
+        "name": "Trademarks",
+        "type": "ASSET",
+        "parent": "1300",
+        "currency": "USD"
+      },
+      {
+        "code": "1325",
+        "name": "Accumulated Amortization - Trademarks",
+        "type": "ASSET",
+        "parent": "1300",
+        "currency": "USD"
+      },
+      {
+        "code": "1330",
+        "name": "Copyrights",
+        "type": "ASSET",
+        "parent": "1300",
+        "currency": "USD"
+      },
+      {
+        "code": "1335",
+        "name": "Accumulated Amortization - Copyrights",
+        "type": "ASSET",
+        "parent": "1300",
+        "currency": "USD"
+      },
+      {
+        "code": "1340",
+        "name": "Goodwill",
+        "type": "ASSET",
+        "parent": "1300",
+        "currency": "USD"
+      },
+      {
+        "code": "1350",
+        "name": "Software Development Costs",
+        "type": "ASSET",
+        "parent": "1300",
+        "currency": "USD"
+      },
+      {
+        "code": "1355",
+        "name": "Accumulated Amortization - Software",
+        "type": "ASSET",
+        "parent": "1300",
+        "currency": "USD"
+      },
+      {
+        "code": "1360",
+        "name": "Customer Relationships",
+        "type": "ASSET",
+        "parent": "1300",
+        "currency": "USD"
+      },
+      {
+        "code": "1370",
+        "name": "Brand Names",
+        "type": "ASSET",
+        "parent": "1300",
+        "currency": "USD"
+      },
+      {
+        "code": "2000",
+        "name": "Liabilities",
+        "type": "LIABILITY",
+        "parent": null,
+        "currency": "USD"
+      },
+      {
+        "code": "2100",
+        "name": "Current Liabilities",
+        "type": "LIABILITY",
+        "parent": "2000",
+        "currency": "USD"
+      },
+      {
+        "code": "2110",
+        "name": "Accounts Payable",
+        "type": "LIABILITY",
+        "parent": "2100",
+        "currency": "USD"
+      },
+      {
+        "code": "2111",
+        "name": "AP - Trade",
+        "type": "LIABILITY",
+        "parent": "2110",
+        "currency": "USD"
+      },
+      {
+        "code": "2112",
+        "name": "AP - Related Parties",
+        "type": "LIABILITY",
+        "parent": "2110",
+        "currency": "USD"
+      },
+      {
+        "code": "2113",
+        "name": "AP - Utilities",
+        "type": "LIABILITY",
+        "parent": "2110",
+        "currency": "USD"
+      },
+      {
+        "code": "2114",
+        "name": "AP - Rent",
+        "type": "LIABILITY",
+        "parent": "2110",
+        "currency": "USD"
+      },
+      {
+        "code": "2120",
+        "name": "Short-term Loans",
+        "type": "LIABILITY",
+        "parent": "2100",
+        "currency": "USD"
+      },
+      {
+        "code": "2121",
+        "name": "Line of Credit",
+        "type": "LIABILITY",
+        "parent": "2120",
+        "currency": "USD"
+      },
+      {
+        "code": "2122",
+        "name": "Notes Payable - Current",
+        "type": "LIABILITY",
+        "parent": "2120",
+        "currency": "USD"
+      },
+      {
+        "code": "2130",
+        "name": "Accrued Expenses",
+        "type": "LIABILITY",
+        "parent": "2100",
+        "currency": "USD"
+      },
+      {
+        "code": "2131",
+        "name": "Accrued Salaries",
+        "type": "LIABILITY",
+        "parent": "2130",
+        "currency": "USD"
+      },
+      {
+        "code": "2132",
+        "name": "Accrued Taxes",
+        "type": "LIABILITY",
+        "parent": "2130",
+        "currency": "USD"
+      },
+      {
+        "code": "2133",
+        "name": "Accrued Interest",
+        "type": "LIABILITY",
+        "parent": "2130",
+        "currency": "USD"
+      },
+      {
+        "code": "2134",
+        "name": "Accrued Utilities",
+        "type": "LIABILITY",
+        "parent": "2130",
+        "currency": "USD"
+      },
+      {
+        "code": "2135",
+        "name": "Accrued Rent",
+        "type": "LIABILITY",
+        "parent": "2130",
+        "currency": "USD"
+      },
+      {
+        "code": "2136",
+        "name": "Accrued Commissions",
+        "type": "LIABILITY",
+        "parent": "2130",
+        "currency": "USD"
+      },
+      {
+        "code": "2140",
+        "name": "Deferred Revenue",
+        "type": "LIABILITY",
+        "parent": "2100",
+        "currency": "USD"
+      },
+      {
+        "code": "2141",
+        "name": "Unearned Service Revenue",
+        "type": "LIABILITY",
+        "parent": "2140",
+        "currency": "USD"
+      },
+      {
+        "code": "2142",
+        "name": "Customer Deposits",
+        "type": "LIABILITY",
+        "parent": "2140",
+        "currency": "USD"
+      },
+      {
+        "code": "2150",
+        "name": "Payroll Liabilities",
+        "type": "LIABILITY",
+        "parent": "2100",
+        "currency": "USD"
+      },
+      {
+        "code": "2151",
+        "name": "Federal Income Tax Withheld",
+        "type": "LIABILITY",
+        "parent": "2150",
+        "currency": "USD"
+      },
+      {
+        "code": "2152",
+        "name": "State Income Tax Withheld",
+        "type": "LIABILITY",
+        "parent": "2150",
+        "currency": "USD"
+      },
+      {
+        "code": "2153",
+        "name": "Social Security Tax Payable",
+        "type": "LIABILITY",
+        "parent": "2150",
+        "currency": "USD"
+      },
+      {
+        "code": "2154",
+        "name": "Medicare Tax Payable",
+        "type": "LIABILITY",
+        "parent": "2150",
+        "currency": "USD"
+      },
+      {
+        "code": "2155",
+        "name": "401k Contributions Payable",
+        "type": "LIABILITY",
+        "parent": "2150",
+        "currency": "USD"
+      },
+      {
+        "code": "2156",
+        "name": "Health Insurance Payable",
+        "type": "LIABILITY",
+        "parent": "2150",
+        "currency": "USD"
+      },
+      {
+        "code": "2200",
+        "name": "Long-term Liabilities",
+        "type": "LIABILITY",
+        "parent": "2000",
+        "currency": "USD"
+      },
+      {
+        "code": "2210",
+        "name": "Long-term Loans",
+        "type": "LIABILITY",
+        "parent": "2200",
+        "currency": "USD"
+      },
+      {
+        "code": "2220",
+        "name": "Bonds Payable",
+        "type": "LIABILITY",
+        "parent": "2200",
+        "currency": "USD"
+      },
+      {
+        "code": "2230",
+        "name": "Mortgage Payable",
+        "type": "LIABILITY",
+        "parent": "2200",
+        "currency": "USD"
+      },
+      {
+        "code": "2240",
+        "name": "Deferred Tax Liability",
+        "type": "LIABILITY",
+        "parent": "2200",
+        "currency": "USD"
+      },
+      {
+        "code": "2250",
+        "name": "Pension Liability",
+        "type": "LIABILITY",
+        "parent": "2200",
+        "currency": "USD"
+      },
+      {
+        "code": "2260",
+        "name": "Lease Obligations",
+        "type": "LIABILITY",
+        "parent": "2200",
+        "currency": "USD"
+      },
+      {
+        "code": "3000",
+        "name": "Equity",
+        "type": "EQUITY",
+        "parent": null,
+        "currency": "USD"
+      },
+      {
+        "code": "3100",
+        "name": "Owner's Equity",
+        "type": "EQUITY",
+        "parent": "3000",
+        "currency": "USD"
+      },
+      {
+        "code": "3200",
+        "name": "Retained Earnings",
+        "type": "EQUITY",
+        "parent": "3000",
+        "currency": "USD"
+      },
+      {
+        "code": "3300",
+        "name": "Common Stock",
+        "type": "EQUITY",
+        "parent": "3000",
+        "currency": "USD"
+      },
+      {
+        "code": "3310",
+        "name": "Preferred Stock",
+        "type": "EQUITY",
+        "parent": "3000",
+        "currency": "USD"
+      },
+      {
+        "code": "3400",
+        "name": "Additional Paid-in Capital",
+        "type": "EQUITY",
+        "parent": "3000",
+        "currency": "USD"
+      },
+      {
+        "code": "3500",
+        "name": "Treasury Stock",
+        "type": "EQUITY",
+        "parent": "3000",
+        "currency": "USD"
+      },
+      {
+        "code": "3600",
+        "name": "Accumulated Other Comprehensive Income",
+        "type": "EQUITY",
+        "parent": "3000",
+        "currency": "USD"
+      },
+      {
+        "code": "3700",
+        "name": "Dividends",
+        "type": "EQUITY",
+        "parent": "3000",
+        "currency": "USD"
+      },
+      {
+        "code": "4000",
+        "name": "Revenue",
+        "type": "REVENUE",
+        "parent": null,
+        "currency": "USD"
+      },
+      {
+        "code": "4100",
+        "name": "Sales Revenue",
+        "type": "REVENUE",
+        "parent": "4000",
+        "currency": "USD"
+      },
+      {
+        "code": "4110",
+        "name": "Product Sales",
+        "type": "REVENUE",
+        "parent": "4100",
+        "currency": "USD"
+      },
+      {
+        "code": "4111",
+        "name": "Domestic Sales",
+        "type": "REVENUE",
+        "parent": "4100",
+        "currency": "USD"
+      },
+      {
+        "code": "4112",
+        "name": "International Sales",
+        "type": "REVENUE",
+        "parent": "4100",
+        "currency": "USD"
+      },
+      {
+        "code": "4113",
+        "name": "Online Sales",
+        "type": "REVENUE",
+        "parent": "4100",
+        "currency": "USD"
+      },
+      {
+        "code": "4114",
+        "name": "Retail Sales",
+        "type": "REVENUE",
+        "parent": "4100",
+        "currency": "USD"
+      },
+      {
+        "code": "4115",
+        "name": "Wholesale Sales",
+        "type": "REVENUE",
+        "parent": "4100",
+        "currency": "USD"
+      },
+      {
+        "code": "4120",
+        "name": "Sales Returns and Allowances",
+        "type": "REVENUE",
+        "parent": "4100",
+        "currency": "USD"
+      },
+      {
+        "code": "4130",
+        "name": "Sales Discounts",
+        "type": "REVENUE",
+        "parent": "4100",
+        "currency": "USD"
+      },
+      {
+        "code": "4200",
+        "name": "Service Revenue",
+        "type": "REVENUE",
+        "parent": "4000",
+        "currency": "USD"
+      },
+      {
+        "code": "4210",
+        "name": "Consulting Revenue",
+        "type": "REVENUE",
+        "parent": "4200",
+        "currency": "USD"
+      },
+      {
+        "code": "4220",
+        "name": "Professional Fees",
+        "type": "REVENUE",
+        "parent": "4200",
+        "currency": "USD"
+      },
+      {
+        "code": "4230",
+        "name": "Billable Hours",
+        "type": "REVENUE",
+        "parent": "4200",
+        "currency": "USD"
+      },
+      {
+        "code": "4240",
+        "name": "Retainer Fees",
+        "type": "REVENUE",
+        "parent": "4200",
+        "currency": "USD"
+      },
+      {
+        "code": "4250",
+        "name": "Subscription Revenue",
+        "type": "REVENUE",
+        "parent": "4200",
+        "currency": "USD"
+      },
+      {
+        "code": "4251",
+        "name": "Monthly Subscriptions",
+        "type": "REVENUE",
+        "parent": "4200",
+        "currency": "USD"
+      },
+      {
+        "code": "4252",
+        "name": "Annual Subscriptions",
+        "type": "REVENUE",
+        "parent": "4200",
+        "currency": "USD"
+      },
+      {
+        "code": "4260",
+        "name": "Maintenance Revenue",
+        "type": "REVENUE",
+        "parent": "4200",
+        "currency": "USD"
+      },
+      {
+        "code": "4270",
+        "name": "Support Revenue",
+        "type": "REVENUE",
+        "parent": "4200",
+        "currency": "USD"
+      },
+      {
+        "code": "4300",
+        "name": "Interest Income",
+        "type": "REVENUE",
+        "parent": "4000",
+        "currency": "USD"
+      },
+      {
+        "code": "4400",
+        "name": "Rental Income",
+        "type": "REVENUE",
+        "parent": "4000",
+        "currency": "USD"
+      },
+      {
+        "code": "4410",
+        "name": "Rental Income - Residential",
+        "type": "REVENUE",
+        "parent": "4000",
+        "currency": "USD"
+      },
+      {
+        "code": "4420",
+        "name": "Rental Income - Commercial",
+        "type": "REVENUE",
+        "parent": "4000",
+        "currency": "USD"
+      },
+      {
+        "code": "4500",
+        "name": "Dividend Income",
+        "type": "REVENUE",
+        "parent": "4000",
+        "currency": "USD"
+      },
+      {
+        "code": "4600",
+        "name": "Gain on Sale of Assets",
+        "type": "REVENUE",
+        "parent": "4000",
+        "currency": "USD"
+      },
+      {
+        "code": "4700",
+        "name": "Foreign Exchange Gain",
+        "type": "REVENUE",
+        "parent": "4000",
+        "currency": "USD"
+      },
+      {
+        "code": "4800",
+        "name": "Miscellaneous Revenue",
+        "type": "REVENUE",
+        "parent": "4000",
+        "currency": "USD"
+      },
+      {
+        "code": "5000",
+        "name": "Expenses",
+        "type": "EXPENSE",
+        "parent": null,
+        "currency": "USD"
+      },
+      {
+        "code": "5100",
+        "name": "Cost of Goods Sold",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "5110",
+        "name": "Direct Materials",
+        "type": "EXPENSE",
+        "parent": "5100",
+        "currency": "USD"
+      },
+      {
+        "code": "5120",
+        "name": "Direct Labor",
+        "type": "EXPENSE",
+        "parent": "5100",
+        "currency": "USD"
+      },
+      {
+        "code": "5130",
+        "name": "Manufacturing Overhead",
+        "type": "EXPENSE",
+        "parent": "5100",
+        "currency": "USD"
+      },
+      {
+        "code": "5140",
+        "name": "Freight In",
+        "type": "EXPENSE",
+        "parent": "5100",
+        "currency": "USD"
+      },
+      {
+        "code": "5150",
+        "name": "Inventory Shrinkage",
+        "type": "EXPENSE",
+        "parent": "5100",
+        "currency": "USD"
+      },
+      {
+        "code": "5200",
+        "name": "Operating Expenses",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "5210",
+        "name": "Salaries and Wages",
+        "type": "EXPENSE",
+        "parent": "5200",
+        "currency": "USD"
+      },
+      {
+        "code": "5211",
+        "name": "Executive Salaries",
+        "type": "EXPENSE",
+        "parent": "5210",
+        "currency": "USD"
+      },
+      {
+        "code": "5212",
+        "name": "Administrative Salaries",
+        "type": "EXPENSE",
+        "parent": "5210",
+        "currency": "USD"
+      },
+      {
+        "code": "5213",
+        "name": "Sales Salaries",
+        "type": "EXPENSE",
+        "parent": "5210",
+        "currency": "USD"
+      },
+      {
+        "code": "5214",
+        "name": "Production Wages",
+        "type": "EXPENSE",
+        "parent": "5210",
+        "currency": "USD"
+      },
+      {
+        "code": "5215",
+        "name": "Overtime",
+        "type": "EXPENSE",
+        "parent": "5210",
+        "currency": "USD"
+      },
+      {
+        "code": "5216",
+        "name": "Bonuses",
+        "type": "EXPENSE",
+        "parent": "5210",
+        "currency": "USD"
+      },
+      {
+        "code": "5217",
+        "name": "Commissions",
+        "type": "EXPENSE",
+        "parent": "5210",
+        "currency": "USD"
+      },
+      {
+        "code": "5220",
+        "name": "Employee Benefits",
+        "type": "EXPENSE",
+        "parent": "5200",
+        "currency": "USD"
+      },
+      {
+        "code": "5221",
+        "name": "Health Insurance",
+        "type": "EXPENSE",
+        "parent": "5220",
+        "currency": "USD"
+      },
+      {
+        "code": "5222",
+        "name": "Dental Insurance",
+        "type": "EXPENSE",
+        "parent": "5220",
+        "currency": "USD"
+      },
+      {
+        "code": "5223",
+        "name": "Life Insurance",
+        "type": "EXPENSE",
+        "parent": "5220",
+        "currency": "USD"
+      },
+      {
+        "code": "5224",
+        "name": "401k Matching",
+        "type": "EXPENSE",
+        "parent": "5220",
+        "currency": "USD"
+      },
+      {
+        "code": "5225",
+        "name": "Pension Contributions",
+        "type": "EXPENSE",
+        "parent": "5220",
+        "currency": "USD"
+      },
+      {
+        "code": "5226",
+        "name": "Workers Compensation",
+        "type": "EXPENSE",
+        "parent": "5220",
+        "currency": "USD"
+      },
+      {
+        "code": "5227",
+        "name": "Unemployment Insurance",
+        "type": "EXPENSE",
+        "parent": "5220",
+        "currency": "USD"
+      },
+      {
+        "code": "5230",
+        "name": "Rent and Occupancy",
+        "type": "EXPENSE",
+        "parent": "5200",
+        "currency": "USD"
+      },
+      {
+        "code": "5231",
+        "name": "Office Rent",
+        "type": "EXPENSE",
+        "parent": "5230",
+        "currency": "USD"
+      },
+      {
+        "code": "5232",
+        "name": "Warehouse Rent",
+        "type": "EXPENSE",
+        "parent": "5230",
+        "currency": "USD"
+      },
+      {
+        "code": "5233",
+        "name": "Electricity",
+        "type": "EXPENSE",
+        "parent": "5230",
+        "currency": "USD"
+      },
+      {
+        "code": "5234",
+        "name": "Gas",
+        "type": "EXPENSE",
+        "parent": "5230",
+        "currency": "USD"
+      },
+      {
+        "code": "5235",
+        "name": "Water",
+        "type": "EXPENSE",
+        "parent": "5230",
+        "currency": "USD"
+      },
+      {
+        "code": "5236",
+        "name": "Internet",
+        "type": "EXPENSE",
+        "parent": "5230",
+        "currency": "USD"
+      },
+      {
+        "code": "5237",
+        "name": "Telephone",
+        "type": "EXPENSE",
+        "parent": "5230",
+        "currency": "USD"
+      },
+      {
+        "code": "5240",
+        "name": "Marketing and Advertising",
+        "type": "EXPENSE",
+        "parent": "5200",
+        "currency": "USD"
+      },
+      {
+        "code": "5241",
+        "name": "Digital Advertising",
+        "type": "EXPENSE",
+        "parent": "5240",
+        "currency": "USD"
+      },
+      {
+        "code": "5242",
+        "name": "Print Advertising",
+        "type": "EXPENSE",
+        "parent": "5240",
+        "currency": "USD"
+      },
+      {
+        "code": "5243",
+        "name": "Trade Shows",
+        "type": "EXPENSE",
+        "parent": "5240",
+        "currency": "USD"
+      },
+      {
+        "code": "5244",
+        "name": "Promotional Materials",
+        "type": "EXPENSE",
+        "parent": "5240",
+        "currency": "USD"
+      },
+      {
+        "code": "5245",
+        "name": "Website Marketing",
+        "type": "EXPENSE",
+        "parent": "5240",
+        "currency": "USD"
+      },
+      {
+        "code": "5246",
+        "name": "Social Media Marketing",
+        "type": "EXPENSE",
+        "parent": "5240",
+        "currency": "USD"
+      },
+      {
+        "code": "5250",
+        "name": "Professional Services",
+        "type": "EXPENSE",
+        "parent": "5200",
+        "currency": "USD"
+      },
+      {
+        "code": "5251",
+        "name": "Legal Fees",
+        "type": "EXPENSE",
+        "parent": "5250",
+        "currency": "USD"
+      },
+      {
+        "code": "5252",
+        "name": "Accounting Fees",
+        "type": "EXPENSE",
+        "parent": "5250",
+        "currency": "USD"
+      },
+      {
+        "code": "5253",
+        "name": "Consulting Fees",
+        "type": "EXPENSE",
+        "parent": "5250",
+        "currency": "USD"
+      },
+      {
+        "code": "5254",
+        "name": "Audit Fees",
+        "type": "EXPENSE",
+        "parent": "5250",
+        "currency": "USD"
+      },
+      {
+        "code": "5260",
+        "name": "Insurance",
+        "type": "EXPENSE",
+        "parent": "5200",
+        "currency": "USD"
+      },
+      {
+        "code": "5261",
+        "name": "General Liability Insurance",
+        "type": "EXPENSE",
+        "parent": "5260",
+        "currency": "USD"
+      },
+      {
+        "code": "5262",
+        "name": "Property Insurance",
+        "type": "EXPENSE",
+        "parent": "5260",
+        "currency": "USD"
+      },
+      {
+        "code": "5263",
+        "name": "Auto Insurance",
+        "type": "EXPENSE",
+        "parent": "5260",
+        "currency": "USD"
+      },
+      {
+        "code": "5264",
+        "name": "Directors and Officers Insurance",
+        "type": "EXPENSE",
+        "parent": "5260",
+        "currency": "USD"
+      },
+      {
+        "code": "5270",
+        "name": "Office and Administrative",
+        "type": "EXPENSE",
+        "parent": "5200",
+        "currency": "USD"
+      },
+      {
+        "code": "5271",
+        "name": "Office Supplies",
+        "type": "EXPENSE",
+        "parent": "5270",
+        "currency": "USD"
+      },
+      {
+        "code": "5272",
+        "name": "Postage and Delivery",
+        "type": "EXPENSE",
+        "parent": "5270",
+        "currency": "USD"
+      },
+      {
+        "code": "5273",
+        "name": "Printing and Copying",
+        "type": "EXPENSE",
+        "parent": "5270",
+        "currency": "USD"
+      },
+      {
+        "code": "5274",
+        "name": "Subscriptions and Memberships",
+        "type": "EXPENSE",
+        "parent": "5270",
+        "currency": "USD"
+      },
+      {
+        "code": "5275",
+        "name": "Software Licenses",
+        "type": "EXPENSE",
+        "parent": "5270",
+        "currency": "USD"
+      },
+      {
+        "code": "5280",
+        "name": "Travel and Entertainment",
+        "type": "EXPENSE",
+        "parent": "5200",
+        "currency": "USD"
+      },
+      {
+        "code": "5281",
+        "name": "Airfare",
+        "type": "EXPENSE",
+        "parent": "5280",
+        "currency": "USD"
+      },
+      {
+        "code": "5282",
+        "name": "Hotels",
+        "type": "EXPENSE",
+        "parent": "5280",
+        "currency": "USD"
+      },
+      {
+        "code": "5283",
+        "name": "Meals",
+        "type": "EXPENSE",
+        "parent": "5280",
+        "currency": "USD"
+      },
+      {
+        "code": "5284",
+        "name": "Car Rental",
+        "type": "EXPENSE",
+        "parent": "5280",
+        "currency": "USD"
+      },
+      {
+        "code": "5285",
+        "name": "Client Entertainment",
+        "type": "EXPENSE",
+        "parent": "5280",
+        "currency": "USD"
+      },
+      {
+        "code": "5290",
+        "name": "Maintenance and Repairs",
+        "type": "EXPENSE",
+        "parent": "5200",
+        "currency": "USD"
+      },
+      {
+        "code": "5291",
+        "name": "Building Maintenance",
+        "type": "EXPENSE",
+        "parent": "5290",
+        "currency": "USD"
+      },
+      {
+        "code": "5292",
+        "name": "Equipment Repairs",
+        "type": "EXPENSE",
+        "parent": "5290",
+        "currency": "USD"
+      },
+      {
+        "code": "5293",
+        "name": "Vehicle Maintenance",
+        "type": "EXPENSE",
+        "parent": "5290",
+        "currency": "USD"
+      },
+      {
+        "code": "5294",
+        "name": "Computer Repairs",
+        "type": "EXPENSE",
+        "parent": "5290",
+        "currency": "USD"
+      },
+      {
+        "code": "5300",
+        "name": "Depreciation and Amortization",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "5310",
+        "name": "Depreciation - Buildings",
+        "type": "EXPENSE",
+        "parent": "5300",
+        "currency": "USD"
+      },
+      {
+        "code": "5320",
+        "name": "Depreciation - Equipment",
+        "type": "EXPENSE",
+        "parent": "5300",
+        "currency": "USD"
+      },
+      {
+        "code": "5330",
+        "name": "Depreciation - Vehicles",
+        "type": "EXPENSE",
+        "parent": "5300",
+        "currency": "USD"
+      },
+      {
+        "code": "5340",
+        "name": "Amortization - Intangibles",
+        "type": "EXPENSE",
+        "parent": "5300",
+        "currency": "USD"
+      },
+      {
+        "code": "5400",
+        "name": "Interest and Finance Charges",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "5410",
+        "name": "Interest Expense - Loans",
+        "type": "EXPENSE",
+        "parent": "5400",
+        "currency": "USD"
+      },
+      {
+        "code": "5420",
+        "name": "Interest Expense - Credit Cards",
+        "type": "EXPENSE",
+        "parent": "5400",
+        "currency": "USD"
+      },
+      {
+        "code": "5430",
+        "name": "Bank Charges",
+        "type": "EXPENSE",
+        "parent": "5400",
+        "currency": "USD"
+      },
+      {
+        "code": "5440",
+        "name": "Finance Charges",
+        "type": "EXPENSE",
+        "parent": "5400",
+        "currency": "USD"
+      },
+      {
+        "code": "5500",
+        "name": "Taxes",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "5510",
+        "name": "Federal Income Tax",
+        "type": "EXPENSE",
+        "parent": "5500",
+        "currency": "USD"
+      },
+      {
+        "code": "5520",
+        "name": "State Income Tax",
+        "type": "EXPENSE",
+        "parent": "5500",
+        "currency": "USD"
+      },
+      {
+        "code": "5530",
+        "name": "Property Tax",
+        "type": "EXPENSE",
+        "parent": "5500",
+        "currency": "USD"
+      },
+      {
+        "code": "5540",
+        "name": "Sales Tax",
+        "type": "EXPENSE",
+        "parent": "5500",
+        "currency": "USD"
+      },
+      {
+        "code": "5550",
+        "name": "Payroll Taxes",
+        "type": "EXPENSE",
+        "parent": "5500",
+        "currency": "USD"
+      },
+      {
+        "code": "5600",
+        "name": "Other Expenses",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "5610",
+        "name": "Bad Debt Expense",
+        "type": "EXPENSE",
+        "parent": "5600",
+        "currency": "USD"
+      },
+      {
+        "code": "5620",
+        "name": "Loss on Sale of Assets",
+        "type": "EXPENSE",
+        "parent": "5600",
+        "currency": "USD"
+      },
+      {
+        "code": "5630",
+        "name": "Foreign Exchange Loss",
+        "type": "EXPENSE",
+        "parent": "5600",
+        "currency": "USD"
+      },
+      {
+        "code": "5640",
+        "name": "Donations",
+        "type": "EXPENSE",
+        "parent": "5600",
+        "currency": "USD"
+      },
+      {
+        "code": "5650",
+        "name": "Research and Development",
+        "type": "EXPENSE",
+        "parent": "5600",
+        "currency": "USD"
+      },
+      {
+        "code": "5660",
+        "name": "Training and Development",
+        "type": "EXPENSE",
+        "parent": "5600",
+        "currency": "USD"
+      },
+      {
+        "code": "5670",
+        "name": "Licenses and Permits",
+        "type": "EXPENSE",
+        "parent": "5600",
+        "currency": "USD"
+      },
+      {
+        "code": "5680",
+        "name": "Miscellaneous Expense",
+        "type": "EXPENSE",
+        "parent": "5600",
+        "currency": "USD"
+      },
+      {
+        "code": "6000",
+        "name": "Retail Operations",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "6010",
+        "name": "Point of Sale Systems",
+        "type": "EXPENSE",
+        "parent": "6000",
+        "currency": "USD"
+      },
+      {
+        "code": "6020",
+        "name": "Store Fixtures",
+        "type": "EXPENSE",
+        "parent": "6000",
+        "currency": "USD"
+      },
+      {
+        "code": "6030",
+        "name": "Inventory Management Systems",
+        "type": "EXPENSE",
+        "parent": "6000",
+        "currency": "USD"
+      },
+      {
+        "code": "6040",
+        "name": "Loss Prevention",
+        "type": "EXPENSE",
+        "parent": "6000",
+        "currency": "USD"
+      },
+      {
+        "code": "6050",
+        "name": "Store Display Materials",
+        "type": "EXPENSE",
+        "parent": "6000",
+        "currency": "USD"
+      },
+      {
+        "code": "6100",
+        "name": "Manufacturing Operations",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "6110",
+        "name": "Factory Supervision",
+        "type": "EXPENSE",
+        "parent": "6100",
+        "currency": "USD"
+      },
+      {
+        "code": "6120",
+        "name": "Quality Control",
+        "type": "EXPENSE",
+        "parent": "6100",
+        "currency": "USD"
+      },
+      {
+        "code": "6130",
+        "name": "Production Planning",
+        "type": "EXPENSE",
+        "parent": "6100",
+        "currency": "USD"
+      },
+      {
+        "code": "6140",
+        "name": "Factory Supplies",
+        "type": "EXPENSE",
+        "parent": "6100",
+        "currency": "USD"
+      },
+      {
+        "code": "6150",
+        "name": "Tool and Die Maintenance",
+        "type": "EXPENSE",
+        "parent": "6100",
+        "currency": "USD"
+      },
+      {
+        "code": "6200",
+        "name": "Technology Operations",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "6210",
+        "name": "Cloud Hosting",
+        "type": "EXPENSE",
+        "parent": "6200",
+        "currency": "USD"
+      },
+      {
+        "code": "6220",
+        "name": "API Services",
+        "type": "EXPENSE",
+        "parent": "6200",
+        "currency": "USD"
+      },
+      {
+        "code": "6230",
+        "name": "Database Services",
+        "type": "EXPENSE",
+        "parent": "6200",
+        "currency": "USD"
+      },
+      {
+        "code": "6240",
+        "name": "Development Tools",
+        "type": "EXPENSE",
+        "parent": "6200",
+        "currency": "USD"
+      },
+      {
+        "code": "6250",
+        "name": "Security and Compliance",
+        "type": "EXPENSE",
+        "parent": "6200",
+        "currency": "USD"
+      },
+      {
+        "code": "6300",
+        "name": "Healthcare Operations",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "6310",
+        "name": "Medical Supplies",
+        "type": "EXPENSE",
+        "parent": "6300",
+        "currency": "USD"
+      },
+      {
+        "code": "6320",
+        "name": "Pharmaceutical Costs",
+        "type": "EXPENSE",
+        "parent": "6300",
+        "currency": "USD"
+      },
+      {
+        "code": "6330",
+        "name": "Lab Equipment",
+        "type": "EXPENSE",
+        "parent": "6300",
+        "currency": "USD"
+      },
+      {
+        "code": "6340",
+        "name": "Patient Care Services",
+        "type": "EXPENSE",
+        "parent": "6300",
+        "currency": "USD"
+      },
+      {
+        "code": "6350",
+        "name": "Medical Waste Disposal",
+        "type": "EXPENSE",
+        "parent": "6300",
+        "currency": "USD"
+      },
+      {
+        "code": "6400",
+        "name": "Real Estate Operations",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "6410",
+        "name": "Property Management",
+        "type": "EXPENSE",
+        "parent": "6400",
+        "currency": "USD"
+      },
+      {
+        "code": "6420",
+        "name": "Tenant Relations",
+        "type": "EXPENSE",
+        "parent": "6400",
+        "currency": "USD"
+      },
+      {
+        "code": "6430",
+        "name": "Property Inspections",
+        "type": "EXPENSE",
+        "parent": "6400",
+        "currency": "USD"
+      },
+      {
+        "code": "6440",
+        "name": "Landscaping",
+        "type": "EXPENSE",
+        "parent": "6400",
+        "currency": "USD"
+      },
+      {
+        "code": "6450",
+        "name": "Snow Removal",
+        "type": "EXPENSE",
+        "parent": "6400",
+        "currency": "USD"
+      },
+      {
+        "code": "6500",
+        "name": "Restaurant Operations",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "6510",
+        "name": "Food Costs",
+        "type": "EXPENSE",
+        "parent": "6500",
+        "currency": "USD"
+      },
+      {
+        "code": "6520",
+        "name": "Beverage Costs",
+        "type": "EXPENSE",
+        "parent": "6500",
+        "currency": "USD"
+      },
+      {
+        "code": "6530",
+        "name": "Kitchen Equipment Maintenance",
+        "type": "EXPENSE",
+        "parent": "6500",
+        "currency": "USD"
+      },
+      {
+        "code": "6540",
+        "name": "Menu Development",
+        "type": "EXPENSE",
+        "parent": "6500",
+        "currency": "USD"
+      },
+      {
+        "code": "6550",
+        "name": "Food Safety Compliance",
+        "type": "EXPENSE",
+        "parent": "6500",
+        "currency": "USD"
+      },
+      {
+        "code": "6011-0",
+        "name": "POS Terminal 1",
+        "type": "EXPENSE",
+        "parent": "6010",
+        "currency": "USD"
+      },
+      {
+        "code": "6011-1",
+        "name": "POS Terminal 2",
+        "type": "EXPENSE",
+        "parent": "6010",
+        "currency": "USD"
+      },
+      {
+        "code": "6011-2",
+        "name": "POS Terminal 3",
+        "type": "EXPENSE",
+        "parent": "6010",
+        "currency": "USD"
+      },
+      {
+        "code": "6011-3",
+        "name": "POS Terminal 4",
+        "type": "EXPENSE",
+        "parent": "6010",
+        "currency": "USD"
+      },
+      {
+        "code": "6011-4",
+        "name": "POS Terminal 5",
+        "type": "EXPENSE",
+        "parent": "6010",
+        "currency": "USD"
+      },
+      {
+        "code": "6011-5",
+        "name": "POS Terminal 6",
+        "type": "EXPENSE",
+        "parent": "6010",
+        "currency": "USD"
+      },
+      {
+        "code": "6011-6",
+        "name": "POS Terminal 7",
+        "type": "EXPENSE",
+        "parent": "6010",
+        "currency": "USD"
+      },
+      {
+        "code": "6011-7",
+        "name": "POS Terminal 8",
+        "type": "EXPENSE",
+        "parent": "6010",
+        "currency": "USD"
+      },
+      {
+        "code": "6011-8",
+        "name": "POS Terminal 9",
+        "type": "EXPENSE",
+        "parent": "6010",
+        "currency": "USD"
+      },
+      {
+        "code": "6011-9",
+        "name": "POS Terminal 10",
+        "type": "EXPENSE",
+        "parent": "6010",
+        "currency": "USD"
+      },
+      {
+        "code": "6121-0",
+        "name": "QC Station 1",
+        "type": "EXPENSE",
+        "parent": "6120",
+        "currency": "USD"
+      },
+      {
+        "code": "6121-1",
+        "name": "QC Station 2",
+        "type": "EXPENSE",
+        "parent": "6120",
+        "currency": "USD"
+      },
+      {
+        "code": "6121-2",
+        "name": "QC Station 3",
+        "type": "EXPENSE",
+        "parent": "6120",
+        "currency": "USD"
+      },
+      {
+        "code": "6121-3",
+        "name": "QC Station 4",
+        "type": "EXPENSE",
+        "parent": "6120",
+        "currency": "USD"
+      },
+      {
+        "code": "6121-4",
+        "name": "QC Station 5",
+        "type": "EXPENSE",
+        "parent": "6120",
+        "currency": "USD"
+      },
+      {
+        "code": "6121-5",
+        "name": "QC Station 6",
+        "type": "EXPENSE",
+        "parent": "6120",
+        "currency": "USD"
+      },
+      {
+        "code": "6121-6",
+        "name": "QC Station 7",
+        "type": "EXPENSE",
+        "parent": "6120",
+        "currency": "USD"
+      },
+      {
+        "code": "6121-7",
+        "name": "QC Station 8",
+        "type": "EXPENSE",
+        "parent": "6120",
+        "currency": "USD"
+      },
+      {
+        "code": "6121-8",
+        "name": "QC Station 9",
+        "type": "EXPENSE",
+        "parent": "6120",
+        "currency": "USD"
+      },
+      {
+        "code": "6121-9",
+        "name": "QC Station 10",
+        "type": "EXPENSE",
+        "parent": "6120",
+        "currency": "USD"
+      },
+      {
+        "code": "6211-0",
+        "name": "Cloud Hosting - US-East",
+        "type": "EXPENSE",
+        "parent": "6210",
+        "currency": "USD"
+      },
+      {
+        "code": "6211-1",
+        "name": "Cloud Hosting - US-West",
+        "type": "EXPENSE",
+        "parent": "6210",
+        "currency": "USD"
+      },
+      {
+        "code": "6211-2",
+        "name": "Cloud Hosting - EU-Central",
+        "type": "EXPENSE",
+        "parent": "6210",
+        "currency": "USD"
+      },
+      {
+        "code": "6211-3",
+        "name": "Cloud Hosting - Asia-Pacific",
+        "type": "EXPENSE",
+        "parent": "6210",
+        "currency": "USD"
+      },
+      {
+        "code": "6211-4",
+        "name": "Cloud Hosting - South-America",
+        "type": "EXPENSE",
+        "parent": "6210",
+        "currency": "USD"
+      },
+      {
+        "code": "6211-5",
+        "name": "Cloud Hosting - Middle-East",
+        "type": "EXPENSE",
+        "parent": "6210",
+        "currency": "USD"
+      },
+      {
+        "code": "6211-6",
+        "name": "Cloud Hosting - Africa",
+        "type": "EXPENSE",
+        "parent": "6210",
+        "currency": "USD"
+      },
+      {
+        "code": "6211-7",
+        "name": "Cloud Hosting - Australia",
+        "type": "EXPENSE",
+        "parent": "6210",
+        "currency": "USD"
+      },
+      {
+        "code": "6211-8",
+        "name": "Cloud Hosting - Canada",
+        "type": "EXPENSE",
+        "parent": "6210",
+        "currency": "USD"
+      },
+      {
+        "code": "6211-9",
+        "name": "Cloud Hosting - UK",
+        "type": "EXPENSE",
+        "parent": "6210",
+        "currency": "USD"
+      },
+      {
+        "code": "6321-0",
+        "name": "Pharmaceuticals - Antibiotics",
+        "type": "EXPENSE",
+        "parent": "6320",
+        "currency": "USD"
+      },
+      {
+        "code": "6321-1",
+        "name": "Pharmaceuticals - Antivirals",
+        "type": "EXPENSE",
+        "parent": "6320",
+        "currency": "USD"
+      },
+      {
+        "code": "6321-2",
+        "name": "Pharmaceuticals - Pain Management",
+        "type": "EXPENSE",
+        "parent": "6320",
+        "currency": "USD"
+      },
+      {
+        "code": "6321-3",
+        "name": "Pharmaceuticals - Cardiac",
+        "type": "EXPENSE",
+        "parent": "6320",
+        "currency": "USD"
+      },
+      {
+        "code": "6321-4",
+        "name": "Pharmaceuticals - Diabetes",
+        "type": "EXPENSE",
+        "parent": "6320",
+        "currency": "USD"
+      },
+      {
+        "code": "6321-5",
+        "name": "Pharmaceuticals - Respiratory",
+        "type": "EXPENSE",
+        "parent": "6320",
+        "currency": "USD"
+      },
+      {
+        "code": "6321-6",
+        "name": "Pharmaceuticals - Oncology",
+        "type": "EXPENSE",
+        "parent": "6320",
+        "currency": "USD"
+      },
+      {
+        "code": "6321-7",
+        "name": "Pharmaceuticals - Vaccines",
+        "type": "EXPENSE",
+        "parent": "6320",
+        "currency": "USD"
+      },
+      {
+        "code": "6321-8",
+        "name": "Pharmaceuticals - Dermatology",
+        "type": "EXPENSE",
+        "parent": "6320",
+        "currency": "USD"
+      },
+      {
+        "code": "6321-9",
+        "name": "Pharmaceuticals - Ophthalmology",
+        "type": "EXPENSE",
+        "parent": "6320",
+        "currency": "USD"
+      },
+      {
+        "code": "7000",
+        "name": "Headquarters Operations",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "7001",
+        "name": "Headquarters - Sales",
+        "type": "EXPENSE",
+        "parent": "7000",
+        "currency": "USD"
+      },
+      {
+        "code": "7002",
+        "name": "Headquarters - Marketing",
+        "type": "EXPENSE",
+        "parent": "7000",
+        "currency": "USD"
+      },
+      {
+        "code": "7003",
+        "name": "Headquarters - R&D",
+        "type": "EXPENSE",
+        "parent": "7000",
+        "currency": "USD"
+      },
+      {
+        "code": "7004",
+        "name": "Headquarters - Operations",
+        "type": "EXPENSE",
+        "parent": "7000",
+        "currency": "USD"
+      },
+      {
+        "code": "7005",
+        "name": "Headquarters - Support",
+        "type": "EXPENSE",
+        "parent": "7000",
+        "currency": "USD"
+      },
+      {
+        "code": "7006",
+        "name": "Headquarters - HR",
+        "type": "EXPENSE",
+        "parent": "7000",
+        "currency": "USD"
+      },
+      {
+        "code": "7007",
+        "name": "Headquarters - IT",
+        "type": "EXPENSE",
+        "parent": "7000",
+        "currency": "USD"
+      },
+      {
+        "code": "7008",
+        "name": "Headquarters - Finance",
+        "type": "EXPENSE",
+        "parent": "7000",
+        "currency": "USD"
+      },
+      {
+        "code": "7009",
+        "name": "Headquarters - Legal",
+        "type": "EXPENSE",
+        "parent": "7000",
+        "currency": "USD"
+      },
+      {
+        "code": "7010",
+        "name": "Headquarters - Admin",
+        "type": "EXPENSE",
+        "parent": "7000",
+        "currency": "USD"
+      },
+      {
+        "code": "7100",
+        "name": "Branch-A Operations",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "7101",
+        "name": "Branch-A - Sales",
+        "type": "EXPENSE",
+        "parent": "7100",
+        "currency": "USD"
+      },
+      {
+        "code": "7102",
+        "name": "Branch-A - Marketing",
+        "type": "EXPENSE",
+        "parent": "7100",
+        "currency": "USD"
+      },
+      {
+        "code": "7103",
+        "name": "Branch-A - R&D",
+        "type": "EXPENSE",
+        "parent": "7100",
+        "currency": "USD"
+      },
+      {
+        "code": "7104",
+        "name": "Branch-A - Operations",
+        "type": "EXPENSE",
+        "parent": "7100",
+        "currency": "USD"
+      },
+      {
+        "code": "7105",
+        "name": "Branch-A - Support",
+        "type": "EXPENSE",
+        "parent": "7100",
+        "currency": "USD"
+      },
+      {
+        "code": "7106",
+        "name": "Branch-A - HR",
+        "type": "EXPENSE",
+        "parent": "7100",
+        "currency": "USD"
+      },
+      {
+        "code": "7107",
+        "name": "Branch-A - IT",
+        "type": "EXPENSE",
+        "parent": "7100",
+        "currency": "USD"
+      },
+      {
+        "code": "7108",
+        "name": "Branch-A - Finance",
+        "type": "EXPENSE",
+        "parent": "7100",
+        "currency": "USD"
+      },
+      {
+        "code": "7109",
+        "name": "Branch-A - Legal",
+        "type": "EXPENSE",
+        "parent": "7100",
+        "currency": "USD"
+      },
+      {
+        "code": "7110",
+        "name": "Branch-A - Admin",
+        "type": "EXPENSE",
+        "parent": "7100",
+        "currency": "USD"
+      },
+      {
+        "code": "7200",
+        "name": "Branch-B Operations",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "7201",
+        "name": "Branch-B - Sales",
+        "type": "EXPENSE",
+        "parent": "7200",
+        "currency": "USD"
+      },
+      {
+        "code": "7202",
+        "name": "Branch-B - Marketing",
+        "type": "EXPENSE",
+        "parent": "7200",
+        "currency": "USD"
+      },
+      {
+        "code": "7203",
+        "name": "Branch-B - R&D",
+        "type": "EXPENSE",
+        "parent": "7200",
+        "currency": "USD"
+      },
+      {
+        "code": "7204",
+        "name": "Branch-B - Operations",
+        "type": "EXPENSE",
+        "parent": "7200",
+        "currency": "USD"
+      },
+      {
+        "code": "7205",
+        "name": "Branch-B - Support",
+        "type": "EXPENSE",
+        "parent": "7200",
+        "currency": "USD"
+      },
+      {
+        "code": "7206",
+        "name": "Branch-B - HR",
+        "type": "EXPENSE",
+        "parent": "7200",
+        "currency": "USD"
+      },
+      {
+        "code": "7207",
+        "name": "Branch-B - IT",
+        "type": "EXPENSE",
+        "parent": "7200",
+        "currency": "USD"
+      },
+      {
+        "code": "7208",
+        "name": "Branch-B - Finance",
+        "type": "EXPENSE",
+        "parent": "7200",
+        "currency": "USD"
+      },
+      {
+        "code": "7209",
+        "name": "Branch-B - Legal",
+        "type": "EXPENSE",
+        "parent": "7200",
+        "currency": "USD"
+      },
+      {
+        "code": "7210",
+        "name": "Branch-B - Admin",
+        "type": "EXPENSE",
+        "parent": "7200",
+        "currency": "USD"
+      },
+      {
+        "code": "7300",
+        "name": "Branch-C Operations",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "7301",
+        "name": "Branch-C - Sales",
+        "type": "EXPENSE",
+        "parent": "7300",
+        "currency": "USD"
+      },
+      {
+        "code": "7302",
+        "name": "Branch-C - Marketing",
+        "type": "EXPENSE",
+        "parent": "7300",
+        "currency": "USD"
+      },
+      {
+        "code": "7303",
+        "name": "Branch-C - R&D",
+        "type": "EXPENSE",
+        "parent": "7300",
+        "currency": "USD"
+      },
+      {
+        "code": "7304",
+        "name": "Branch-C - Operations",
+        "type": "EXPENSE",
+        "parent": "7300",
+        "currency": "USD"
+      },
+      {
+        "code": "7305",
+        "name": "Branch-C - Support",
+        "type": "EXPENSE",
+        "parent": "7300",
+        "currency": "USD"
+      },
+      {
+        "code": "7306",
+        "name": "Branch-C - HR",
+        "type": "EXPENSE",
+        "parent": "7300",
+        "currency": "USD"
+      },
+      {
+        "code": "7307",
+        "name": "Branch-C - IT",
+        "type": "EXPENSE",
+        "parent": "7300",
+        "currency": "USD"
+      },
+      {
+        "code": "7308",
+        "name": "Branch-C - Finance",
+        "type": "EXPENSE",
+        "parent": "7300",
+        "currency": "USD"
+      },
+      {
+        "code": "7309",
+        "name": "Branch-C - Legal",
+        "type": "EXPENSE",
+        "parent": "7300",
+        "currency": "USD"
+      },
+      {
+        "code": "7310",
+        "name": "Branch-C - Admin",
+        "type": "EXPENSE",
+        "parent": "7300",
+        "currency": "USD"
+      },
+      {
+        "code": "7400",
+        "name": "Branch-D Operations",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "7401",
+        "name": "Branch-D - Sales",
+        "type": "EXPENSE",
+        "parent": "7400",
+        "currency": "USD"
+      },
+      {
+        "code": "7402",
+        "name": "Branch-D - Marketing",
+        "type": "EXPENSE",
+        "parent": "7400",
+        "currency": "USD"
+      },
+      {
+        "code": "7403",
+        "name": "Branch-D - R&D",
+        "type": "EXPENSE",
+        "parent": "7400",
+        "currency": "USD"
+      },
+      {
+        "code": "7404",
+        "name": "Branch-D - Operations",
+        "type": "EXPENSE",
+        "parent": "7400",
+        "currency": "USD"
+      },
+      {
+        "code": "7405",
+        "name": "Branch-D - Support",
+        "type": "EXPENSE",
+        "parent": "7400",
+        "currency": "USD"
+      },
+      {
+        "code": "7406",
+        "name": "Branch-D - HR",
+        "type": "EXPENSE",
+        "parent": "7400",
+        "currency": "USD"
+      },
+      {
+        "code": "7407",
+        "name": "Branch-D - IT",
+        "type": "EXPENSE",
+        "parent": "7400",
+        "currency": "USD"
+      },
+      {
+        "code": "7408",
+        "name": "Branch-D - Finance",
+        "type": "EXPENSE",
+        "parent": "7400",
+        "currency": "USD"
+      },
+      {
+        "code": "7409",
+        "name": "Branch-D - Legal",
+        "type": "EXPENSE",
+        "parent": "7400",
+        "currency": "USD"
+      },
+      {
+        "code": "7410",
+        "name": "Branch-D - Admin",
+        "type": "EXPENSE",
+        "parent": "7400",
+        "currency": "USD"
+      },
+      {
+        "code": "8010",
+        "name": "Cost Center 001",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8010-1",
+        "name": "Cost Center 001-1",
+        "type": "EXPENSE",
+        "parent": "8010",
+        "currency": "USD"
+      },
+      {
+        "code": "8010-2",
+        "name": "Cost Center 001-2",
+        "type": "EXPENSE",
+        "parent": "8010",
+        "currency": "USD"
+      },
+      {
+        "code": "8010-3",
+        "name": "Cost Center 001-3",
+        "type": "EXPENSE",
+        "parent": "8010",
+        "currency": "USD"
+      },
+      {
+        "code": "8010-4",
+        "name": "Cost Center 001-4",
+        "type": "EXPENSE",
+        "parent": "8010",
+        "currency": "USD"
+      },
+      {
+        "code": "8010-5",
+        "name": "Cost Center 001-5",
+        "type": "EXPENSE",
+        "parent": "8010",
+        "currency": "USD"
+      },
+      {
+        "code": "8020",
+        "name": "Cost Center 002",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8020-1",
+        "name": "Cost Center 002-1",
+        "type": "EXPENSE",
+        "parent": "8020",
+        "currency": "USD"
+      },
+      {
+        "code": "8020-2",
+        "name": "Cost Center 002-2",
+        "type": "EXPENSE",
+        "parent": "8020",
+        "currency": "USD"
+      },
+      {
+        "code": "8020-3",
+        "name": "Cost Center 002-3",
+        "type": "EXPENSE",
+        "parent": "8020",
+        "currency": "USD"
+      },
+      {
+        "code": "8020-4",
+        "name": "Cost Center 002-4",
+        "type": "EXPENSE",
+        "parent": "8020",
+        "currency": "USD"
+      },
+      {
+        "code": "8020-5",
+        "name": "Cost Center 002-5",
+        "type": "EXPENSE",
+        "parent": "8020",
+        "currency": "USD"
+      },
+      {
+        "code": "8030",
+        "name": "Cost Center 003",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8030-1",
+        "name": "Cost Center 003-1",
+        "type": "EXPENSE",
+        "parent": "8030",
+        "currency": "USD"
+      },
+      {
+        "code": "8030-2",
+        "name": "Cost Center 003-2",
+        "type": "EXPENSE",
+        "parent": "8030",
+        "currency": "USD"
+      },
+      {
+        "code": "8030-3",
+        "name": "Cost Center 003-3",
+        "type": "EXPENSE",
+        "parent": "8030",
+        "currency": "USD"
+      },
+      {
+        "code": "8030-4",
+        "name": "Cost Center 003-4",
+        "type": "EXPENSE",
+        "parent": "8030",
+        "currency": "USD"
+      },
+      {
+        "code": "8030-5",
+        "name": "Cost Center 003-5",
+        "type": "EXPENSE",
+        "parent": "8030",
+        "currency": "USD"
+      },
+      {
+        "code": "8040",
+        "name": "Cost Center 004",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8040-1",
+        "name": "Cost Center 004-1",
+        "type": "EXPENSE",
+        "parent": "8040",
+        "currency": "USD"
+      },
+      {
+        "code": "8040-2",
+        "name": "Cost Center 004-2",
+        "type": "EXPENSE",
+        "parent": "8040",
+        "currency": "USD"
+      },
+      {
+        "code": "8040-3",
+        "name": "Cost Center 004-3",
+        "type": "EXPENSE",
+        "parent": "8040",
+        "currency": "USD"
+      },
+      {
+        "code": "8040-4",
+        "name": "Cost Center 004-4",
+        "type": "EXPENSE",
+        "parent": "8040",
+        "currency": "USD"
+      },
+      {
+        "code": "8040-5",
+        "name": "Cost Center 004-5",
+        "type": "EXPENSE",
+        "parent": "8040",
+        "currency": "USD"
+      },
+      {
+        "code": "8050",
+        "name": "Cost Center 005",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8050-1",
+        "name": "Cost Center 005-1",
+        "type": "EXPENSE",
+        "parent": "8050",
+        "currency": "USD"
+      },
+      {
+        "code": "8050-2",
+        "name": "Cost Center 005-2",
+        "type": "EXPENSE",
+        "parent": "8050",
+        "currency": "USD"
+      },
+      {
+        "code": "8050-3",
+        "name": "Cost Center 005-3",
+        "type": "EXPENSE",
+        "parent": "8050",
+        "currency": "USD"
+      },
+      {
+        "code": "8050-4",
+        "name": "Cost Center 005-4",
+        "type": "EXPENSE",
+        "parent": "8050",
+        "currency": "USD"
+      },
+      {
+        "code": "8050-5",
+        "name": "Cost Center 005-5",
+        "type": "EXPENSE",
+        "parent": "8050",
+        "currency": "USD"
+      },
+      {
+        "code": "8060",
+        "name": "Cost Center 006",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8060-1",
+        "name": "Cost Center 006-1",
+        "type": "EXPENSE",
+        "parent": "8060",
+        "currency": "USD"
+      },
+      {
+        "code": "8060-2",
+        "name": "Cost Center 006-2",
+        "type": "EXPENSE",
+        "parent": "8060",
+        "currency": "USD"
+      },
+      {
+        "code": "8060-3",
+        "name": "Cost Center 006-3",
+        "type": "EXPENSE",
+        "parent": "8060",
+        "currency": "USD"
+      },
+      {
+        "code": "8060-4",
+        "name": "Cost Center 006-4",
+        "type": "EXPENSE",
+        "parent": "8060",
+        "currency": "USD"
+      },
+      {
+        "code": "8060-5",
+        "name": "Cost Center 006-5",
+        "type": "EXPENSE",
+        "parent": "8060",
+        "currency": "USD"
+      },
+      {
+        "code": "8070",
+        "name": "Cost Center 007",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8070-1",
+        "name": "Cost Center 007-1",
+        "type": "EXPENSE",
+        "parent": "8070",
+        "currency": "USD"
+      },
+      {
+        "code": "8070-2",
+        "name": "Cost Center 007-2",
+        "type": "EXPENSE",
+        "parent": "8070",
+        "currency": "USD"
+      },
+      {
+        "code": "8070-3",
+        "name": "Cost Center 007-3",
+        "type": "EXPENSE",
+        "parent": "8070",
+        "currency": "USD"
+      },
+      {
+        "code": "8070-4",
+        "name": "Cost Center 007-4",
+        "type": "EXPENSE",
+        "parent": "8070",
+        "currency": "USD"
+      },
+      {
+        "code": "8070-5",
+        "name": "Cost Center 007-5",
+        "type": "EXPENSE",
+        "parent": "8070",
+        "currency": "USD"
+      },
+      {
+        "code": "8080",
+        "name": "Cost Center 008",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8080-1",
+        "name": "Cost Center 008-1",
+        "type": "EXPENSE",
+        "parent": "8080",
+        "currency": "USD"
+      },
+      {
+        "code": "8080-2",
+        "name": "Cost Center 008-2",
+        "type": "EXPENSE",
+        "parent": "8080",
+        "currency": "USD"
+      },
+      {
+        "code": "8080-3",
+        "name": "Cost Center 008-3",
+        "type": "EXPENSE",
+        "parent": "8080",
+        "currency": "USD"
+      },
+      {
+        "code": "8080-4",
+        "name": "Cost Center 008-4",
+        "type": "EXPENSE",
+        "parent": "8080",
+        "currency": "USD"
+      },
+      {
+        "code": "8080-5",
+        "name": "Cost Center 008-5",
+        "type": "EXPENSE",
+        "parent": "8080",
+        "currency": "USD"
+      },
+      {
+        "code": "8090",
+        "name": "Cost Center 009",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8090-1",
+        "name": "Cost Center 009-1",
+        "type": "EXPENSE",
+        "parent": "8090",
+        "currency": "USD"
+      },
+      {
+        "code": "8090-2",
+        "name": "Cost Center 009-2",
+        "type": "EXPENSE",
+        "parent": "8090",
+        "currency": "USD"
+      },
+      {
+        "code": "8090-3",
+        "name": "Cost Center 009-3",
+        "type": "EXPENSE",
+        "parent": "8090",
+        "currency": "USD"
+      },
+      {
+        "code": "8090-4",
+        "name": "Cost Center 009-4",
+        "type": "EXPENSE",
+        "parent": "8090",
+        "currency": "USD"
+      },
+      {
+        "code": "8090-5",
+        "name": "Cost Center 009-5",
+        "type": "EXPENSE",
+        "parent": "8090",
+        "currency": "USD"
+      },
+      {
+        "code": "8100",
+        "name": "Cost Center 010",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8100-1",
+        "name": "Cost Center 010-1",
+        "type": "EXPENSE",
+        "parent": "8100",
+        "currency": "USD"
+      },
+      {
+        "code": "8100-2",
+        "name": "Cost Center 010-2",
+        "type": "EXPENSE",
+        "parent": "8100",
+        "currency": "USD"
+      },
+      {
+        "code": "8100-3",
+        "name": "Cost Center 010-3",
+        "type": "EXPENSE",
+        "parent": "8100",
+        "currency": "USD"
+      },
+      {
+        "code": "8100-4",
+        "name": "Cost Center 010-4",
+        "type": "EXPENSE",
+        "parent": "8100",
+        "currency": "USD"
+      },
+      {
+        "code": "8100-5",
+        "name": "Cost Center 010-5",
+        "type": "EXPENSE",
+        "parent": "8100",
+        "currency": "USD"
+      },
+      {
+        "code": "8110",
+        "name": "Cost Center 011",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8110-1",
+        "name": "Cost Center 011-1",
+        "type": "EXPENSE",
+        "parent": "8110",
+        "currency": "USD"
+      },
+      {
+        "code": "8110-2",
+        "name": "Cost Center 011-2",
+        "type": "EXPENSE",
+        "parent": "8110",
+        "currency": "USD"
+      },
+      {
+        "code": "8110-3",
+        "name": "Cost Center 011-3",
+        "type": "EXPENSE",
+        "parent": "8110",
+        "currency": "USD"
+      },
+      {
+        "code": "8110-4",
+        "name": "Cost Center 011-4",
+        "type": "EXPENSE",
+        "parent": "8110",
+        "currency": "USD"
+      },
+      {
+        "code": "8110-5",
+        "name": "Cost Center 011-5",
+        "type": "EXPENSE",
+        "parent": "8110",
+        "currency": "USD"
+      },
+      {
+        "code": "8120",
+        "name": "Cost Center 012",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8120-1",
+        "name": "Cost Center 012-1",
+        "type": "EXPENSE",
+        "parent": "8120",
+        "currency": "USD"
+      },
+      {
+        "code": "8120-2",
+        "name": "Cost Center 012-2",
+        "type": "EXPENSE",
+        "parent": "8120",
+        "currency": "USD"
+      },
+      {
+        "code": "8120-3",
+        "name": "Cost Center 012-3",
+        "type": "EXPENSE",
+        "parent": "8120",
+        "currency": "USD"
+      },
+      {
+        "code": "8120-4",
+        "name": "Cost Center 012-4",
+        "type": "EXPENSE",
+        "parent": "8120",
+        "currency": "USD"
+      },
+      {
+        "code": "8120-5",
+        "name": "Cost Center 012-5",
+        "type": "EXPENSE",
+        "parent": "8120",
+        "currency": "USD"
+      },
+      {
+        "code": "8130",
+        "name": "Cost Center 013",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8130-1",
+        "name": "Cost Center 013-1",
+        "type": "EXPENSE",
+        "parent": "8130",
+        "currency": "USD"
+      },
+      {
+        "code": "8130-2",
+        "name": "Cost Center 013-2",
+        "type": "EXPENSE",
+        "parent": "8130",
+        "currency": "USD"
+      },
+      {
+        "code": "8130-3",
+        "name": "Cost Center 013-3",
+        "type": "EXPENSE",
+        "parent": "8130",
+        "currency": "USD"
+      },
+      {
+        "code": "8130-4",
+        "name": "Cost Center 013-4",
+        "type": "EXPENSE",
+        "parent": "8130",
+        "currency": "USD"
+      },
+      {
+        "code": "8130-5",
+        "name": "Cost Center 013-5",
+        "type": "EXPENSE",
+        "parent": "8130",
+        "currency": "USD"
+      },
+      {
+        "code": "8140",
+        "name": "Cost Center 014",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8140-1",
+        "name": "Cost Center 014-1",
+        "type": "EXPENSE",
+        "parent": "8140",
+        "currency": "USD"
+      },
+      {
+        "code": "8140-2",
+        "name": "Cost Center 014-2",
+        "type": "EXPENSE",
+        "parent": "8140",
+        "currency": "USD"
+      },
+      {
+        "code": "8140-3",
+        "name": "Cost Center 014-3",
+        "type": "EXPENSE",
+        "parent": "8140",
+        "currency": "USD"
+      },
+      {
+        "code": "8140-4",
+        "name": "Cost Center 014-4",
+        "type": "EXPENSE",
+        "parent": "8140",
+        "currency": "USD"
+      },
+      {
+        "code": "8140-5",
+        "name": "Cost Center 014-5",
+        "type": "EXPENSE",
+        "parent": "8140",
+        "currency": "USD"
+      },
+      {
+        "code": "8150",
+        "name": "Cost Center 015",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8150-1",
+        "name": "Cost Center 015-1",
+        "type": "EXPENSE",
+        "parent": "8150",
+        "currency": "USD"
+      },
+      {
+        "code": "8150-2",
+        "name": "Cost Center 015-2",
+        "type": "EXPENSE",
+        "parent": "8150",
+        "currency": "USD"
+      },
+      {
+        "code": "8150-3",
+        "name": "Cost Center 015-3",
+        "type": "EXPENSE",
+        "parent": "8150",
+        "currency": "USD"
+      },
+      {
+        "code": "8150-4",
+        "name": "Cost Center 015-4",
+        "type": "EXPENSE",
+        "parent": "8150",
+        "currency": "USD"
+      },
+      {
+        "code": "8150-5",
+        "name": "Cost Center 015-5",
+        "type": "EXPENSE",
+        "parent": "8150",
+        "currency": "USD"
+      },
+      {
+        "code": "8160",
+        "name": "Cost Center 016",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8160-1",
+        "name": "Cost Center 016-1",
+        "type": "EXPENSE",
+        "parent": "8160",
+        "currency": "USD"
+      },
+      {
+        "code": "8160-2",
+        "name": "Cost Center 016-2",
+        "type": "EXPENSE",
+        "parent": "8160",
+        "currency": "USD"
+      },
+      {
+        "code": "8160-3",
+        "name": "Cost Center 016-3",
+        "type": "EXPENSE",
+        "parent": "8160",
+        "currency": "USD"
+      },
+      {
+        "code": "8160-4",
+        "name": "Cost Center 016-4",
+        "type": "EXPENSE",
+        "parent": "8160",
+        "currency": "USD"
+      },
+      {
+        "code": "8160-5",
+        "name": "Cost Center 016-5",
+        "type": "EXPENSE",
+        "parent": "8160",
+        "currency": "USD"
+      },
+      {
+        "code": "8170",
+        "name": "Cost Center 017",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8170-1",
+        "name": "Cost Center 017-1",
+        "type": "EXPENSE",
+        "parent": "8170",
+        "currency": "USD"
+      },
+      {
+        "code": "8170-2",
+        "name": "Cost Center 017-2",
+        "type": "EXPENSE",
+        "parent": "8170",
+        "currency": "USD"
+      },
+      {
+        "code": "8170-3",
+        "name": "Cost Center 017-3",
+        "type": "EXPENSE",
+        "parent": "8170",
+        "currency": "USD"
+      },
+      {
+        "code": "8170-4",
+        "name": "Cost Center 017-4",
+        "type": "EXPENSE",
+        "parent": "8170",
+        "currency": "USD"
+      },
+      {
+        "code": "8170-5",
+        "name": "Cost Center 017-5",
+        "type": "EXPENSE",
+        "parent": "8170",
+        "currency": "USD"
+      },
+      {
+        "code": "8180",
+        "name": "Cost Center 018",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8180-1",
+        "name": "Cost Center 018-1",
+        "type": "EXPENSE",
+        "parent": "8180",
+        "currency": "USD"
+      },
+      {
+        "code": "8180-2",
+        "name": "Cost Center 018-2",
+        "type": "EXPENSE",
+        "parent": "8180",
+        "currency": "USD"
+      },
+      {
+        "code": "8180-3",
+        "name": "Cost Center 018-3",
+        "type": "EXPENSE",
+        "parent": "8180",
+        "currency": "USD"
+      },
+      {
+        "code": "8180-4",
+        "name": "Cost Center 018-4",
+        "type": "EXPENSE",
+        "parent": "8180",
+        "currency": "USD"
+      },
+      {
+        "code": "8180-5",
+        "name": "Cost Center 018-5",
+        "type": "EXPENSE",
+        "parent": "8180",
+        "currency": "USD"
+      },
+      {
+        "code": "8190",
+        "name": "Cost Center 019",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8190-1",
+        "name": "Cost Center 019-1",
+        "type": "EXPENSE",
+        "parent": "8190",
+        "currency": "USD"
+      },
+      {
+        "code": "8190-2",
+        "name": "Cost Center 019-2",
+        "type": "EXPENSE",
+        "parent": "8190",
+        "currency": "USD"
+      },
+      {
+        "code": "8190-3",
+        "name": "Cost Center 019-3",
+        "type": "EXPENSE",
+        "parent": "8190",
+        "currency": "USD"
+      },
+      {
+        "code": "8190-4",
+        "name": "Cost Center 019-4",
+        "type": "EXPENSE",
+        "parent": "8190",
+        "currency": "USD"
+      },
+      {
+        "code": "8190-5",
+        "name": "Cost Center 019-5",
+        "type": "EXPENSE",
+        "parent": "8190",
+        "currency": "USD"
+      },
+      {
+        "code": "8200",
+        "name": "Cost Center 020",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8200-1",
+        "name": "Cost Center 020-1",
+        "type": "EXPENSE",
+        "parent": "8200",
+        "currency": "USD"
+      },
+      {
+        "code": "8200-2",
+        "name": "Cost Center 020-2",
+        "type": "EXPENSE",
+        "parent": "8200",
+        "currency": "USD"
+      },
+      {
+        "code": "8200-3",
+        "name": "Cost Center 020-3",
+        "type": "EXPENSE",
+        "parent": "8200",
+        "currency": "USD"
+      },
+      {
+        "code": "8200-4",
+        "name": "Cost Center 020-4",
+        "type": "EXPENSE",
+        "parent": "8200",
+        "currency": "USD"
+      },
+      {
+        "code": "8200-5",
+        "name": "Cost Center 020-5",
+        "type": "EXPENSE",
+        "parent": "8200",
+        "currency": "USD"
+      },
+      {
+        "code": "8210",
+        "name": "Cost Center 021",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8210-1",
+        "name": "Cost Center 021-1",
+        "type": "EXPENSE",
+        "parent": "8210",
+        "currency": "USD"
+      },
+      {
+        "code": "8210-2",
+        "name": "Cost Center 021-2",
+        "type": "EXPENSE",
+        "parent": "8210",
+        "currency": "USD"
+      },
+      {
+        "code": "8210-3",
+        "name": "Cost Center 021-3",
+        "type": "EXPENSE",
+        "parent": "8210",
+        "currency": "USD"
+      },
+      {
+        "code": "8210-4",
+        "name": "Cost Center 021-4",
+        "type": "EXPENSE",
+        "parent": "8210",
+        "currency": "USD"
+      },
+      {
+        "code": "8210-5",
+        "name": "Cost Center 021-5",
+        "type": "EXPENSE",
+        "parent": "8210",
+        "currency": "USD"
+      },
+      {
+        "code": "8220",
+        "name": "Cost Center 022",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8220-1",
+        "name": "Cost Center 022-1",
+        "type": "EXPENSE",
+        "parent": "8220",
+        "currency": "USD"
+      },
+      {
+        "code": "8220-2",
+        "name": "Cost Center 022-2",
+        "type": "EXPENSE",
+        "parent": "8220",
+        "currency": "USD"
+      },
+      {
+        "code": "8220-3",
+        "name": "Cost Center 022-3",
+        "type": "EXPENSE",
+        "parent": "8220",
+        "currency": "USD"
+      },
+      {
+        "code": "8220-4",
+        "name": "Cost Center 022-4",
+        "type": "EXPENSE",
+        "parent": "8220",
+        "currency": "USD"
+      },
+      {
+        "code": "8220-5",
+        "name": "Cost Center 022-5",
+        "type": "EXPENSE",
+        "parent": "8220",
+        "currency": "USD"
+      },
+      {
+        "code": "8230",
+        "name": "Cost Center 023",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8230-1",
+        "name": "Cost Center 023-1",
+        "type": "EXPENSE",
+        "parent": "8230",
+        "currency": "USD"
+      },
+      {
+        "code": "8230-2",
+        "name": "Cost Center 023-2",
+        "type": "EXPENSE",
+        "parent": "8230",
+        "currency": "USD"
+      },
+      {
+        "code": "8230-3",
+        "name": "Cost Center 023-3",
+        "type": "EXPENSE",
+        "parent": "8230",
+        "currency": "USD"
+      },
+      {
+        "code": "8230-4",
+        "name": "Cost Center 023-4",
+        "type": "EXPENSE",
+        "parent": "8230",
+        "currency": "USD"
+      },
+      {
+        "code": "8230-5",
+        "name": "Cost Center 023-5",
+        "type": "EXPENSE",
+        "parent": "8230",
+        "currency": "USD"
+      },
+      {
+        "code": "8240",
+        "name": "Cost Center 024",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8240-1",
+        "name": "Cost Center 024-1",
+        "type": "EXPENSE",
+        "parent": "8240",
+        "currency": "USD"
+      },
+      {
+        "code": "8240-2",
+        "name": "Cost Center 024-2",
+        "type": "EXPENSE",
+        "parent": "8240",
+        "currency": "USD"
+      },
+      {
+        "code": "8240-3",
+        "name": "Cost Center 024-3",
+        "type": "EXPENSE",
+        "parent": "8240",
+        "currency": "USD"
+      },
+      {
+        "code": "8240-4",
+        "name": "Cost Center 024-4",
+        "type": "EXPENSE",
+        "parent": "8240",
+        "currency": "USD"
+      },
+      {
+        "code": "8240-5",
+        "name": "Cost Center 024-5",
+        "type": "EXPENSE",
+        "parent": "8240",
+        "currency": "USD"
+      },
+      {
+        "code": "8250",
+        "name": "Cost Center 025",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8250-1",
+        "name": "Cost Center 025-1",
+        "type": "EXPENSE",
+        "parent": "8250",
+        "currency": "USD"
+      },
+      {
+        "code": "8250-2",
+        "name": "Cost Center 025-2",
+        "type": "EXPENSE",
+        "parent": "8250",
+        "currency": "USD"
+      },
+      {
+        "code": "8250-3",
+        "name": "Cost Center 025-3",
+        "type": "EXPENSE",
+        "parent": "8250",
+        "currency": "USD"
+      },
+      {
+        "code": "8250-4",
+        "name": "Cost Center 025-4",
+        "type": "EXPENSE",
+        "parent": "8250",
+        "currency": "USD"
+      },
+      {
+        "code": "8250-5",
+        "name": "Cost Center 025-5",
+        "type": "EXPENSE",
+        "parent": "8250",
+        "currency": "USD"
+      },
+      {
+        "code": "8260",
+        "name": "Cost Center 026",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8260-1",
+        "name": "Cost Center 026-1",
+        "type": "EXPENSE",
+        "parent": "8260",
+        "currency": "USD"
+      },
+      {
+        "code": "8260-2",
+        "name": "Cost Center 026-2",
+        "type": "EXPENSE",
+        "parent": "8260",
+        "currency": "USD"
+      },
+      {
+        "code": "8260-3",
+        "name": "Cost Center 026-3",
+        "type": "EXPENSE",
+        "parent": "8260",
+        "currency": "USD"
+      },
+      {
+        "code": "8260-4",
+        "name": "Cost Center 026-4",
+        "type": "EXPENSE",
+        "parent": "8260",
+        "currency": "USD"
+      },
+      {
+        "code": "8260-5",
+        "name": "Cost Center 026-5",
+        "type": "EXPENSE",
+        "parent": "8260",
+        "currency": "USD"
+      },
+      {
+        "code": "8270",
+        "name": "Cost Center 027",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8270-1",
+        "name": "Cost Center 027-1",
+        "type": "EXPENSE",
+        "parent": "8270",
+        "currency": "USD"
+      },
+      {
+        "code": "8270-2",
+        "name": "Cost Center 027-2",
+        "type": "EXPENSE",
+        "parent": "8270",
+        "currency": "USD"
+      },
+      {
+        "code": "8270-3",
+        "name": "Cost Center 027-3",
+        "type": "EXPENSE",
+        "parent": "8270",
+        "currency": "USD"
+      },
+      {
+        "code": "8270-4",
+        "name": "Cost Center 027-4",
+        "type": "EXPENSE",
+        "parent": "8270",
+        "currency": "USD"
+      },
+      {
+        "code": "8270-5",
+        "name": "Cost Center 027-5",
+        "type": "EXPENSE",
+        "parent": "8270",
+        "currency": "USD"
+      },
+      {
+        "code": "8280",
+        "name": "Cost Center 028",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8280-1",
+        "name": "Cost Center 028-1",
+        "type": "EXPENSE",
+        "parent": "8280",
+        "currency": "USD"
+      },
+      {
+        "code": "8280-2",
+        "name": "Cost Center 028-2",
+        "type": "EXPENSE",
+        "parent": "8280",
+        "currency": "USD"
+      },
+      {
+        "code": "8280-3",
+        "name": "Cost Center 028-3",
+        "type": "EXPENSE",
+        "parent": "8280",
+        "currency": "USD"
+      },
+      {
+        "code": "8280-4",
+        "name": "Cost Center 028-4",
+        "type": "EXPENSE",
+        "parent": "8280",
+        "currency": "USD"
+      },
+      {
+        "code": "8280-5",
+        "name": "Cost Center 028-5",
+        "type": "EXPENSE",
+        "parent": "8280",
+        "currency": "USD"
+      },
+      {
+        "code": "8290",
+        "name": "Cost Center 029",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8290-1",
+        "name": "Cost Center 029-1",
+        "type": "EXPENSE",
+        "parent": "8290",
+        "currency": "USD"
+      },
+      {
+        "code": "8290-2",
+        "name": "Cost Center 029-2",
+        "type": "EXPENSE",
+        "parent": "8290",
+        "currency": "USD"
+      },
+      {
+        "code": "8290-3",
+        "name": "Cost Center 029-3",
+        "type": "EXPENSE",
+        "parent": "8290",
+        "currency": "USD"
+      },
+      {
+        "code": "8290-4",
+        "name": "Cost Center 029-4",
+        "type": "EXPENSE",
+        "parent": "8290",
+        "currency": "USD"
+      },
+      {
+        "code": "8290-5",
+        "name": "Cost Center 029-5",
+        "type": "EXPENSE",
+        "parent": "8290",
+        "currency": "USD"
+      },
+      {
+        "code": "8300",
+        "name": "Cost Center 030",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8300-1",
+        "name": "Cost Center 030-1",
+        "type": "EXPENSE",
+        "parent": "8300",
+        "currency": "USD"
+      },
+      {
+        "code": "8300-2",
+        "name": "Cost Center 030-2",
+        "type": "EXPENSE",
+        "parent": "8300",
+        "currency": "USD"
+      },
+      {
+        "code": "8300-3",
+        "name": "Cost Center 030-3",
+        "type": "EXPENSE",
+        "parent": "8300",
+        "currency": "USD"
+      },
+      {
+        "code": "8300-4",
+        "name": "Cost Center 030-4",
+        "type": "EXPENSE",
+        "parent": "8300",
+        "currency": "USD"
+      },
+      {
+        "code": "8300-5",
+        "name": "Cost Center 030-5",
+        "type": "EXPENSE",
+        "parent": "8300",
+        "currency": "USD"
+      },
+      {
+        "code": "8310",
+        "name": "Cost Center 031",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8310-1",
+        "name": "Cost Center 031-1",
+        "type": "EXPENSE",
+        "parent": "8310",
+        "currency": "USD"
+      },
+      {
+        "code": "8310-2",
+        "name": "Cost Center 031-2",
+        "type": "EXPENSE",
+        "parent": "8310",
+        "currency": "USD"
+      },
+      {
+        "code": "8310-3",
+        "name": "Cost Center 031-3",
+        "type": "EXPENSE",
+        "parent": "8310",
+        "currency": "USD"
+      },
+      {
+        "code": "8310-4",
+        "name": "Cost Center 031-4",
+        "type": "EXPENSE",
+        "parent": "8310",
+        "currency": "USD"
+      },
+      {
+        "code": "8310-5",
+        "name": "Cost Center 031-5",
+        "type": "EXPENSE",
+        "parent": "8310",
+        "currency": "USD"
+      },
+      {
+        "code": "8320",
+        "name": "Cost Center 032",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8320-1",
+        "name": "Cost Center 032-1",
+        "type": "EXPENSE",
+        "parent": "8320",
+        "currency": "USD"
+      },
+      {
+        "code": "8320-2",
+        "name": "Cost Center 032-2",
+        "type": "EXPENSE",
+        "parent": "8320",
+        "currency": "USD"
+      },
+      {
+        "code": "8320-3",
+        "name": "Cost Center 032-3",
+        "type": "EXPENSE",
+        "parent": "8320",
+        "currency": "USD"
+      },
+      {
+        "code": "8320-4",
+        "name": "Cost Center 032-4",
+        "type": "EXPENSE",
+        "parent": "8320",
+        "currency": "USD"
+      },
+      {
+        "code": "8320-5",
+        "name": "Cost Center 032-5",
+        "type": "EXPENSE",
+        "parent": "8320",
+        "currency": "USD"
+      },
+      {
+        "code": "8330",
+        "name": "Cost Center 033",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8330-1",
+        "name": "Cost Center 033-1",
+        "type": "EXPENSE",
+        "parent": "8330",
+        "currency": "USD"
+      },
+      {
+        "code": "8330-2",
+        "name": "Cost Center 033-2",
+        "type": "EXPENSE",
+        "parent": "8330",
+        "currency": "USD"
+      },
+      {
+        "code": "8330-3",
+        "name": "Cost Center 033-3",
+        "type": "EXPENSE",
+        "parent": "8330",
+        "currency": "USD"
+      },
+      {
+        "code": "8330-4",
+        "name": "Cost Center 033-4",
+        "type": "EXPENSE",
+        "parent": "8330",
+        "currency": "USD"
+      },
+      {
+        "code": "8330-5",
+        "name": "Cost Center 033-5",
+        "type": "EXPENSE",
+        "parent": "8330",
+        "currency": "USD"
+      },
+      {
+        "code": "8340",
+        "name": "Cost Center 034",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8340-1",
+        "name": "Cost Center 034-1",
+        "type": "EXPENSE",
+        "parent": "8340",
+        "currency": "USD"
+      },
+      {
+        "code": "8340-2",
+        "name": "Cost Center 034-2",
+        "type": "EXPENSE",
+        "parent": "8340",
+        "currency": "USD"
+      },
+      {
+        "code": "8340-3",
+        "name": "Cost Center 034-3",
+        "type": "EXPENSE",
+        "parent": "8340",
+        "currency": "USD"
+      },
+      {
+        "code": "8340-4",
+        "name": "Cost Center 034-4",
+        "type": "EXPENSE",
+        "parent": "8340",
+        "currency": "USD"
+      },
+      {
+        "code": "8340-5",
+        "name": "Cost Center 034-5",
+        "type": "EXPENSE",
+        "parent": "8340",
+        "currency": "USD"
+      },
+      {
+        "code": "8350",
+        "name": "Cost Center 035",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8350-1",
+        "name": "Cost Center 035-1",
+        "type": "EXPENSE",
+        "parent": "8350",
+        "currency": "USD"
+      },
+      {
+        "code": "8350-2",
+        "name": "Cost Center 035-2",
+        "type": "EXPENSE",
+        "parent": "8350",
+        "currency": "USD"
+      },
+      {
+        "code": "8350-3",
+        "name": "Cost Center 035-3",
+        "type": "EXPENSE",
+        "parent": "8350",
+        "currency": "USD"
+      },
+      {
+        "code": "8350-4",
+        "name": "Cost Center 035-4",
+        "type": "EXPENSE",
+        "parent": "8350",
+        "currency": "USD"
+      },
+      {
+        "code": "8350-5",
+        "name": "Cost Center 035-5",
+        "type": "EXPENSE",
+        "parent": "8350",
+        "currency": "USD"
+      },
+      {
+        "code": "8360",
+        "name": "Cost Center 036",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8360-1",
+        "name": "Cost Center 036-1",
+        "type": "EXPENSE",
+        "parent": "8360",
+        "currency": "USD"
+      },
+      {
+        "code": "8360-2",
+        "name": "Cost Center 036-2",
+        "type": "EXPENSE",
+        "parent": "8360",
+        "currency": "USD"
+      },
+      {
+        "code": "8360-3",
+        "name": "Cost Center 036-3",
+        "type": "EXPENSE",
+        "parent": "8360",
+        "currency": "USD"
+      },
+      {
+        "code": "8360-4",
+        "name": "Cost Center 036-4",
+        "type": "EXPENSE",
+        "parent": "8360",
+        "currency": "USD"
+      },
+      {
+        "code": "8360-5",
+        "name": "Cost Center 036-5",
+        "type": "EXPENSE",
+        "parent": "8360",
+        "currency": "USD"
+      },
+      {
+        "code": "8370",
+        "name": "Cost Center 037",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8370-1",
+        "name": "Cost Center 037-1",
+        "type": "EXPENSE",
+        "parent": "8370",
+        "currency": "USD"
+      },
+      {
+        "code": "8370-2",
+        "name": "Cost Center 037-2",
+        "type": "EXPENSE",
+        "parent": "8370",
+        "currency": "USD"
+      },
+      {
+        "code": "8370-3",
+        "name": "Cost Center 037-3",
+        "type": "EXPENSE",
+        "parent": "8370",
+        "currency": "USD"
+      },
+      {
+        "code": "8370-4",
+        "name": "Cost Center 037-4",
+        "type": "EXPENSE",
+        "parent": "8370",
+        "currency": "USD"
+      },
+      {
+        "code": "8370-5",
+        "name": "Cost Center 037-5",
+        "type": "EXPENSE",
+        "parent": "8370",
+        "currency": "USD"
+      },
+      {
+        "code": "8380",
+        "name": "Cost Center 038",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8380-1",
+        "name": "Cost Center 038-1",
+        "type": "EXPENSE",
+        "parent": "8380",
+        "currency": "USD"
+      },
+      {
+        "code": "8380-2",
+        "name": "Cost Center 038-2",
+        "type": "EXPENSE",
+        "parent": "8380",
+        "currency": "USD"
+      },
+      {
+        "code": "8380-3",
+        "name": "Cost Center 038-3",
+        "type": "EXPENSE",
+        "parent": "8380",
+        "currency": "USD"
+      },
+      {
+        "code": "8380-4",
+        "name": "Cost Center 038-4",
+        "type": "EXPENSE",
+        "parent": "8380",
+        "currency": "USD"
+      },
+      {
+        "code": "8380-5",
+        "name": "Cost Center 038-5",
+        "type": "EXPENSE",
+        "parent": "8380",
+        "currency": "USD"
+      },
+      {
+        "code": "8390",
+        "name": "Cost Center 039",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8390-1",
+        "name": "Cost Center 039-1",
+        "type": "EXPENSE",
+        "parent": "8390",
+        "currency": "USD"
+      },
+      {
+        "code": "8390-2",
+        "name": "Cost Center 039-2",
+        "type": "EXPENSE",
+        "parent": "8390",
+        "currency": "USD"
+      },
+      {
+        "code": "8390-3",
+        "name": "Cost Center 039-3",
+        "type": "EXPENSE",
+        "parent": "8390",
+        "currency": "USD"
+      },
+      {
+        "code": "8390-4",
+        "name": "Cost Center 039-4",
+        "type": "EXPENSE",
+        "parent": "8390",
+        "currency": "USD"
+      },
+      {
+        "code": "8390-5",
+        "name": "Cost Center 039-5",
+        "type": "EXPENSE",
+        "parent": "8390",
+        "currency": "USD"
+      },
+      {
+        "code": "8400",
+        "name": "Cost Center 040",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8400-1",
+        "name": "Cost Center 040-1",
+        "type": "EXPENSE",
+        "parent": "8400",
+        "currency": "USD"
+      },
+      {
+        "code": "8400-2",
+        "name": "Cost Center 040-2",
+        "type": "EXPENSE",
+        "parent": "8400",
+        "currency": "USD"
+      },
+      {
+        "code": "8400-3",
+        "name": "Cost Center 040-3",
+        "type": "EXPENSE",
+        "parent": "8400",
+        "currency": "USD"
+      },
+      {
+        "code": "8400-4",
+        "name": "Cost Center 040-4",
+        "type": "EXPENSE",
+        "parent": "8400",
+        "currency": "USD"
+      },
+      {
+        "code": "8400-5",
+        "name": "Cost Center 040-5",
+        "type": "EXPENSE",
+        "parent": "8400",
+        "currency": "USD"
+      },
+      {
+        "code": "8410",
+        "name": "Cost Center 041",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8410-1",
+        "name": "Cost Center 041-1",
+        "type": "EXPENSE",
+        "parent": "8410",
+        "currency": "USD"
+      },
+      {
+        "code": "8410-2",
+        "name": "Cost Center 041-2",
+        "type": "EXPENSE",
+        "parent": "8410",
+        "currency": "USD"
+      },
+      {
+        "code": "8410-3",
+        "name": "Cost Center 041-3",
+        "type": "EXPENSE",
+        "parent": "8410",
+        "currency": "USD"
+      },
+      {
+        "code": "8410-4",
+        "name": "Cost Center 041-4",
+        "type": "EXPENSE",
+        "parent": "8410",
+        "currency": "USD"
+      },
+      {
+        "code": "8410-5",
+        "name": "Cost Center 041-5",
+        "type": "EXPENSE",
+        "parent": "8410",
+        "currency": "USD"
+      },
+      {
+        "code": "8420",
+        "name": "Cost Center 042",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8420-1",
+        "name": "Cost Center 042-1",
+        "type": "EXPENSE",
+        "parent": "8420",
+        "currency": "USD"
+      },
+      {
+        "code": "8420-2",
+        "name": "Cost Center 042-2",
+        "type": "EXPENSE",
+        "parent": "8420",
+        "currency": "USD"
+      },
+      {
+        "code": "8420-3",
+        "name": "Cost Center 042-3",
+        "type": "EXPENSE",
+        "parent": "8420",
+        "currency": "USD"
+      },
+      {
+        "code": "8420-4",
+        "name": "Cost Center 042-4",
+        "type": "EXPENSE",
+        "parent": "8420",
+        "currency": "USD"
+      },
+      {
+        "code": "8420-5",
+        "name": "Cost Center 042-5",
+        "type": "EXPENSE",
+        "parent": "8420",
+        "currency": "USD"
+      },
+      {
+        "code": "8430",
+        "name": "Cost Center 043",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8430-1",
+        "name": "Cost Center 043-1",
+        "type": "EXPENSE",
+        "parent": "8430",
+        "currency": "USD"
+      },
+      {
+        "code": "8430-2",
+        "name": "Cost Center 043-2",
+        "type": "EXPENSE",
+        "parent": "8430",
+        "currency": "USD"
+      },
+      {
+        "code": "8430-3",
+        "name": "Cost Center 043-3",
+        "type": "EXPENSE",
+        "parent": "8430",
+        "currency": "USD"
+      },
+      {
+        "code": "8430-4",
+        "name": "Cost Center 043-4",
+        "type": "EXPENSE",
+        "parent": "8430",
+        "currency": "USD"
+      },
+      {
+        "code": "8430-5",
+        "name": "Cost Center 043-5",
+        "type": "EXPENSE",
+        "parent": "8430",
+        "currency": "USD"
+      },
+      {
+        "code": "8440",
+        "name": "Cost Center 044",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8440-1",
+        "name": "Cost Center 044-1",
+        "type": "EXPENSE",
+        "parent": "8440",
+        "currency": "USD"
+      },
+      {
+        "code": "8440-2",
+        "name": "Cost Center 044-2",
+        "type": "EXPENSE",
+        "parent": "8440",
+        "currency": "USD"
+      },
+      {
+        "code": "8440-3",
+        "name": "Cost Center 044-3",
+        "type": "EXPENSE",
+        "parent": "8440",
+        "currency": "USD"
+      },
+      {
+        "code": "8440-4",
+        "name": "Cost Center 044-4",
+        "type": "EXPENSE",
+        "parent": "8440",
+        "currency": "USD"
+      },
+      {
+        "code": "8440-5",
+        "name": "Cost Center 044-5",
+        "type": "EXPENSE",
+        "parent": "8440",
+        "currency": "USD"
+      },
+      {
+        "code": "8450",
+        "name": "Cost Center 045",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8450-1",
+        "name": "Cost Center 045-1",
+        "type": "EXPENSE",
+        "parent": "8450",
+        "currency": "USD"
+      },
+      {
+        "code": "8450-2",
+        "name": "Cost Center 045-2",
+        "type": "EXPENSE",
+        "parent": "8450",
+        "currency": "USD"
+      },
+      {
+        "code": "8450-3",
+        "name": "Cost Center 045-3",
+        "type": "EXPENSE",
+        "parent": "8450",
+        "currency": "USD"
+      },
+      {
+        "code": "8450-4",
+        "name": "Cost Center 045-4",
+        "type": "EXPENSE",
+        "parent": "8450",
+        "currency": "USD"
+      },
+      {
+        "code": "8450-5",
+        "name": "Cost Center 045-5",
+        "type": "EXPENSE",
+        "parent": "8450",
+        "currency": "USD"
+      },
+      {
+        "code": "8460",
+        "name": "Cost Center 046",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8460-1",
+        "name": "Cost Center 046-1",
+        "type": "EXPENSE",
+        "parent": "8460",
+        "currency": "USD"
+      },
+      {
+        "code": "8460-2",
+        "name": "Cost Center 046-2",
+        "type": "EXPENSE",
+        "parent": "8460",
+        "currency": "USD"
+      },
+      {
+        "code": "8460-3",
+        "name": "Cost Center 046-3",
+        "type": "EXPENSE",
+        "parent": "8460",
+        "currency": "USD"
+      },
+      {
+        "code": "8460-4",
+        "name": "Cost Center 046-4",
+        "type": "EXPENSE",
+        "parent": "8460",
+        "currency": "USD"
+      },
+      {
+        "code": "8460-5",
+        "name": "Cost Center 046-5",
+        "type": "EXPENSE",
+        "parent": "8460",
+        "currency": "USD"
+      },
+      {
+        "code": "8470",
+        "name": "Cost Center 047",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8470-1",
+        "name": "Cost Center 047-1",
+        "type": "EXPENSE",
+        "parent": "8470",
+        "currency": "USD"
+      },
+      {
+        "code": "8470-2",
+        "name": "Cost Center 047-2",
+        "type": "EXPENSE",
+        "parent": "8470",
+        "currency": "USD"
+      },
+      {
+        "code": "8470-3",
+        "name": "Cost Center 047-3",
+        "type": "EXPENSE",
+        "parent": "8470",
+        "currency": "USD"
+      },
+      {
+        "code": "8470-4",
+        "name": "Cost Center 047-4",
+        "type": "EXPENSE",
+        "parent": "8470",
+        "currency": "USD"
+      },
+      {
+        "code": "8470-5",
+        "name": "Cost Center 047-5",
+        "type": "EXPENSE",
+        "parent": "8470",
+        "currency": "USD"
+      },
+      {
+        "code": "8480",
+        "name": "Cost Center 048",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8480-1",
+        "name": "Cost Center 048-1",
+        "type": "EXPENSE",
+        "parent": "8480",
+        "currency": "USD"
+      },
+      {
+        "code": "8480-2",
+        "name": "Cost Center 048-2",
+        "type": "EXPENSE",
+        "parent": "8480",
+        "currency": "USD"
+      },
+      {
+        "code": "8480-3",
+        "name": "Cost Center 048-3",
+        "type": "EXPENSE",
+        "parent": "8480",
+        "currency": "USD"
+      },
+      {
+        "code": "8480-4",
+        "name": "Cost Center 048-4",
+        "type": "EXPENSE",
+        "parent": "8480",
+        "currency": "USD"
+      },
+      {
+        "code": "8480-5",
+        "name": "Cost Center 048-5",
+        "type": "EXPENSE",
+        "parent": "8480",
+        "currency": "USD"
+      },
+      {
+        "code": "8490",
+        "name": "Cost Center 049",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8490-1",
+        "name": "Cost Center 049-1",
+        "type": "EXPENSE",
+        "parent": "8490",
+        "currency": "USD"
+      },
+      {
+        "code": "8490-2",
+        "name": "Cost Center 049-2",
+        "type": "EXPENSE",
+        "parent": "8490",
+        "currency": "USD"
+      },
+      {
+        "code": "8490-3",
+        "name": "Cost Center 049-3",
+        "type": "EXPENSE",
+        "parent": "8490",
+        "currency": "USD"
+      },
+      {
+        "code": "8490-4",
+        "name": "Cost Center 049-4",
+        "type": "EXPENSE",
+        "parent": "8490",
+        "currency": "USD"
+      },
+      {
+        "code": "8490-5",
+        "name": "Cost Center 049-5",
+        "type": "EXPENSE",
+        "parent": "8490",
+        "currency": "USD"
+      },
+      {
+        "code": "8500",
+        "name": "Cost Center 050",
+        "type": "EXPENSE",
+        "parent": "5000",
+        "currency": "USD"
+      },
+      {
+        "code": "8500-1",
+        "name": "Cost Center 050-1",
+        "type": "EXPENSE",
+        "parent": "8500",
+        "currency": "USD"
+      },
+      {
+        "code": "8500-2",
+        "name": "Cost Center 050-2",
+        "type": "EXPENSE",
+        "parent": "8500",
+        "currency": "USD"
+      },
+      {
+        "code": "8500-3",
+        "name": "Cost Center 050-3",
+        "type": "EXPENSE",
+        "parent": "8500",
+        "currency": "USD"
+      },
+      {
+        "code": "8500-4",
+        "name": "Cost Center 050-4",
+        "type": "EXPENSE",
+        "parent": "8500",
+        "currency": "USD"
+      },
+      {
+        "code": "8500-5",
+        "name": "Cost Center 050-5",
+        "type": "EXPENSE",
+        "parent": "8500",
+        "currency": "USD"
+      }
+    ]
+  }
+}
