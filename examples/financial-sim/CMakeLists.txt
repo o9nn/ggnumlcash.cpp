@@ -48,3 +48,12 @@ add_executable(${REPORTING_TEST_TARGET}
 )
 target_link_libraries(${REPORTING_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 target_compile_features(${REPORTING_TEST_TARGET} PRIVATE cxx_std_17)
+
+# Demo for financial reporting (no model required)
+set(REPORTING_DEMO_TARGET demo-financial-reporting)
+add_executable(${REPORTING_DEMO_TARGET}
+    demo-financial-reporting.cpp
+    financial-reporting.cpp
+)
+target_link_libraries(${REPORTING_DEMO_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${REPORTING_DEMO_TARGET} PRIVATE cxx_std_17)
