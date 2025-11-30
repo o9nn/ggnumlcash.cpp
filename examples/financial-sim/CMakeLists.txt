@@ -48,3 +48,12 @@ add_executable(${TX_ENGINE_TEST_TARGET}
 )
 target_link_libraries(${TX_ENGINE_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 target_compile_features(${TX_ENGINE_TEST_TARGET} PRIVATE cxx_std_17)
+
+# Demo for advanced transaction engine (no model required)
+set(TX_ENGINE_DEMO_TARGET demo-transaction-engine)
+add_executable(${TX_ENGINE_DEMO_TARGET}
+    demo-transaction-engine.cpp
+    transaction-engine.cpp
+)
+target_link_libraries(${TX_ENGINE_DEMO_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${TX_ENGINE_DEMO_TARGET} PRIVATE cxx_std_17)
