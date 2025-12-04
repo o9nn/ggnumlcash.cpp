@@ -40,6 +40,23 @@ set(TEST_TARGET test-financial-logic)
 add_executable(${TEST_TARGET} test-financial-logic.cpp)
 target_compile_features(${TEST_TARGET} PRIVATE cxx_std_17)
 
+# Test for advanced transaction engine (no model required)
+set(TX_ENGINE_TEST_TARGET test-transaction-engine)
+add_executable(${TX_ENGINE_TEST_TARGET}
+    test-transaction-engine.cpp
+    transaction-engine.cpp
+)
+target_link_libraries(${TX_ENGINE_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${TX_ENGINE_TEST_TARGET} PRIVATE cxx_std_17)
+
+# Demo for advanced transaction engine (no model required)
+set(TX_ENGINE_DEMO_TARGET demo-transaction-engine)
+add_executable(${TX_ENGINE_DEMO_TARGET}
+    demo-transaction-engine.cpp
+    transaction-engine.cpp
+)
+target_link_libraries(${TX_ENGINE_DEMO_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${TX_ENGINE_DEMO_TARGET} PRIVATE cxx_std_17)
 # Test for enhanced chart of accounts (no model required)
 set(ENHANCED_TEST_TARGET test-enhanced-coa)
 add_executable(${ENHANCED_TEST_TARGET} test-enhanced-coa.cpp)
