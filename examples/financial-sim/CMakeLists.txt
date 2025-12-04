@@ -57,3 +57,7 @@ add_executable(${TX_ENGINE_DEMO_TARGET}
 )
 target_link_libraries(${TX_ENGINE_DEMO_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 target_compile_features(${TX_ENGINE_DEMO_TARGET} PRIVATE cxx_std_17)
+# Test for enhanced chart of accounts (no model required)
+set(ENHANCED_TEST_TARGET test-enhanced-coa)
+add_executable(${ENHANCED_TEST_TARGET} test-enhanced-coa.cpp)
+target_compile_features(${ENHANCED_TEST_TARGET} PRIVATE cxx_std_17)
