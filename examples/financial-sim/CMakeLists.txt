@@ -78,3 +78,23 @@ target_compile_features(${TX_ENGINE_DEMO_TARGET} PRIVATE cxx_std_17)
 set(ENHANCED_TEST_TARGET test-enhanced-coa)
 add_executable(${ENHANCED_TEST_TARGET} test-enhanced-coa.cpp)
 target_compile_features(${ENHANCED_TEST_TARGET} PRIVATE cxx_std_17)
+
+# Test for database persistence (no model required)
+set(DB_PERSIST_TEST_TARGET test-database-persistence)
+add_executable(${DB_PERSIST_TEST_TARGET}
+    test-database-persistence.cpp
+    database-persistence.cpp
+    transaction-engine.cpp
+)
+target_link_libraries(${DB_PERSIST_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${DB_PERSIST_TEST_TARGET} PRIVATE cxx_std_17)
+
+# Demo for database persistence (no model required)
+set(DB_PERSIST_DEMO_TARGET demo-database-persistence)
+add_executable(${DB_PERSIST_DEMO_TARGET}
+    demo-database-persistence.cpp
+    database-persistence.cpp
+    transaction-engine.cpp
+)
+target_link_libraries(${DB_PERSIST_DEMO_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${DB_PERSIST_DEMO_TARGET} PRIVATE cxx_std_17)
