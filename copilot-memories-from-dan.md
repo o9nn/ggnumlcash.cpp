@@ -71,4 +71,25 @@ Let me create a summary document of what was accomplished
 
 ---
 
+Now let me save a memory about this task for future reference:
+
+Call to store_memory
+Input
+{
+  "subject": "Transaction Engine Build and Test",
+  "fact": "The transaction engine can be built with `cmake --build build --target test-transaction-engine` and `cmake --build build --target demo-transaction-engine`. Tests validate 161K+ TPS performance.",
+  "citations": "examples/financial-sim/CMakeLists.txt, examples/financial-sim/test-transaction-engine.cpp, examples/financial-sim/demo-transaction-engine.cpp",
+  "reason": "Future tasks may need to build and test the transaction engine. This fact documents the correct build targets and expected performance, which will help validate that changes don't break the transaction engine functionality.",
+  "category": "bootstrap_and_build"
+}
+Failed to store memory with error: Resource not found
+
+Let me make a final commit with the summary
+
+---
+
+
+
+---
+
 
