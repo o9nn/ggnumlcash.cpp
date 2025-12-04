@@ -43,8 +43,10 @@ bool PostgreSQLConnection::disconnect() {
     
     if (!connected) return true;
     
-    // In production: PQfinish(static_cast<PGconn*>(pg_conn));
+    // Set connected to false first to prevent race conditions
     connected = false;
+    
+    // In production: PQfinish(static_cast<PGconn*>(pg_conn));
     
     return true;
 }
@@ -282,14 +284,16 @@ bool RecoveryManager::restore_to_point(const std::string& recovery_point_id,
 
 bool RecoveryManager::restore_to_timestamp(const std::chrono::system_clock::time_point& timestamp,
                                           DatabaseConnection* conn) {
-    std::lock_guard<std::mutex> lock(recovery_mutex);
-    
     // Find the closest recovery point before the timestamp
     RecoveryPoint* closest = nullptr;
-    for (auto& point : recovery_points) {
-        if (point.timestamp <= timestamp) {
-            if (!closest || point.timestamp > closest->timestamp) {
-                closest = &point;
+    
+    {
+        std::lock_guard<std::mutex> lock(recovery_mutex);
+        for (auto& point : recovery_points) {
+            if (point.timestamp <= timestamp) {
+                if (!closest || point.timestamp > closest->timestamp) {
+                    closest = &point;
+                }
             }
         }
     }
@@ -298,7 +302,7 @@ bool RecoveryManager::restore_to_timestamp(const std::chrono::system_clock::time
         return false;
     }
     
-    recovery_mutex.unlock();
+    // Call restore_to_point without holding the lock
     return restore_to_point(closest->id, conn);
 }
 

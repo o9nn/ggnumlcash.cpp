@@ -176,7 +176,8 @@ public:
 
 class PostgreSQLConnection : public DatabaseConnection {
 private:
-    void* pg_conn;  // PGconn* - use void* to avoid including libpq headers
+    void* pg_conn;  // PGconn* - using void* to avoid libpq dependency in stub implementation
+                    // In production: replace with proper forward declaration and pimpl idiom
     
 public:
     PostgreSQLConnection();
