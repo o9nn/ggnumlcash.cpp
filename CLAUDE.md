@@ -85,6 +85,10 @@ cmake --build build --target test-transaction-engine
 cmake --build build --target test-financial-reporting
 cmake --build build --target test-database-persistence
 
+# Build and run audit & anti-fraud tests (Phase A)
+cmake --build build --target test-audit-trail
+cmake --build build --target test-transaction-validator
+
 # Run demos
 ./build/bin/demo-financial-sim
 ./build/bin/llama-ontogenesis
@@ -188,6 +192,10 @@ enum llama_vocab_type {
 - **Task 1.2** - Advanced Transaction Engine (`transaction-engine.h/.cpp`)
 - **Task 1.3** - Real-time Financial Reporting (`financial-reporting.h/.cpp`)
 - **Task 1.4** - Database Persistence & Recovery (`database-persistence.h/.cpp`)
+
+### Implemented Components (Phase A: Audit Foundation)
+- **Task A.1** - Immutable Audit Trail Engine (`audit-trail.h/.cpp`) - 22 tests passing
+- **Task A.3** - Transaction Integrity Validator (`transaction-validator.h/.cpp`) - 20 tests passing
 
 ### Chart of Accounts
 - Header-only design in `examples/financial-sim/`
@@ -326,17 +334,19 @@ Build a hardware-accelerated financial audit and anti-fraud platform that combin
 ### Phase A: Audit Foundation (Weeks 1-6)
 
 #### A.1 Immutable Audit Trail Engine
-**Priority**: Critical | **Depends on**: Task 1.4 (Database Persistence)
+**Priority**: Critical | **Depends on**: Task 1.4 (Database Persistence) | **Status**: IMPLEMENTED
 
 Implement a cryptographically secured, append-only audit trail for all financial transactions, drawing on SOX compliance patterns from the existing security-compliance framework.
 
-- [ ] SHA-256 hash chain for transaction integrity verification
-- [ ] Cryptographic signing of audit entries with timestamp attestation
-- [ ] 7-year retention with instant retrieval capability
-- [ ] Tamper detection with automatic alerting
-- [ ] Export formats: JSON, CSV, PDF for external auditors
+- [x] SHA-256 hash chain for transaction integrity verification
+- [x] Cryptographic signing of audit entries with timestamp attestation
+- [x] 7-year retention with instant retrieval capability
+- [x] Tamper detection with automatic alerting
+- [x] Export formats: JSON, CSV for external auditors
+- [ ] PDF export for external auditors
 - [ ] Integration with existing `database-persistence.h` storage layer
 
+**Implementation**: `examples/financial-sim/audit-trail.h/.cpp` (22 tests passing)
 **Reference**: `docs/security-compliance.md` SOX Controls, `cogpy/revstream1` evidence chain patterns
 
 #### A.2 Multi-Source Financial Data Connector
@@ -355,17 +365,22 @@ Build connectors to ingest financial data from multiple accounting systems for c
 **Reference**: `cogpy/cogflu` Service Provider Interface, `cogpy/gnucash-graphql`
 
 #### A.3 Transaction Integrity Validator
-**Priority**: High | **Depends on**: A.1, A.2
+**Priority**: High | **Depends on**: A.1, A.2 | **Status**: IMPLEMENTED
 
 Core validation engine for detecting accounting inconsistencies.
 
-- [ ] Double-entry balance verification across all accounts
+- [x] Double-entry balance verification across all accounts
 - [ ] Inter-company transaction reconciliation
-- [ ] Missing transaction gap detection with date-range analysis
-- [ ] Duplicate transaction identification using fuzzy matching
+- [x] Missing transaction gap detection with date-range analysis
+- [x] Duplicate transaction identification using fuzzy matching (Levenshtein similarity)
 - [ ] Currency conversion audit with rate source verification
-- [ ] Trial balance validation and automated discrepancy reporting
+- [x] Trial balance validation and automated discrepancy reporting
+- [x] Hash chain integrity verification
+- [x] Account existence validation
+- [x] Amount reasonableness checks (large transaction detection, negative amount detection)
+- [x] Comprehensive validation report (text and JSON export)
 
+**Implementation**: `examples/financial-sim/transaction-validator.h/.cpp` (20 tests passing)
 **Reference**: `cogpy/revstream1/MR/Xero_Accounts.md`, `examples/financial-sim/enhanced-coa.h`
 
 ---
@@ -678,11 +693,17 @@ The full platform roadmap is documented in `docs/development-roadmap.md` with de
 
 | Phase | Issues | Status |
 |---|---|---|
-| Phase 1: Foundation | #001 Financial Core, #002 Hardware Accel, #003 Market Data | In Progress (25%) |
+| Phase 1: Foundation | #001 Financial Core, #002 Hardware Accel, #003 Market Data | In Progress (25%) - Tasks 1.1-1.4 Complete |
+| Phase A: Audit Foundation | A.1 Audit Trail, A.2 Data Connectors, A.3 Integrity Validator | In Progress (50%) - A.1, A.3 Complete |
 | Phase 2: Financial Models | #004 Quant Models, #005 ML Integration, #006 Compliance | Not Started |
+| Phase B: Transaction Flow | B.1 Flow Viz, B.2 Entity Resolution, B.3 Revenue Analysis | Not Started |
 | Phase 3: Trading Platform | #007 HFT Engine, #008 Cross-Asset, #009 Algo Strategies | Not Started |
+| Phase C: Anti-Fraud | C.1 ML Anomaly, C.2 STR Reporting, C.3 Forensic Patterns | Not Started |
 | Phase 4: Enterprise | #010 Cloud-Native, #011 API Platform, #012 Security Hardening | Not Started |
+| Phase D: Legal/Evidence | D.1 Case Management, D.2 Legal Graph, D.3 Filing Automation | Not Started |
 | Phase 5: Innovation | #013 Quantum, #014 Blockchain/DeFi, #015 ESG | Not Started |
+| Phase E: Multi-Agent Intel | E.1 RAG Agents, E.2 Entity Analyzer, E.3 Monitoring | Not Started |
+| Phase F: Visualization | F.1 Tile Server, F.2 Report Generator, F.3 Dashboard | Not Started |
 
 The audit & anti-fraud roadmap (Phases A-F above) integrates with:
 - **Issue #005 Task 5.3** (Fraud Detection & Anomaly Detection) -> Phase C
