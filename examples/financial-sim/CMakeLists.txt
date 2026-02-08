@@ -118,3 +118,24 @@ add_executable(${TX_VALIDATOR_TEST_TARGET}
 )
 target_link_libraries(${TX_VALIDATOR_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 target_compile_features(${TX_VALIDATOR_TEST_TARGET} PRIVATE cxx_std_17)
+
+# Test for financial data connector (Phase A.2 - no model required)
+set(DATA_CONNECTOR_TEST_TARGET test-financial-data-connector)
+add_executable(${DATA_CONNECTOR_TEST_TARGET}
+    test-financial-data-connector.cpp
+    financial-data-connector.cpp
+    transaction-engine.cpp
+)
+target_link_libraries(${DATA_CONNECTOR_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${DATA_CONNECTOR_TEST_TARGET} PRIVATE cxx_std_17)
+
+# Test for audit persistence adapter (Phase A.1 DB integration - no model required)
+set(AUDIT_PERSIST_TEST_TARGET test-audit-persistence)
+add_executable(${AUDIT_PERSIST_TEST_TARGET}
+    test-audit-persistence.cpp
+    audit-persistence.cpp
+    audit-trail.cpp
+    transaction-engine.cpp
+)
+target_link_libraries(${AUDIT_PERSIST_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${AUDIT_PERSIST_TEST_TARGET} PRIVATE cxx_std_17)
