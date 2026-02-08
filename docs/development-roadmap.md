@@ -585,6 +585,73 @@ This document provides a comprehensive development roadmap for building a comple
   - **Testing**: Impact measurement validation
   - **Validation**: Manage sustainable portfolios with measurable impact
 
+### Phase A: Audit Foundation & Anti-Fraud (Parallel Track)
+
+#### Feature: Immutable Audit Trail Engine (A.1)
+**Priority**: Critical
+**Status**: IMPLEMENTED
+**Dependencies**: Task 1.4 (Database Persistence)
+
+**Description**: Cryptographically secured, append-only audit trail for all financial transactions. SOX compliant with 7-year retention and instant retrieval.
+
+**Completed**:
+- [x] SHA-256 hash chain for transaction integrity verification
+- [x] Cryptographic signing (HMAC-SHA256) of audit entries with timestamp attestation
+- [x] 7-year retention policy configuration with instant retrieval
+- [x] Tamper detection with configurable alert callbacks
+- [x] Export formats: JSON, CSV for external auditors
+- [x] Query engine with filtering by severity, category, actor, resource, time range
+- [x] Audit trail integrity reports with detailed pass/fail analysis
+- [x] Transaction batch recording with batch start/end events
+- [x] 22 unit tests passing
+
+**Implementation Files**:
+- `examples/financial-sim/audit-trail.h` - Header with SignedAuditEntry, ImmutableAuditTrail, TamperAlert, RetentionPolicy
+- `examples/financial-sim/audit-trail.cpp` - Full implementation
+- `examples/financial-sim/test-audit-trail.cpp` - Test suite
+
+#### Feature: Multi-Source Financial Data Connector (A.2)
+**Priority**: High
+**Status**: Not Started
+**Dependencies**: Task 1.1 (Chart of Accounts)
+
+**Description**: Build connectors to ingest financial data from multiple accounting systems.
+
+**Tasks**:
+- [ ] Xero API connector (REST, OAuth2)
+- [ ] GnuCash file reader (XML/SQLite)
+- [ ] Beancount/hledger text file parser
+- [ ] ERPNext API connector
+- [ ] CSV/Excel universal importer with field mapping
+- [ ] Data normalization layer mapping external accounts to GGNuCash CoA
+
+#### Feature: Transaction Integrity Validator (A.3)
+**Priority**: High
+**Status**: IMPLEMENTED
+**Dependencies**: A.1
+
+**Description**: Core validation engine for detecting accounting inconsistencies including double-entry violations, duplicate transactions, and trial balance discrepancies.
+
+**Completed**:
+- [x] Double-entry balance verification across all accounts
+- [x] Missing transaction gap detection with configurable duration thresholds
+- [x] Duplicate transaction identification using Levenshtein fuzzy matching
+- [x] Trial balance validation and automated discrepancy reporting
+- [x] Hash chain integrity verification for tamper detection
+- [x] Account existence validation against registered account sets
+- [x] Amount reasonableness checks (large transaction flags, negative amount detection)
+- [x] Comprehensive validation report with text and JSON export
+- [x] 20 unit tests passing
+
+**Implementation Files**:
+- `examples/financial-sim/transaction-validator.h` - Header with TransactionValidator, ValidationReport, DuplicateCandidate
+- `examples/financial-sim/transaction-validator.cpp` - Full implementation
+- `examples/financial-sim/test-transaction-validator.cpp` - Test suite
+
+**Remaining**:
+- [ ] Inter-company transaction reconciliation
+- [ ] Currency conversion audit with rate source verification
+
 ## Cross-Cutting Concerns
 
 ### Performance Requirements

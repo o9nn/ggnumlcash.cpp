@@ -98,3 +98,23 @@ add_executable(${DB_PERSIST_DEMO_TARGET}
 )
 target_link_libraries(${DB_PERSIST_DEMO_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 target_compile_features(${DB_PERSIST_DEMO_TARGET} PRIVATE cxx_std_17)
+
+# Test for immutable audit trail (Phase A.1 - no model required)
+set(AUDIT_TRAIL_TEST_TARGET test-audit-trail)
+add_executable(${AUDIT_TRAIL_TEST_TARGET}
+    test-audit-trail.cpp
+    audit-trail.cpp
+    transaction-engine.cpp
+)
+target_link_libraries(${AUDIT_TRAIL_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${AUDIT_TRAIL_TEST_TARGET} PRIVATE cxx_std_17)
+
+# Test for transaction integrity validator (Phase A.3 - no model required)
+set(TX_VALIDATOR_TEST_TARGET test-transaction-validator)
+add_executable(${TX_VALIDATOR_TEST_TARGET}
+    test-transaction-validator.cpp
+    transaction-validator.cpp
+    transaction-engine.cpp
+)
+target_link_libraries(${TX_VALIDATOR_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${TX_VALIDATOR_TEST_TARGET} PRIVATE cxx_std_17)
