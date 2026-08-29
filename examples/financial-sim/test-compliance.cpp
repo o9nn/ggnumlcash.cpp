@@ -267,18 +267,17 @@ void test_tamper_evidence_verification() {
 //   retail     200 @  75%  -> RWA 150
 //   corporate  300 @ 150%  -> RWA 450
 // Total exposure = 2000, RWA = 1600.
-static BaselIIIEngine make_known_book() {
-    BaselIIIEngine engine;
+static void fill_known_book(BaselIIIEngine & engine) {
     engine.add_exposure(BaselExposure("E1", "corporate", 1000.0, 1.00));
     engine.add_exposure(BaselExposure("E2", "sovereign",  500.0, 0.00));
     engine.add_exposure(BaselExposure("E3", "retail",     200.0, 0.75));
     engine.add_exposure(BaselExposure("E4", "corporate",  300.0, 1.50));
-    return engine;
 }
 
 void test_basel_rwa_computation() {
     TEST("Basel III RWA and total exposure on a known book");
-    BaselIIIEngine engine = make_known_book();
+    BaselIIIEngine engine;
+    fill_known_book(engine);
     ASSERT_EQ(engine.exposure_count(), (size_t) 4);
     ASSERT_NEAR(engine.compute_rwa(), 1600.0, 1e-9);
     ASSERT_NEAR(engine.compute_total_exposure(), 2000.0, 1e-9);
@@ -287,7 +286,8 @@ void test_basel_rwa_computation() {
 
 void test_basel_ratios_pass() {
     TEST("Basel III ratios pass with adequate capital");
-    BaselIIIEngine engine = make_known_book();
+    BaselIIIEngine engine;
+    fill_known_book(engine);
     CapitalStructure cap;
     cap.cet1_capital      = 120.0;  // CET1  = 120/1600  = 7.5%   (>= 7.0% incl. CCB)
     cap.additional_tier1  = 20.0;   // Tier1 = 140/1600  = 8.75%  (>= 6%)
@@ -311,7 +311,8 @@ void test_basel_ratios_pass() {
 
 void test_basel_ratios_fail_at_thresholds() {
     TEST("Basel III ratios fail below thresholds");
-    BaselIIIEngine engine = make_known_book();
+    BaselIIIEngine engine;
+    fill_known_book(engine);
     CapitalStructure cap;
     cap.cet1_capital     = 60.0;   // CET1  = 60/1600 = 3.75%  (< 4.5% hard min)
     cap.additional_tier1 = 20.0;   // Tier1 = 80/1600 = 5%     (< 6%)
@@ -327,7 +328,8 @@ void test_basel_ratios_fail_at_thresholds() {
     ASSERT_TRUE(report.ratio_pass("Leverage"));
 
     // CET1 above hard minimum but below minimum+CCB must still fail.
-    BaselIIIEngine engine2 = make_known_book();
+    BaselIIIEngine engine2;
+    fill_known_book(engine2);
     CapitalStructure cap2;
     cap2.cet1_capital     = 96.0;  // CET1 = 6% >= 4.5% but < 7.0% incl. CCB
     cap2.additional_tier1 = 40.0;  // Tier1 = 8.5%
@@ -358,7 +360,8 @@ void test_basel_custom_thresholds() {
 
 void test_basel_stress_scenario() {
     TEST("Basel III stress scenario re-weights and recomputes");
-    BaselIIIEngine engine = make_known_book();
+    BaselIIIEngine engine;
+    fill_known_book(engine);
     CapitalStructure cap;
     cap.cet1_capital     = 120.0;
     cap.additional_tier1 = 20.0;
