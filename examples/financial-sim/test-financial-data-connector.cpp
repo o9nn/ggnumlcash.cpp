@@ -1175,7 +1175,8 @@ void test_xero_oauth2_request_builder() {
 
     ASSERT_TRUE(request.find("GET /api.xro/2.0/Accounts HTTP/1.1") != std::string::npos);
     ASSERT_TRUE(request.find("Host: api.xero.com") != std::string::npos);
-    ASSERT_TRUE(request.find("Authorization: ****** test-token-123") != std::string::npos);
+    ASSERT_TRUE(request.find("Authorization: Bearer ") != std::string::npos);
+    ASSERT_TRUE(request.find("test-token-123") != std::string::npos);
     ASSERT_TRUE(request.find("xero-tenant-id: tenant-abc") != std::string::npos);
     ASSERT_TRUE(request.find("Accept: application/json") != std::string::npos);
 

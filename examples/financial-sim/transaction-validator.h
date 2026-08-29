@@ -429,6 +429,14 @@ private:
     const RegisteredExchangeRate * find_reference_rate(const std::string & from_currency,
                                                        const std::string & to_currency,
                                                        const std::string & date) const;
+    // Effective reference rate oriented from->to, inverting the stored rate
+    // when the matching registered entry is in the reverse direction.
+    // Returns true (and sets rate/source) when a reference rate is available.
+    bool effective_reference_rate(const std::string & from_currency,
+                                  const std::string & to_currency,
+                                  const std::string & date,
+                                  double & rate,
+                                  std::string & source) const;
 };
 
 } // namespace validation

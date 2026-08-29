@@ -247,8 +247,12 @@ ValidationReport TransactionValidator::validate_all(
     for (const auto & bal : report.intercompany_balances) {
         report.intercompany_transactions_checked += bal.transaction_count;
     }
+    // Count only per-transaction findings (which carry a transaction_id) so a
+    // single unreconciled transaction is not double-counted by the per-pair
+    // net-balance summary findings (which leave transaction_id empty).
     report.intercompany_unreconciled = 0;
     for (const auto & f : intercompany_findings) {
+        if (f.transaction_id.empty()) continue;  // per-pair summary, not a transaction
         if (f.severity == ValidationSeverity::ERROR
                 || f.severity == ValidationSeverity::WARNING
                 || f.severity == ValidationSeverity::CRITICAL) {
@@ -926,23 +930,25 @@ std::vector<ValidationFinding> TransactionValidator::validate_currency_conversio
     double tolerance = config_.currency_conversion_tolerance_pct / 100.0;
 
     for (const auto & rec : records) {
-        const RegisteredExchangeRate * ref = find_reference_rate(
-            rec.from_currency, rec.to_currency, rec.date);
+        double ref_rate = 0.0;
+        std::string ref_source;
+        bool has_ref = effective_reference_rate(
+            rec.from_currency, rec.to_currency, rec.date, ref_rate, ref_source);
 
-        if (ref != nullptr) {
-            double deviation = std::abs(rec.implied_rate - ref->rate) / ref->rate;
+        if (has_ref) {
+            double deviation = std::abs(rec.implied_rate - ref_rate) / ref_rate;
 
             ValidationFinding f;
             f.finding_id = generate_finding_id();
             f.type = ValidationType::CURRENCY_CONVERSION;
             f.transaction_id = rec.transaction_id;
             f.account_code = rec.entry_account;
-            f.expected_value = ref->rate;
+            f.expected_value = ref_rate;
             f.actual_value = rec.implied_rate;
             f.context["from_currency"] = rec.from_currency;
             f.context["to_currency"] = rec.to_currency;
-            f.context["rate_source"] = rec.rate_source.empty() ? ref->source : rec.rate_source;
-            f.context["reference_source"] = ref->source;
+            f.context["rate_source"] = rec.rate_source.empty() ? ref_source : rec.rate_source;
+            f.context["reference_source"] = ref_source;
             f.context["deviation_pct"] = std::to_string(deviation * 100.0);
 
             if (deviation <= tolerance) {
@@ -951,14 +957,14 @@ std::vector<ValidationFinding> TransactionValidator::validate_currency_conversio
                                 + rec.to_currency + " in transaction " + rec.transaction_id
                                 + " within tolerance (implied "
                                 + std::to_string(rec.implied_rate) + " vs reference "
-                                + std::to_string(ref->rate) + " from " + ref->source + ")";
+                                + std::to_string(ref_rate) + " from " + ref_source + ")";
             } else {
                 f.severity = ValidationSeverity::WARNING;
                 f.description = "Currency conversion " + rec.from_currency + "->"
                                 + rec.to_currency + " in transaction " + rec.transaction_id
                                 + " deviates "
                                 + std::to_string(deviation * 100.0) + "% from reference rate "
-                                + std::to_string(ref->rate) + " (" + ref->source
+                                + std::to_string(ref_rate) + " (" + ref_source
                                 + ", tolerance "
                                 + std::to_string(config_.currency_conversion_tolerance_pct)
                                 + "%)";
@@ -1064,11 +1070,31 @@ std::string TransactionValidator::get_account_entity(const std::string & account
     return best_entity;
 }
 
+bool TransactionValidator::effective_reference_rate(const std::string & from_currency,
+                                                    const std::string & to_currency,
+                                                    const std::string & date,
+                                                    double & rate,
+                                                    std::string & source) const {
+    const RegisteredExchangeRate * ref = find_reference_rate(from_currency, to_currency, date);
+    if (ref == nullptr || ref->rate == 0.0) return false;
+
+    // The stored rate is expressed as (to/ref->to per from/ref->from). When the
+    // match was found in the reverse direction, the effective from->to rate is
+    // the reciprocal.
+    bool reversed = (ref->from_currency == to_currency && ref->to_currency == from_currency);
+    rate = reversed ? (1.0 / ref->rate) : ref->rate;
+    source = ref->source;
+    return true;
+}
+
 double TransactionValidator::lookup_reference_rate(const std::string & from_currency,
                                                    const std::string & to_currency,
                                                    const std::string & date) const {
-    const RegisteredExchangeRate * ref = find_reference_rate(from_currency, to_currency, date);
-    return (ref != nullptr) ? ref->rate : 0.0;
+    double rate = 0.0;
+    std::string source;
+    return effective_reference_rate(from_currency, to_currency, date, rate, source)
+               ? rate
+               : 0.0;
 }
 
 std::string TransactionValidator::get_transaction_currency(const Transaction & tx) const {

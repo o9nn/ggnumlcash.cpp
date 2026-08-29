@@ -2369,7 +2369,7 @@ std::string XeroConnector::build_oauth2_request(const std::string & endpoint,
     std::stringstream ss;
     ss << "GET " << endpoint << " HTTP/1.1\r\n";
     ss << "Host: " << host << "\r\n";
-    ss << "Authorization: ****** " << bearer_token << "\r\n";
+    ss << "Authorization: Bearer " << bearer_token << "\r\n";
     if (!tenant_id.empty()) {
         ss << "xero-tenant-id: " << tenant_id << "\r\n";
     }

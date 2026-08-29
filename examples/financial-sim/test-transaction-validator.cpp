@@ -640,6 +640,41 @@ TEST(currency_conversion_within_tolerance_passes) {
     ASSERT_EQ(records[0].rate_source, "ECB");
 }
 
+TEST(currency_conversion_inverse_reference_rate) {
+    // Reference rate registered in the REVERSE direction (USD->EUR) while the
+    // transaction implies EUR->USD. The validator must invert the stored rate.
+    TransactionValidator validator;
+    validator.register_transaction_currency("TX-FX-INV", "USD");
+    validator.register_account_currency("1200", "EUR");
+    // USD->EUR: 1 USD = 0.9259 EUR, i.e. EUR->USD = 1/0.9259 ~= 1.08
+    validator.register_exchange_rate("USD", "EUR", "2025-01-15", 0.9259, "ECB");
+    validator.register_rate_source("TX-FX-INV", "ECB");
+
+    // 1000 EUR converted at ~1.08 -> 1080 USD home side.
+    Transaction tx;
+    tx.id = "TX-FX-INV";
+    tx.description = "EUR receivable settlement (inverse reference)";
+    tx.timestamp = "2025-01-15 10:00:00";
+    tx.entries = {
+        TransactionEntry("1200", 0.0, 1000.0, "EUR receivable"),
+        TransactionEntry("1101", 1080.0, 0.0, "USD cash")
+    };
+
+    std::vector<Transaction> txs = {tx};
+    auto findings = validator.validate_currency_conversion(txs);
+
+    bool found_pass = false;
+    for (const auto & f : findings) {
+        if (f.type == ValidationType::CURRENCY_CONVERSION &&
+            f.severity == ValidationSeverity::PASS) {
+            found_pass = true;
+            // Expected value must be the INVERTED rate (~1.08), not 0.9259.
+            ASSERT_TRUE(std::abs(f.expected_value - (1.0 / 0.9259)) < 0.001);
+        }
+    }
+    ASSERT_TRUE(found_pass);
+}
+
 TEST(currency_conversion_missing_rate_source) {
     TransactionValidator validator;
     validator.register_transaction_currency("TX-FX-2", "USD");
