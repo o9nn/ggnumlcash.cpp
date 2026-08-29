@@ -94,21 +94,25 @@ double trinomial_option_price(double spot,
     double sig = std::max(volatility, 1e-12);
     double u = std::exp(sig * std::sqrt(2.0 * dt));
     double d = 1.0 / u;
-    double m = 1.0;
 
-    // Moment-matched risk-neutral branch probabilities.
+    // Moment-matched risk-neutral branch probabilities. Matching the first
+    // two moments of the gross return (G = e^{r dt}, V2 = e^{(2r+sig^2) dt})
+    // on the (u, 1, d) lattice gives:
+    //   A   = (V2 - 1 - (G - 1)(1 + d)) / (u - d)
+    //   p_u = A / (u - 1),  p_d = (A - (G - 1)) / (1 - d),  p_m = 1 - p_u - p_d
     double growth = std::exp(risk_free_rate * dt);
-    double denom_u = 1.0 - d;
-    double denom_d = u - 1.0;
-    double p_u = growth * denom_u / (u * denom_u * denom_u);
-    double p_d = growth * denom_d / (d * denom_d * denom_d);
+    double second = std::exp((2.0 * risk_free_rate + sig * sig) * dt);
+    double a = (second - 1.0 - (growth - 1.0) * (1.0 + d)) / (u - d);
+    double p_u = a / (u - 1.0);
+    double p_d = (a - (growth - 1.0)) / (1.0 - d);
     double p_m = 1.0 - p_u - p_d;
     double disc = std::exp(-risk_free_rate * dt);
 
-    // Terminal layer: index j holds spot * u^j * d^(steps - j).
+    // Terminal layer: node index j at step k holds spot * u^(j - k), so the
+    // up/mid/down children of node j are j+2, j+1, j at the next step.
     std::vector<double> values(2 * steps + 1);
     for (int j = 0; j <= 2 * steps; j++) {
-        double s = spot * std::pow(u, j) * std::pow(d, steps - j);
+        double s = spot * std::pow(u, j - steps);
         values[j] = option_payoff(s, strike, type);
     }
 
@@ -116,9 +120,9 @@ double trinomial_option_price(double spot,
     for (int step = steps - 1; step >= 0; step--) {
         int count = 2 * step + 1;
         for (int j = 0; j < count; j++) {
-            double hold = disc * (p_u * values[j] + p_m * values[j + 1] + p_d * values[j + 2]);
+            double hold = disc * (p_d * values[j] + p_m * values[j + 1] + p_u * values[j + 2]);
             if (american) {
-                double s = spot * std::pow(u, j) * std::pow(d, step - j);
+                double s = spot * std::pow(u, j - step);
                 values[j] = std::max(hold, option_payoff(s, strike, type));
             } else {
                 values[j] = hold;

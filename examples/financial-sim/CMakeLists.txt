@@ -125,9 +125,21 @@ add_executable(${DATA_CONNECTOR_TEST_TARGET}
     test-financial-data-connector.cpp
     financial-data-connector.cpp
     transaction-engine.cpp
+    avro-serializer.cpp
 )
 target_link_libraries(${DATA_CONNECTOR_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 target_compile_features(${DATA_CONNECTOR_TEST_TARGET} PRIVATE cxx_std_17)
+
+# Test for Avro serializer (Phase A.2 - no model required)
+set(AVRO_TEST_TARGET test-avro-serializer)
+add_executable(${AVRO_TEST_TARGET}
+    test-avro-serializer.cpp
+    avro-serializer.cpp
+    financial-data-connector.cpp
+    transaction-engine.cpp
+)
+target_link_libraries(${AVRO_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${AVRO_TEST_TARGET} PRIVATE cxx_std_17)
 
 # Test for audit persistence adapter (Phase A.1 DB integration - no model required)
 set(AUDIT_PERSIST_TEST_TARGET test-audit-persistence)
@@ -186,6 +198,16 @@ add_executable(${FLOW_ANALYTICS_TEST_TARGET}
 )
 target_link_libraries(${FLOW_ANALYTICS_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 target_compile_features(${FLOW_ANALYTICS_TEST_TARGET} PRIVATE cxx_std_17)
+
+# Test for quantitative finance models (Phase 2, Issue #004 - no model required)
+set(QUANT_MODELS_TEST_TARGET test-quant-models)
+add_executable(${QUANT_MODELS_TEST_TARGET}
+    test-quant-models.cpp
+    quant-models.cpp
+    financial-tensors.cpp
+)
+target_link_libraries(${QUANT_MODELS_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${QUANT_MODELS_TEST_TARGET} PRIVATE cxx_std_17)
 
 # Test for regulatory compliance engine (Issue #006 - no model required)
 set(COMPLIANCE_TEST_TARGET test-compliance)
