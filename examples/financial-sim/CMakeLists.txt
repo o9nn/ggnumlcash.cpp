@@ -136,6 +136,16 @@ add_executable(${AUDIT_PERSIST_TEST_TARGET}
     audit-persistence.cpp
     audit-trail.cpp
     transaction-engine.cpp
+    pdf-report.cpp
 )
 target_link_libraries(${AUDIT_PERSIST_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 target_compile_features(${AUDIT_PERSIST_TEST_TARGET} PRIVATE cxx_std_17)
+
+# Test for minimal PDF report writer (Phase A.1 - no model required)
+set(PDF_REPORT_TEST_TARGET test-pdf-report)
+add_executable(${PDF_REPORT_TEST_TARGET}
+    test-pdf-report.cpp
+    pdf-report.cpp
+)
+target_link_libraries(${PDF_REPORT_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${PDF_REPORT_TEST_TARGET} PRIVATE cxx_std_17)

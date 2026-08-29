@@ -1,4 +1,5 @@
 #include "audit-persistence.h"
+#include "pdf-report.h"
 #include <algorithm>
 
 namespace ggnucash {
@@ -390,6 +391,20 @@ std::string AuditPersistenceAdapter::export_to_structured_text(
     ss << "================================================================\n";
 
     return ss.str();
+}
+
+std::string AuditPersistenceAdapter::export_to_pdf(
+    const std::vector<SignedAuditEntry> & entries,
+    const std::string & report_title) const {
+    std::string text = export_to_structured_text(entries, report_title);
+
+    ggnucash::report::PdfConfig config;
+    config.title = report_title;
+    config.author = "GGNuCash Audit Subsystem";
+
+    ggnucash::report::PdfReportWriter writer(config);
+    writer.add_text(text);
+    return writer.render();
 }
 
 // ---- Statistics ----

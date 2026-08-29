@@ -358,6 +358,45 @@ void test_structured_text_export() {
     TEST_END("Structured text export for PDF");
 }
 
+void test_pdf_export() {
+    TEST("Direct PDF export of audit report");
+
+    AuditPersistenceAdapter adapter;
+
+    ImmutableAuditTrail trail("test-key");
+    Transaction tx;
+    tx.id = "TX-100";
+    tx.description = "PDF export transaction";
+    tx.entries.push_back(TransactionEntry("1000", 750.0, 0.0));
+    tx.entries.push_back(TransactionEntry("4000", 0.0, 750.0));
+    tx.calculate_hash();
+    trail.record_transaction(tx, "auditor");
+
+    trail.record_event(AuditSeverity::CRITICAL, AuditCategory::TAMPER_DETECTION,
+                       "integrity-monitor", "HASH_MISMATCH", "entry/abc",
+                       "Hash chain break detected");
+
+    AuditQuery q;
+    auto entries = trail.query(q);
+
+    std::string pdf = adapter.export_to_pdf(entries, "SOX Compliance Report");
+
+    // Validate PDF container structure
+    ASSERT_TRUE(pdf.size() > 0);
+    ASSERT_TRUE(pdf.find("%PDF-1.4") == 0);
+    ASSERT_TRUE(pdf.find("/Type /Catalog") != std::string::npos);
+    ASSERT_TRUE(pdf.find("/Title (SOX Compliance Report)") != std::string::npos);
+    ASSERT_TRUE(pdf.find("xref") != std::string::npos);
+    ASSERT_TRUE(pdf.find("%%EOF") != std::string::npos);
+
+    // Validate report content survived the text -> PDF round trip
+    ASSERT_TRUE(pdf.find("TX-100") != std::string::npos);
+    ASSERT_TRUE(pdf.find("DETAILED ENTRIES") != std::string::npos);
+    ASSERT_TRUE(pdf.find("END OF REPORT") != std::string::npos);
+
+    TEST_END("Direct PDF export of audit report");
+}
+
 // ============================================================================
 // SQL Injection Prevention Tests
 // ============================================================================
@@ -478,6 +517,7 @@ int main() {
     std::cout << "\n--- Export Format Tests ---" << std::endl;
     test_sql_export();
     test_structured_text_export();
+    test_pdf_export();
 
     std::cout << "\n--- Security Tests ---" << std::endl;
     test_sql_escaping();
