@@ -40,7 +40,7 @@ std::string fix_utc_timestamp(int64_t epoch_ns) {
 #else
     gmtime_r(&secs, &tm_utc);
 #endif
-    char buf[32];
+    char buf[128];
     std::snprintf(buf, sizeof(buf), "%04d%02d%02d-%02d:%02d:%02d.%03d",
                   tm_utc.tm_year + 1900, tm_utc.tm_mon + 1, tm_utc.tm_mday,
                   tm_utc.tm_hour, tm_utc.tm_min, tm_utc.tm_sec, millis);

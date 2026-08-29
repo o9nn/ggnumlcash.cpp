@@ -485,7 +485,7 @@ void test_http_request_builder_body() {
         .set_body("{\"symbols\":[\"AAPL\"]}")
         .build();
     ASSERT_TRUE(req.find("POST /v1/subscribe HTTP/1.1\r\n") == 0);
-    ASSERT_TRUE(req.find("Content-Length: 21\r\n") != std::string::npos);
+    ASSERT_TRUE(req.find("Content-Length: 20\r\n") != std::string::npos);
     ASSERT_TRUE(req.find("\r\n\r\n{\"symbols\":[\"AAPL\"]}") != std::string::npos);
     TEST_END("HTTP request builder sets Content-Length for body");
 }
@@ -954,7 +954,8 @@ void test_end_to_end_pipeline() {
     int delivered = 0;
     bus.subscribe("AAPL", [&delivered](const MarketDataMessage &) { delivered++; });
 
-    const int64_t base = TimestampSource::now_wall_ns();
+    // Feed timestamps 100ms in the past so receipt stamps are always later.
+    const int64_t base = TimestampSource::now_wall_ns() - 100000000LL;
     for (int i = 0; i < 5; i++) {
         Tick tick = norm.normalize_tick("NASDAQ", "AAPL.OQ",
                                         187.50 + i, 187.55 + i, 187.52 + i,
