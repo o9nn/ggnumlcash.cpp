@@ -970,6 +970,375 @@ void test_connector_type_strings() {
     TEST_END("Connector type string conversion");
 }
 
+// ============================================================================
+// JSON Parser Tests
+// ============================================================================
+
+void test_json_parser_basic() {
+    TEST("JsonParser parses objects, arrays, scalars");
+
+    JsonParser parser;
+    JsonValue root;
+    std::string error;
+
+    ASSERT_TRUE(parser.parse(
+        R"({"a": 1, "b": "text", "c": [1, 2.5, -3], "d": {"e": true, "f": null}})",
+        root, error));
+    ASSERT_TRUE(root.is_object());
+    ASSERT_TRUE(root.has("a"));
+    ASSERT_NEAR(root.get("a").as_number(), 1.0, 0.0001);
+    ASSERT_EQ(root.get("b").as_string(), "text");
+    ASSERT_TRUE(root.get("c").is_array());
+    ASSERT_EQ(root.get("c").size(), (size_t)3);
+    ASSERT_NEAR(root.get("c").at(1).as_number(), 2.5, 0.0001);
+    ASSERT_NEAR(root.get("c").at(2).as_number(), -3.0, 0.0001);
+    ASSERT_TRUE(root.get("d").get("e").as_bool());
+    ASSERT_TRUE(root.get("d").get("f").is_null());
+
+    TEST_END("JsonParser parses objects, arrays, scalars");
+}
+
+void test_json_parser_escapes_and_unicode() {
+    TEST("JsonParser handles escapes and unicode");
+
+    JsonParser parser;
+    JsonValue root;
+    std::string error;
+
+    ASSERT_TRUE(parser.parse(R"({"s": "a\"b\\c\ndAé"})", root, error));
+    std::string expected = "a\"b\\c\ndA\xc3\xa9";
+    ASSERT_EQ(root.get("s").as_string(), expected);
+
+    // Missing keys return null values
+    ASSERT_TRUE(root.get("nonexistent").is_null());
+    ASSERT_EQ(root.get("nonexistent").as_string(), "");
+
+    TEST_END("JsonParser handles escapes and unicode");
+}
+
+void test_json_parser_errors() {
+    TEST("JsonParser rejects malformed JSON gracefully");
+
+    JsonParser parser;
+    JsonValue root;
+    std::string error;
+
+    ASSERT_FALSE(parser.parse("{invalid", root, error));
+    ASSERT_FALSE(error.empty());
+    ASSERT_FALSE(parser.parse("[1, 2", root, error));
+    ASSERT_FALSE(parser.parse("{\"a\": 1} trailing", root, error));
+    ASSERT_FALSE(parser.parse("", root, error));
+    ASSERT_FALSE(parser.parse("{\"a\": tru}", root, error));
+
+    TEST_END("JsonParser rejects malformed JSON gracefully");
+}
+
+// ============================================================================
+// Xero Connector Tests
+// ============================================================================
+
+void test_xero_accounts_import() {
+    TEST("Xero connector imports chart of accounts");
+
+    XeroConnector connector;
+    std::string payload = R"({
+        "Accounts": [
+            {
+                "AccountID": "bd0e9484-bfd8-4a40-93b0-c4c5f7a30a01",
+                "Code": "090",
+                "Name": "Business Bank Account",
+                "Type": "BANK",
+                "CurrencyCode": "USD",
+                "Description": "Main operating account"
+            },
+            {
+                "AccountID": "7dd4b1f4-1111-4a40-93b0-c4c5f7a30a02",
+                "Code": "400",
+                "Name": "Sales Revenue",
+                "Type": "SALES"
+            },
+            {
+                "AccountID": "8ee5c2g5-2222-4a40-93b0-c4c5f7a30a03",
+                "Code": "800",
+                "Name": "Interest Expense",
+                "Type": "EXPENSE"
+            }
+        ]
+    })";
+
+    auto result = connector.import_from_string(payload);
+
+    ASSERT_TRUE(result.success);
+    ASSERT_EQ(result.accounts_imported, (uint64_t)3);
+    ASSERT_EQ(result.accounts[0].external_id, "bd0e9484-bfd8-4a40-93b0-c4c5f7a30a01");
+    ASSERT_EQ(result.accounts[0].external_code, "090");
+    ASSERT_EQ(result.accounts[0].name, "Business Bank Account");
+    ASSERT_EQ(result.accounts[0].type, "Asset");
+    ASSERT_EQ(result.accounts[1].type, "Revenue");
+    ASSERT_EQ(result.accounts[2].type, "Expense");
+    ASSERT_EQ(result.accounts[0].currency, "USD");
+    ASSERT_EQ(result.accounts[1].currency, "USD"); // default
+
+    TEST_END("Xero connector imports chart of accounts");
+}
+
+void test_xero_bank_transactions_import() {
+    TEST("Xero connector imports bank transactions");
+
+    XeroConnector connector;
+    std::string payload = R"({
+        "BankTransactions": [
+            {
+                "BankTransactionID": "a1b2c3d4-0001-4a40-93b0-c4c5f7a30a10",
+                "Type": "RECEIVE",
+                "Date": "2024-01-15T00:00:00",
+                "Reference": "INV-0042",
+                "CurrencyCode": "USD",
+                "Total": 1500.00,
+                "BankAccount": {"Code": "090", "AccountID": "bd0e9484"},
+                "LineItems": [
+                    {
+                        "Description": "Consulting services",
+                        "AccountCode": "400",
+                        "LineAmount": 1500.00,
+                        "Quantity": 1,
+                        "UnitAmount": 1500.00
+                    }
+                ]
+            },
+            {
+                "BankTransactionID": "a1b2c3d4-0002-4a40-93b0-c4c5f7a30a11",
+                "Type": "SPEND",
+                "Date": "/Date(1705968000000+0000)/",
+                "Reference": "OFFICE-SUPPLY",
+                "Total": 250.50,
+                "BankAccount": {"Code": "090"},
+                "LineItems": [
+                    {
+                        "AccountCode": "610",
+                        "LineAmount": 250.50
+                    }
+                ]
+            }
+        ]
+    })";
+
+    auto result = connector.import_from_string(payload);
+
+    ASSERT_TRUE(result.success);
+    ASSERT_EQ(result.transactions_imported, (uint64_t)2);
+    ASSERT_EQ(result.transactions.size(), (size_t)2);
+
+    const auto & tx1 = result.transactions[0];
+    ASSERT_EQ(tx1.external_id, "a1b2c3d4-0001-4a40-93b0-c4c5f7a30a10");
+    ASSERT_EQ(tx1.date, "2024-01-15");
+    ASSERT_EQ(tx1.reference, "INV-0042");
+    ASSERT_EQ(tx1.source_system, "Xero");
+    ASSERT_EQ(tx1.lines.size(), (size_t)2);
+    ASSERT_EQ(tx1.lines[0].account_code, "400");
+    ASSERT_NEAR(tx1.lines[0].debit_amount, 1500.0, 0.01);
+    ASSERT_EQ(tx1.lines[1].account_code, "090");
+    ASSERT_NEAR(tx1.lines[1].debit_amount, 1500.0, 0.01); // RECEIVE -> bank debit
+
+    const auto & tx2 = result.transactions[1];
+    ASSERT_EQ(tx2.date, "2024-01-23"); // 1705968000000 ms epoch
+    ASSERT_NEAR(tx2.lines[0].debit_amount, 250.50, 0.01);
+    ASSERT_NEAR(tx2.lines[1].credit_amount, 250.50, 0.01); // SPEND -> bank credit
+    ASSERT_TRUE(tx2.is_balanced());
+
+    TEST_END("Xero connector imports bank transactions");
+}
+
+void test_xero_malformed_and_empty() {
+    TEST("Xero connector handles malformed and empty payloads");
+
+    XeroConnector connector;
+
+    auto bad = connector.import_from_string("this is not json");
+    ASSERT_FALSE(bad.success);
+    ASSERT_FALSE(bad.errors.empty());
+
+    auto empty = connector.import_from_string("{}");
+    ASSERT_TRUE(empty.success);
+    ASSERT_EQ(empty.accounts_imported, (uint64_t)0);
+    ASSERT_EQ(empty.transactions_imported, (uint64_t)0);
+    ASSERT_FALSE(empty.warnings.empty());
+
+    TEST_END("Xero connector handles malformed and empty payloads");
+}
+
+void test_xero_oauth2_request_builder() {
+    TEST("Xero OAuth2 request builder constructs valid request");
+
+    auto request = XeroConnector::build_oauth2_request(
+        "/api.xro/2.0/Accounts", "test-token-123", "tenant-abc");
+
+    ASSERT_TRUE(request.find("GET /api.xro/2.0/Accounts HTTP/1.1") != std::string::npos);
+    ASSERT_TRUE(request.find("Host: api.xero.com") != std::string::npos);
+    ASSERT_TRUE(request.find("Authorization: ****** test-token-123") != std::string::npos);
+    ASSERT_TRUE(request.find("xero-tenant-id: tenant-abc") != std::string::npos);
+    ASSERT_TRUE(request.find("Accept: application/json") != std::string::npos);
+
+    // Without tenant id the header is omitted
+    auto request2 = XeroConnector::build_oauth2_request("/api.xro/2.0/Contacts", "tok");
+    ASSERT_TRUE(request2.find("xero-tenant-id") == std::string::npos);
+
+    TEST_END("Xero OAuth2 request builder constructs valid request");
+}
+
+// ============================================================================
+// ERPNext Connector Tests
+// ============================================================================
+
+void test_erpnext_accounts_import() {
+    TEST("ERPNext connector imports chart of accounts");
+
+    ErpNextConnector connector;
+    std::string payload = R"({
+        "data": [
+            {
+                "name": "Main Cash - ACME",
+                "account_name": "Main Cash",
+                "account_type": "Cash",
+                "parent_account": "Cash and Bank Accounts - ACME",
+                "account_number": "1110",
+                "account_currency": "USD"
+            },
+            {
+                "name": "Sales - ACME",
+                "account_name": "Sales",
+                "account_type": "Income Account",
+                "parent_account": "Income - ACME"
+            },
+            {
+                "name": "Creditors - ACME",
+                "account_name": "Creditors",
+                "account_type": "Payable",
+                "parent_account": "Liabilities - ACME"
+            }
+        ]
+    })";
+
+    auto result = connector.import_from_string(payload);
+
+    ASSERT_TRUE(result.success);
+    ASSERT_EQ(result.accounts_imported, (uint64_t)3);
+    ASSERT_EQ(result.accounts[0].external_id, "Main Cash - ACME");
+    ASSERT_EQ(result.accounts[0].external_code, "1110");
+    ASSERT_EQ(result.accounts[0].name, "Main Cash");
+    ASSERT_EQ(result.accounts[0].type, "Asset");
+    ASSERT_EQ(result.accounts[0].parent_id, "Cash and Bank Accounts - ACME");
+    ASSERT_EQ(result.accounts[1].type, "Revenue");
+    ASSERT_EQ(result.accounts[2].type, "Liability");
+
+    TEST_END("ERPNext connector imports chart of accounts");
+}
+
+void test_erpnext_journal_entries_import() {
+    TEST("ERPNext connector imports journal entries");
+
+    ErpNextConnector connector;
+    std::string payload = R"({
+        "data": [
+            {
+                "name": "JV-2024-00015",
+                "posting_date": "2024-01-20",
+                "user_remark": "Monthly office rent",
+                "total_debit": 2500.00,
+                "total_credit": 2500.00,
+                "company_currency": "USD",
+                "accounts": [
+                    {"account": "Rent Expense - ACME", "debit": 2500.00, "credit": 0.0},
+                    {"account": "Main Cash - ACME", "debit": 0.0, "credit": 2500.00}
+                ]
+            },
+            {
+                "name": "JV-2024-00016",
+                "posting_date": "2024-01-22",
+                "user_remark": "Client invoice payment",
+                "accounts": [
+                    {"account": "Main Cash - ACME", "debit": 5000.00, "credit": 0.0},
+                    {"account": "Debtors - ACME", "debit": 0.0, "credit": 5000.00}
+                ]
+            }
+        ]
+    })";
+
+    auto result = connector.import_from_string(payload);
+
+    ASSERT_TRUE(result.success);
+    ASSERT_EQ(result.transactions_imported, (uint64_t)2);
+
+    const auto & tx1 = result.transactions[0];
+    ASSERT_EQ(tx1.external_id, "JV-2024-00015");
+    ASSERT_EQ(tx1.date, "2024-01-20");
+    ASSERT_EQ(tx1.description, "Monthly office rent");
+    ASSERT_EQ(tx1.source_system, "ERPNext");
+    ASSERT_EQ(tx1.currency, "USD");
+    ASSERT_EQ(tx1.lines.size(), (size_t)2);
+    ASSERT_EQ(tx1.lines[0].account_code, "Rent Expense - ACME");
+    ASSERT_NEAR(tx1.lines[0].debit_amount, 2500.0, 0.01);
+    ASSERT_NEAR(tx1.lines[1].credit_amount, 2500.0, 0.01);
+    ASSERT_TRUE(tx1.is_balanced());
+    ASSERT_TRUE(tx1.metadata.find("total_debit") != tx1.metadata.end());
+
+    const auto & tx2 = result.transactions[1];
+    ASSERT_EQ(tx2.external_id, "JV-2024-00016");
+    ASSERT_TRUE(tx2.is_balanced());
+
+    TEST_END("ERPNext connector imports journal entries");
+}
+
+void test_erpnext_malformed_and_mixed() {
+    TEST("ERPNext connector handles malformed and mixed payloads");
+
+    ErpNextConnector connector;
+
+    auto bad = connector.import_from_string("{not valid json");
+    ASSERT_FALSE(bad.success);
+    ASSERT_FALSE(bad.errors.empty());
+
+    // Mixed accounts + journal entries in one payload
+    std::string mixed = R"({
+        "data": [
+            {"name": "Sales - ACME", "account_name": "Sales", "account_type": "Income Account"},
+            {
+                "name": "JV-00001",
+                "posting_date": "2024-02-01",
+                "accounts": [
+                    {"account": "Cash", "debit": 100.0, "credit": 0.0},
+                    {"account": "Sales", "debit": 0.0, "credit": 100.0}
+                ]
+            },
+            {"some_other_doctype": true}
+        ]
+    })";
+    auto result = connector.import_from_string(mixed);
+    ASSERT_TRUE(result.success);
+    ASSERT_EQ(result.accounts_imported, (uint64_t)1);
+    ASSERT_EQ(result.transactions_imported, (uint64_t)1);
+    ASSERT_EQ(result.records_skipped, (uint64_t)1);
+
+    TEST_END("ERPNext connector handles malformed and mixed payloads");
+}
+
+void test_erpnext_api_request_builder() {
+    TEST("ERPNext API request builder constructs token-auth request");
+
+    auto request = ErpNextConnector::build_api_request(
+        "/api/resource/Account", "api-key-1", "api-secret-2", "erp.example.com");
+
+    ASSERT_TRUE(request.find("GET /api/resource/Account HTTP/1.1") != std::string::npos);
+    ASSERT_TRUE(request.find("Host: erp.example.com") != std::string::npos);
+    ASSERT_TRUE(request.find("Authorization: token api-key-1:api-secret-2") != std::string::npos);
+
+    TEST_END("ERPNext API request builder constructs token-auth request");
+}
+
+// ============================================================================
+// GnuCash SQLite Connector Tests
+// ============================================================================
+
 // Minimal in-memory SQLite file builder (test fixture). Writes valid SQLite
 // format-3 pages: page 1 holds sqlite_master, subsequent pages hold one table
 // each as leaf-only b-trees.
@@ -1410,6 +1779,30 @@ int main() {
     test_factory_type_detection();
     test_factory_create_connector();
     test_factory_create_for_file();
+    test_factory_phase_a2_connectors();
+
+    std::cout << "\n--- JSON Parser Tests ---" << std::endl;
+    test_json_parser_basic();
+    test_json_parser_escapes_and_unicode();
+    test_json_parser_errors();
+
+    std::cout << "\n--- Xero Connector Tests ---" << std::endl;
+    test_xero_accounts_import();
+    test_xero_bank_transactions_import();
+    test_xero_malformed_and_empty();
+    test_xero_oauth2_request_builder();
+
+    std::cout << "\n--- ERPNext Connector Tests ---" << std::endl;
+    test_erpnext_accounts_import();
+    test_erpnext_journal_entries_import();
+    test_erpnext_malformed_and_mixed();
+    test_erpnext_api_request_builder();
+
+    std::cout << "\n--- GnuCash SQLite Connector Tests ---" << std::endl;
+    test_sqlite_reader_accounts();
+    test_sqlite_reader_transactions();
+    test_sqlite_reader_malformed_input();
+    test_sqlite_reader_missing_tables();
 
     std::cout << "\n--- Import Result Tests ---" << std::endl;
     test_import_result_summary();
