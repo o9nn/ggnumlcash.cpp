@@ -187,6 +187,19 @@ add_executable(${FLOW_ANALYTICS_TEST_TARGET}
 target_link_libraries(${FLOW_ANALYTICS_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 target_compile_features(${FLOW_ANALYTICS_TEST_TARGET} PRIVATE cxx_std_17)
 
+# Test for regulatory compliance engine (Issue #006 - no model required)
+set(COMPLIANCE_TEST_TARGET test-compliance)
+add_executable(${COMPLIANCE_TEST_TARGET}
+    test-compliance.cpp
+    compliance.cpp
+    audit-trail.cpp
+    transaction-validator.cpp
+    transaction-engine.cpp
+    financial-tensors.cpp
+)
+target_link_libraries(${COMPLIANCE_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${COMPLIANCE_TEST_TARGET} PRIVATE cxx_std_17)
+
 # Test for fraud detection & anomaly detection (Issue #005 Task 5.3 / Phase C.1 - no model required)
 set(FRAUD_TEST_TARGET test-fraud-detection)
 add_executable(${FRAUD_TEST_TARGET}

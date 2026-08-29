@@ -249,7 +249,9 @@ ValidationReport TransactionValidator::validate_all(
     }
     report.intercompany_unreconciled = 0;
     for (const auto & f : intercompany_findings) {
-        if (f.severity != ValidationSeverity::PASS) {
+        if (f.severity == ValidationSeverity::ERROR
+                || f.severity == ValidationSeverity::WARNING
+                || f.severity == ValidationSeverity::CRITICAL) {
             report.intercompany_unreconciled++;
         }
     }
@@ -809,7 +811,8 @@ std::vector<IntercompanyBalance> TransactionValidator::get_intercompany_balances
     struct PairData {
         std::string entity_a;
         std::string entity_b;
-        double net;         // Sum of a's (debits - credits) over pair transactions
+        double net_a;       // Sum of a's (debits - credits) across pair transactions
+        double net_b;       // Sum of b's (debits - credits) across pair transactions
         uint64_t count;
     };
 
@@ -833,7 +836,8 @@ std::vector<IntercompanyBalance> TransactionValidator::get_intercompany_balances
                     pd.entity_a = a->first;
                     pd.entity_b = b->first;
                 }
-                pd.net += a->second;
+                pd.net_a += a->second;
+                pd.net_b += b->second;
                 pd.count++;
             }
         }
@@ -843,7 +847,9 @@ std::vector<IntercompanyBalance> TransactionValidator::get_intercompany_balances
         IntercompanyBalance bal;
         bal.entity_a = kv.second.entity_a;
         bal.entity_b = kv.second.entity_b;
-        bal.net_position = kv.second.net;
+        // Reconciled pairs mirror: a's net should cancel b's net. The
+        // residual |net_a + net_b| is the unreconciled inter-company balance.
+        bal.net_position = kv.second.net_a + kv.second.net_b;
         bal.transaction_count = kv.second.count;
         balances.push_back(bal);
     }
@@ -878,19 +884,20 @@ std::vector<CurrencyConversionRecord> TransactionValidator::extract_currency_con
 
         if (foreign.empty()) continue;
 
-        // The home-currency side equals the residual on either side of the
-        // transaction once the foreign leg's own amount is removed.
+        // The home-currency side is the residual of the whole journal once
+        // the foreign leg's own signed net is removed. For the common case
+        // of a single foreign currency this is exact.
         double total_debits = 0.0;
         double total_credits = 0.0;
         for (const auto & entry : tx.entries) {
             total_debits += entry.debit_amount;
             total_credits += entry.credit_amount;
         }
-        double home_residual = std::max(std::abs(total_debits - total_credits),
-                                        config_.balance_tolerance);
+        double journal_net = total_debits - total_credits;
 
         for (const auto & kv : foreign) {
-            double foreign_amount = std::abs(kv.second.first);
+            double foreign_net = kv.second.first;
+            double foreign_amount = std::abs(foreign_net);
             if (foreign_amount < config_.balance_tolerance) continue;
 
             CurrencyConversionRecord rec;
@@ -899,7 +906,7 @@ std::vector<CurrencyConversionRecord> TransactionValidator::extract_currency_con
             rec.from_currency = kv.first;
             rec.to_currency = home;
             rec.foreign_amount = foreign_amount;
-            rec.home_amount = home_residual;
+            rec.home_amount = std::abs(journal_net - foreign_net);
             rec.implied_rate = rec.home_amount / rec.foreign_amount;
             rec.rate_source = get_rate_source(tx.id);
             rec.date = tx.timestamp.size() >= 10 ? tx.timestamp.substr(0, 10) : tx.timestamp;
