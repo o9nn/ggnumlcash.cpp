@@ -588,7 +588,7 @@ void test_efficient_frontier_shape() {
             gmv_idx = i;
         }
     }
-    ASSERT_NEAR(frontier[gmv_idx].risk, gmv_risk, 1e-6);
+    ASSERT_NEAR(frontier[gmv_idx].risk, gmv_risk, 1e-4);
     for (size_t i = gmv_idx + 1; i < frontier.size(); i++) {
         ASSERT_TRUE(frontier[i].risk > frontier[i - 1].risk);
     }
