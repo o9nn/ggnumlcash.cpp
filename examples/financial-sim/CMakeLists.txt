@@ -149,3 +149,22 @@ add_executable(${PDF_REPORT_TEST_TARGET}
 )
 target_link_libraries(${PDF_REPORT_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 target_compile_features(${PDF_REPORT_TEST_TARGET} PRIVATE cxx_std_17)
+
+# Test for financial tensor kernels (Phase 1, Issue #002 Task 2.1 - no model required)
+set(FIN_TENSORS_TEST_TARGET test-financial-tensors)
+add_executable(${FIN_TENSORS_TEST_TARGET}
+    test-financial-tensors.cpp
+    financial-tensors.cpp
+)
+target_link_libraries(${FIN_TENSORS_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${FIN_TENSORS_TEST_TARGET} PRIVATE cxx_std_17)
+
+# Test for backend selection + memory pool (Issue #002 Tasks 2.2/2.3 - no model required)
+set(FIN_BACKEND_TEST_TARGET test-financial-backend)
+add_executable(${FIN_BACKEND_TEST_TARGET}
+    test-financial-backend.cpp
+    financial-backend.cpp
+    financial-memory-pool.cpp
+)
+target_link_libraries(${FIN_BACKEND_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${FIN_BACKEND_TEST_TARGET} PRIVATE cxx_std_17)
