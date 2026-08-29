@@ -13,6 +13,7 @@
 #include <iomanip>
 #include <fstream>
 #include <algorithm>
+#include <cstdint>
 
 // ============================================================================
 // Multi-Source Financial Data Connector - Phase A.2

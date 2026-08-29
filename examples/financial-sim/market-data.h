@@ -377,6 +377,8 @@ struct HttpResponse {
 
 class HttpResponseParser {
 public:
+    HttpResponseParser();
+
     // Feed raw response bytes; returns true once a complete response is held.
     // Bodies are framed by Content-Length; when no Content-Length header is
     // present the response is header-only (body empty) and completes at the
@@ -551,6 +553,8 @@ class MarketDataBus {
 public:
     using Callback = std::function<void(const MarketDataMessage &)>;
 
+    MarketDataBus() : next_id_(1), published_(0), delivered_(0) {}
+
     // Subscribe to one exact symbol. Returns a subscription id.
     uint64_t subscribe(const std::string & symbol, Callback callback);
 
@@ -575,7 +579,7 @@ private:
         Callback    callback;
     };
 
-    std::mutex               mutex_;
+    mutable std::mutex       mutex_;
     std::vector<Subscription> subscriptions_;
     uint64_t                 next_id_;
     uint64_t                 published_;

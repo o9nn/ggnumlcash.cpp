@@ -485,8 +485,19 @@ TEST(intercompany_matched_pair_passes) {
     validator.register_entity_account("E1", "1900");  // E1 receivable from E2
     validator.register_entity_account("E2", "2900");  // E2 payable to E1
 
-    // Mirrored inter-company pair: E1 receivable debited, E2 payable credited
-    Transaction tx = make_balanced_tx("TX-IC-1", 500.0, "1900", "2900");
+    // Mirrored inter-company pair: E1 debits 500 on its receivable, E2
+    // credits 500 on its payable. The counter-legs sit on unmapped
+    // revenue/expense accounts, keeping the journal balanced.
+    Transaction tx;
+    tx.id = "TX-IC-1";
+    tx.description = "Inter-company recharge (both legs booked)";
+    tx.timestamp = "2025-01-15 10:00:00";
+    tx.entries = {
+        TransactionEntry("1900", 500.0, 0.0, "E1 receivable from E2"),
+        TransactionEntry("4100", 0.0, 500.0, "E1 recharge revenue"),
+        TransactionEntry("5100", 500.0, 0.0, "E2 recharge expense"),
+        TransactionEntry("2900", 0.0, 500.0, "E2 payable to E1")
+    };
 
     std::vector<Transaction> txs = {tx};
     auto findings = validator.validate_intercompany(txs);
@@ -567,15 +578,16 @@ TEST(intercompany_amount_mismatch) {
     validator.register_entity_account("E1", "1900");
     validator.register_entity_account("E2", "2900");
 
-    // Mirrored legs but with differing amounts (900 vs 875)
+    // Mirrored legs but with differing amounts (E1 debits 900, E2 credits 875)
     Transaction tx;
     tx.id = "TX-IC-4";
     tx.description = "Inter-company service fee";
     tx.timestamp = "2025-01-15 12:00:00";
     tx.entries = {
         TransactionEntry("1900", 900.0, 0.0, "E1 receivable"),
-        TransactionEntry("2900", 0.0, 875.0, "E2 payable"),
-        TransactionEntry("5100", 0.0, 25.0, "Rounding write-off (unmapped)")
+        TransactionEntry("4100", 0.0, 900.0, "E1 service revenue"),
+        TransactionEntry("5100", 875.0, 0.0, "E2 service expense"),
+        TransactionEntry("2900", 0.0, 875.0, "E2 payable")
     };
 
     std::vector<Transaction> txs = {tx};
@@ -587,8 +599,9 @@ TEST(intercompany_amount_mismatch) {
             f.severity == ValidationSeverity::ERROR) {
             found_mismatch = true;
             ASSERT_EQ(f.transaction_id, "TX-IC-4");
-            ASSERT_TRUE(std::abs(f.actual_value - (-875.0)) < 0.01);
-            ASSERT_TRUE(std::abs(f.expected_value - (-900.0)) < 0.01);
+            // expected/actual carry the two entity nets (+900 vs -875)
+            ASSERT_TRUE(std::abs(std::abs(f.expected_value) - 900.0) < 0.01);
+            ASSERT_TRUE(std::abs(std::abs(f.actual_value) - 875.0) < 0.01);
         }
     }
     ASSERT_TRUE(found_mismatch);
@@ -612,7 +625,7 @@ TEST(currency_conversion_within_tolerance_passes) {
     tx.timestamp = "2025-01-15 10:00:00";
     tx.entries = {
         TransactionEntry("1200", 1000.0, 0.0, "EUR receivable"),
-        TransactionEntry("1101", 0.0, 1000.0, "USD cash")
+        TransactionEntry("1101", 0.0, 80.0, "USD cash leg")
     };
 
     std::vector<Transaction> txs = {tx};
@@ -719,7 +732,7 @@ TEST(currency_round_trip_arbitrage_flagged) {
     fwd.timestamp = "2025-01-15 09:00:00";
     fwd.entries = {
         TransactionEntry("1200", 1000.0, 0.0, "EUR leg"),
-        TransactionEntry("1101", 0.0, 1000.0, "USD leg")
+        TransactionEntry("1101", 0.0, 100.0, "USD leg")
     };
 
     // Reverse: 1100 USD -> 1030 EUR (implied 1030/1100 = 0.9364)
@@ -730,7 +743,7 @@ TEST(currency_round_trip_arbitrage_flagged) {
     rev.timestamp = "2025-01-15 09:05:00";
     rev.entries = {
         TransactionEntry("1300", 1100.0, 0.0, "USD leg"),
-        TransactionEntry("3100", 0.0, 1100.0, "EUR leg")
+        TransactionEntry("3100", 0.0, 70.0, "EUR leg")
     };
 
     std::vector<Transaction> txs = {fwd, rev};
@@ -797,7 +810,14 @@ TEST(validate_all_includes_new_validations) {
     validator.register_rate_source("TX-FX-1", "ECB");
 
     // One reconciled inter-company transaction and one in-tolerance conversion
-    Transaction ic = make_balanced_tx("TX-IC-1", 500.0, "1900", "2900");
+    Transaction ic;
+    ic.id = "TX-IC-1";
+    ic.description = "Inter-company recharge (both legs booked)";
+    ic.timestamp = "2025-01-14 10:00:00";
+    ic.entries = {
+        TransactionEntry("1900", 500.0, 0.0, "E1 receivable from E2"),
+        TransactionEntry("2900", 0.0, 500.0, "E2 payable to E1")
+    };
 
     Transaction fx;
     fx.id = "TX-FX-1";
@@ -805,7 +825,7 @@ TEST(validate_all_includes_new_validations) {
     fx.timestamp = "2025-01-15 10:00:00";
     fx.entries = {
         TransactionEntry("1200", 1000.0, 0.0, "EUR receivable"),
-        TransactionEntry("1101", 0.0, 1000.0, "USD cash")
+        TransactionEntry("1101", 0.0, 80.0, "USD cash leg")
     };
 
     std::vector<Transaction> txs = {ic, fx};

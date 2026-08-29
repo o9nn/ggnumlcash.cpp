@@ -659,23 +659,27 @@ std::vector<ValidationFinding> TransactionValidator::validate_intercompany(
 
     struct EntityLeg {
         std::string entity;
+        double debits;
+        double credits;
         double net; // debits - credits on this entity's accounts
     };
 
     for (const auto & tx : transactions) {
         // Group entry activity by entity (unmapped accounts are ignored)
-        std::map<std::string, double> entity_net;
+        std::map<std::string, std::pair<double, double>> entity_dc; // entity -> (debits, credits)
         for (const auto & entry : tx.entries) {
             std::string entity = get_account_entity(entry.account_code);
             if (entity.empty()) continue;
-            entity_net[entity] += entry.debit_amount - entry.credit_amount;
+            entity_dc[entity].first += entry.debit_amount;
+            entity_dc[entity].second += entry.credit_amount;
         }
 
-        if (entity_net.size() < 2) continue; // not inter-company
+        if (entity_dc.size() < 2) continue; // not inter-company
 
         std::vector<EntityLeg> legs;
-        for (const auto & kv : entity_net) {
-            legs.push_back({kv.first, kv.second});
+        for (const auto & kv : entity_dc) {
+            legs.push_back({kv.first, kv.second.first, kv.second.second,
+                            kv.second.first - kv.second.second});
         }
 
         auto emit = [&](ValidationSeverity severity, const std::string & desc,
@@ -697,40 +701,52 @@ std::vector<ValidationFinding> TransactionValidator::validate_intercompany(
         if (legs.size() == 2) {
             const EntityLeg & a = legs[0];
             const EntityLeg & b = legs[1];
-            double diff = std::abs(a.net + b.net);
 
-            if (std::abs(a.net) < config_.balance_tolerance
-                    && std::abs(b.net) < config_.balance_tolerance) {
-                // Legs fully offset by non-entity accounts; still a zero-net
-                // inter-company pair, so confirm reconciliation below.
-            } else if (diff < config_.balance_tolerance) {
-                // Mirrored legs offset each other; reconciliation confirmed below.
-            } else {
-                double magnitude = std::max(std::abs(a.net), std::abs(b.net));
+            // A reconciled inter-company transaction mirrors the legs:
+            // one side's debits match the other side's credits, so the
+            // entity nets cancel exactly (a_net + b_net == 0).
+            double net_gap = std::abs(a.net + b.net);
+            double gross = std::max(std::max(a.debits, a.credits),
+                                    std::max(b.debits, b.credits));
 
-                if (diff >= 0.5 * magnitude) {
-                    emit(ValidationSeverity::ERROR,
-                         "Inter-company transaction " + tx.id
-                             + " is missing the offsetting leg on entity '" + b.entity
-                             + "': entity '" + a.entity + "' net " + std::to_string(a.net)
-                             + " is not mirrored by the counterparty entity",
-                         a.entity, b.entity, -a.net, b.net);
-                } else {
-                    emit(ValidationSeverity::ERROR,
-                         "Inter-company amount mismatch in transaction " + tx.id
-                             + ": entity '" + a.entity + "' net " + std::to_string(a.net)
-                             + " vs entity '" + b.entity + "' net " + std::to_string(b.net)
-                             + " (difference " + std::to_string(diff) + ")",
-                         a.entity, b.entity, -a.net, b.net);
-                }
+            if (net_gap < config_.balance_tolerance) {
+                emit(ValidationSeverity::PASS,
+                     "Inter-company transaction " + tx.id + " reconciled between entity '"
+                         + a.entity + "' and entity '" + b.entity + "'",
+                     a.entity, b.entity, 0.0, net_gap);
                 continue;
             }
 
-            // Legs reconcile (zero-net inter-company pair)
-            emit(ValidationSeverity::PASS,
-                 "Inter-company transaction " + tx.id + " reconciled between entity '"
-                     + a.entity + "' and entity '" + b.entity + "'",
-                 a.entity, b.entity, 0.0, a.net + b.net);
+            // Missing counterparty leg: the weaker entity side offsets less
+            // than half of the stronger entity side's flow.
+            double a_flow = a.debits + a.credits;
+            double b_flow = b.debits + b.credits;
+            double strong_flow = std::max(a_flow, b_flow);
+            double weak_flow = std::min(a_flow, b_flow);
+
+            if (weak_flow < 0.5 * strong_flow) {
+                const EntityLeg & dominant = (a_flow >= b_flow) ? a : b;
+                const EntityLeg & other = (a_flow >= b_flow) ? b : a;
+                emit(ValidationSeverity::ERROR,
+                     "Inter-company transaction " + tx.id
+                         + " is missing the offsetting leg on entity '" + other.entity
+                         + "': entity '" + dominant.entity + "' records "
+                         + std::to_string(dominant.debits) + " debits / "
+                         + std::to_string(dominant.credits) + " credits"
+                         + " without a matching counterparty entry",
+                     dominant.entity, other.entity,
+                     dominant.debits + dominant.credits,
+                     other.credits + other.debits);
+                continue;
+            }
+
+            emit(ValidationSeverity::ERROR,
+                 "Inter-company amount mismatch in transaction " + tx.id
+                     + ": entity '" + a.entity + "' net " + std::to_string(a.net)
+                     + " vs entity '" + b.entity + "' net " + std::to_string(b.net)
+                     + " (gap " + std::to_string(net_gap) + " on gross "
+                     + std::to_string(gross) + ")",
+                 a.entity, b.entity, a.net, b.net);
         } else {
             // More than two entities: mirror legs must net to zero overall
             double total_net = 0.0;
@@ -793,7 +809,7 @@ std::vector<IntercompanyBalance> TransactionValidator::get_intercompany_balances
     struct PairData {
         std::string entity_a;
         std::string entity_b;
-        double net;
+        double net;         // Sum of a's (debits - credits) over pair transactions
         uint64_t count;
     };
 
@@ -860,6 +876,19 @@ std::vector<CurrencyConversionRecord> TransactionValidator::extract_currency_con
             }
         }
 
+        if (foreign.empty()) continue;
+
+        // The home-currency side equals the residual on either side of the
+        // transaction once the foreign leg's own amount is removed.
+        double total_debits = 0.0;
+        double total_credits = 0.0;
+        for (const auto & entry : tx.entries) {
+            total_debits += entry.debit_amount;
+            total_credits += entry.credit_amount;
+        }
+        double home_residual = std::max(std::abs(total_debits - total_credits),
+                                        config_.balance_tolerance);
+
         for (const auto & kv : foreign) {
             double foreign_amount = std::abs(kv.second.first);
             if (foreign_amount < config_.balance_tolerance) continue;
@@ -870,11 +899,7 @@ std::vector<CurrencyConversionRecord> TransactionValidator::extract_currency_con
             rec.from_currency = kv.first;
             rec.to_currency = home;
             rec.foreign_amount = foreign_amount;
-
-            double total_debits = 0.0;
-            for (const auto & entry : tx.entries) total_debits += entry.debit_amount;
-            rec.home_amount = std::abs(total_debits - foreign_amount);
-
+            rec.home_amount = home_residual;
             rec.implied_rate = rec.home_amount / rec.foreign_amount;
             rec.rate_source = get_rate_source(tx.id);
             rec.date = tx.timestamp.size() >= 10 ? tx.timestamp.substr(0, 10) : tx.timestamp;

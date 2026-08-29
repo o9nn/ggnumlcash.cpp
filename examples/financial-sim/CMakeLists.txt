@@ -169,6 +169,15 @@ add_executable(${FIN_BACKEND_TEST_TARGET}
 target_link_libraries(${FIN_BACKEND_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 target_compile_features(${FIN_BACKEND_TEST_TARGET} PRIVATE cxx_std_17)
 
+# Test for market data integration (Phase 1, Issue #003 - no model required)
+set(MARKET_DATA_TEST_TARGET test-market-data)
+add_executable(${MARKET_DATA_TEST_TARGET}
+    test-market-data.cpp
+    market-data.cpp
+)
+target_link_libraries(${MARKET_DATA_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${MARKET_DATA_TEST_TARGET} PRIVATE cxx_std_17)
+
 # Test for transaction flow analytics + entity resolution (Phase B.1/B.2 - no model required)
 set(FLOW_ANALYTICS_TEST_TARGET test-flow-analytics)
 add_executable(${FLOW_ANALYTICS_TEST_TARGET}
@@ -177,3 +186,12 @@ add_executable(${FLOW_ANALYTICS_TEST_TARGET}
 )
 target_link_libraries(${FLOW_ANALYTICS_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 target_compile_features(${FLOW_ANALYTICS_TEST_TARGET} PRIVATE cxx_std_17)
+
+# Test for fraud detection & anomaly detection (Issue #005 Task 5.3 / Phase C.1 - no model required)
+set(FRAUD_TEST_TARGET test-fraud-detection)
+add_executable(${FRAUD_TEST_TARGET}
+    test-fraud-detection.cpp
+    fraud-detection.cpp
+)
+target_link_libraries(${FRAUD_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${FRAUD_TEST_TARGET} PRIVATE cxx_std_17)
