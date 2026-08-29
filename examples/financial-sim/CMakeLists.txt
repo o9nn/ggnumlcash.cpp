@@ -168,3 +168,12 @@ add_executable(${FIN_BACKEND_TEST_TARGET}
 )
 target_link_libraries(${FIN_BACKEND_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 target_compile_features(${FIN_BACKEND_TEST_TARGET} PRIVATE cxx_std_17)
+
+# Test for transaction flow analytics + entity resolution (Phase B.1/B.2 - no model required)
+set(FLOW_ANALYTICS_TEST_TARGET test-flow-analytics)
+add_executable(${FLOW_ANALYTICS_TEST_TARGET}
+    test-flow-analytics.cpp
+    flow-analytics.cpp
+)
+target_link_libraries(${FLOW_ANALYTICS_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${FLOW_ANALYTICS_TEST_TARGET} PRIVATE cxx_std_17)

@@ -477,6 +477,367 @@ TEST(empty_transaction_list) {
 }
 
 // ============================================================================
+// Tests: Inter-company Reconciliation
+// ============================================================================
+
+TEST(intercompany_matched_pair_passes) {
+    TransactionValidator validator;
+    validator.register_entity_account("E1", "1900");  // E1 receivable from E2
+    validator.register_entity_account("E2", "2900");  // E2 payable to E1
+
+    // Mirrored inter-company pair: E1 receivable debited, E2 payable credited
+    Transaction tx = make_balanced_tx("TX-IC-1", 500.0, "1900", "2900");
+
+    std::vector<Transaction> txs = {tx};
+    auto findings = validator.validate_intercompany(txs);
+
+    ASSERT_GT(findings.size(), 0u);
+    bool found_pass = false;
+    for (const auto & f : findings) {
+        ASSERT_EQ(f.type, ValidationType::INTERCOMPANY_RECONCILIATION);
+        if (f.severity == ValidationSeverity::PASS) found_pass = true;
+        ASSERT_TRUE(f.severity != ValidationSeverity::ERROR);
+    }
+    ASSERT_TRUE(found_pass);
+
+    // Net inter-company balance should be zero
+    auto balances = validator.get_intercompany_balances(txs);
+    ASSERT_EQ(balances.size(), 1u);
+    ASSERT_TRUE(std::abs(balances[0].net_position) < 0.01);
+    ASSERT_EQ(balances[0].transaction_count, 1u);
+}
+
+TEST(intercompany_missing_counterparty_leg) {
+    TransactionValidator validator;
+    validator.register_entity_account("E1", "1900");  // E1 receivable from E2
+    validator.register_entity_account("E2", "2900");  // E2 payable to E2
+
+    // E1 books its side but the E2 leg goes to an unmapped expense account
+    // instead of the E2 inter-company payable
+    Transaction tx;
+    tx.id = "TX-IC-2";
+    tx.description = "Inter-company recharge";
+    tx.timestamp = "2025-01-15 10:00:00";
+    tx.entries = {
+        TransactionEntry("1900", 800.0, 0.0, "E1 receivable"),
+        TransactionEntry("5100", 0.0, 800.0, "Expense (unmapped)")
+    };
+
+    std::vector<Transaction> txs = {tx};
+    auto findings = validator.validate_intercompany(txs);
+
+    ASSERT_EQ(findings.size(), 0u);  // no inter-company pair formed
+
+    // Now force a cross-entity transaction with no offsetting leg:
+    // E1 receivable debited 800, E2 payable debited 100 (both debits),
+    // balanced by an unmapped account credit.
+    Transaction tx2;
+    tx2.id = "TX-IC-3";
+    tx2.description = "One-sided inter-company booking";
+    tx2.timestamp = "2025-01-15 11:00:00";
+    tx2.entries = {
+        TransactionEntry("1900", 800.0, 0.0, "E1 receivable"),
+        TransactionEntry("2900", 100.0, 0.0, "E2 payable reduced"),
+        TransactionEntry("5100", 0.0, 900.0, "Expense (unmapped)")
+    };
+
+    std::vector<Transaction> txs2 = {tx2};
+    auto findings2 = validator.validate_intercompany(txs2);
+
+    bool found_missing = false;
+    for (const auto & f : findings2) {
+        if (f.type == ValidationType::INTERCOMPANY_RECONCILIATION &&
+            f.severity == ValidationSeverity::ERROR) {
+            found_missing = true;
+            ASSERT_EQ(f.transaction_id, "TX-IC-3");
+            ASSERT_TRUE(f.context.count("entity_a") > 0);
+            ASSERT_TRUE(f.context.count("entity_b") > 0);
+        }
+    }
+    ASSERT_TRUE(found_missing);
+
+    // Net position must be non-zero
+    auto balances = validator.get_intercompany_balances(txs2);
+    ASSERT_EQ(balances.size(), 1u);
+    ASSERT_TRUE(std::abs(balances[0].net_position) > 0.01);
+}
+
+TEST(intercompany_amount_mismatch) {
+    TransactionValidator validator;
+    validator.register_entity_account("E1", "1900");
+    validator.register_entity_account("E2", "2900");
+
+    // Mirrored legs but with differing amounts (900 vs 875)
+    Transaction tx;
+    tx.id = "TX-IC-4";
+    tx.description = "Inter-company service fee";
+    tx.timestamp = "2025-01-15 12:00:00";
+    tx.entries = {
+        TransactionEntry("1900", 900.0, 0.0, "E1 receivable"),
+        TransactionEntry("2900", 0.0, 875.0, "E2 payable"),
+        TransactionEntry("5100", 0.0, 25.0, "Rounding write-off (unmapped)")
+    };
+
+    std::vector<Transaction> txs = {tx};
+    auto findings = validator.validate_intercompany(txs);
+
+    bool found_mismatch = false;
+    for (const auto & f : findings) {
+        if (f.type == ValidationType::INTERCOMPANY_RECONCILIATION &&
+            f.severity == ValidationSeverity::ERROR) {
+            found_mismatch = true;
+            ASSERT_EQ(f.transaction_id, "TX-IC-4");
+            ASSERT_TRUE(std::abs(f.actual_value - (-875.0)) < 0.01);
+            ASSERT_TRUE(std::abs(f.expected_value - (-900.0)) < 0.01);
+        }
+    }
+    ASSERT_TRUE(found_mismatch);
+}
+
+// ============================================================================
+// Tests: Currency Conversion Audit
+// ============================================================================
+
+TEST(currency_conversion_within_tolerance_passes) {
+    TransactionValidator validator;
+    validator.register_transaction_currency("TX-FX-1", "USD");
+    validator.register_account_currency("1200", "EUR");
+    validator.register_exchange_rate("EUR", "USD", "2025-01-15", 1.08, "ECB");
+    validator.register_rate_source("TX-FX-1", "ECB");
+
+    // 1000 EUR converted at ~1.08 -> 1080 USD home side
+    Transaction tx;
+    tx.id = "TX-FX-1";
+    tx.description = "EUR receivable settlement";
+    tx.timestamp = "2025-01-15 10:00:00";
+    tx.entries = {
+        TransactionEntry("1200", 1000.0, 0.0, "EUR receivable"),
+        TransactionEntry("1101", 0.0, 1000.0, "USD cash")
+    };
+
+    std::vector<Transaction> txs = {tx};
+    auto findings = validator.validate_currency_conversion(txs);
+
+    ASSERT_GT(findings.size(), 0u);
+    bool found_pass = false;
+    for (const auto & f : findings) {
+        ASSERT_EQ(f.type, ValidationType::CURRENCY_CONVERSION);
+        if (f.severity == ValidationSeverity::PASS) {
+            found_pass = true;
+            ASSERT_TRUE(std::abs(f.expected_value - 1.08) < 0.0001);
+            ASSERT_TRUE(f.context.count("rate_source") > 0);
+        }
+    }
+    ASSERT_TRUE(found_pass);
+
+    // Extraction sanity check
+    auto records = validator.extract_currency_conversions(txs);
+    ASSERT_EQ(records.size(), 1u);
+    ASSERT_EQ(records[0].from_currency, "EUR");
+    ASSERT_EQ(records[0].to_currency, "USD");
+    ASSERT_TRUE(std::abs(records[0].implied_rate - 1.08) < 0.0001);
+    ASSERT_EQ(records[0].rate_source, "ECB");
+}
+
+TEST(currency_conversion_missing_rate_source) {
+    TransactionValidator validator;
+    validator.register_transaction_currency("TX-FX-2", "USD");
+    validator.register_account_currency("1200", "GBP");
+    // No reference rate registered and no rate source recorded
+
+    Transaction tx;
+    tx.id = "TX-FX-2";
+    tx.description = "GBP settlement without rate source";
+    tx.timestamp = "2025-01-15 10:00:00";
+    tx.entries = {
+        TransactionEntry("1200", 500.0, 0.0, "GBP receivable"),
+        TransactionEntry("1101", 0.0, 500.0, "USD cash")
+    };
+
+    std::vector<Transaction> txs = {tx};
+    auto findings = validator.validate_currency_conversion(txs);
+
+    bool found_missing_source = false;
+    for (const auto & f : findings) {
+        if (f.type == ValidationType::CURRENCY_CONVERSION &&
+            f.severity == ValidationSeverity::WARNING) {
+            found_missing_source = true;
+            ASSERT_EQ(f.transaction_id, "TX-FX-2");
+            ASSERT_TRUE(f.description.find("no recorded rate source") != std::string::npos);
+            ASSERT_TRUE(f.context.at("rate_source").empty());
+        }
+    }
+    ASSERT_TRUE(found_missing_source);
+}
+
+TEST(currency_conversion_beyond_tolerance) {
+    TransactionValidator validator;
+    validator.register_transaction_currency("TX-FX-3", "USD");
+    validator.register_account_currency("1200", "JPY");
+    validator.register_exchange_rate("JPY", "USD", "2025-01-15", 0.0067, "Reuters");
+    validator.register_rate_source("TX-FX-3", "Reuters");
+
+    // 100000 JPY at reference 0.0067 = 670 USD, but books only 600 USD
+    // home side -> implied rate 0.0060, ~10% deviation
+    Transaction tx;
+    tx.id = "TX-FX-3";
+    tx.description = "JPY settlement at stale rate";
+    tx.timestamp = "2025-01-15 10:00:00";
+    tx.entries = {
+        TransactionEntry("1200", 100000.0, 0.0, "JPY receivable"),
+        TransactionEntry("1101", 0.0, 100000.0, "USD cash")
+    };
+
+    std::vector<Transaction> txs = {tx};
+    auto findings = validator.validate_currency_conversion(txs);
+
+    bool found_deviation = false;
+    for (const auto & f : findings) {
+        if (f.type == ValidationType::CURRENCY_CONVERSION &&
+            f.severity == ValidationSeverity::WARNING &&
+            f.description.find("deviates") != std::string::npos) {
+            found_deviation = true;
+            ASSERT_TRUE(f.actual_value < f.expected_value);
+            ASSERT_TRUE(f.context.count("reference_source") > 0);
+            ASSERT_EQ(f.context.at("reference_source"), "Reuters");
+        }
+    }
+    ASSERT_TRUE(found_deviation);
+}
+
+TEST(currency_round_trip_arbitrage_flagged) {
+    TransactionValidator validator;
+    validator.register_transaction_currency("TX-RT-1", "USD");
+    validator.register_transaction_currency("TX-RT-2", "EUR");
+    validator.register_account_currency("1200", "EUR");
+    validator.register_account_currency("1300", "USD");
+
+    // Forward: 1000 EUR -> 1100 USD (implied 1.10)
+    Transaction fwd;
+    fwd.id = "TX-RT-1";
+    fwd.description = "Buy USD with EUR";
+    fwd.timestamp = "2025-01-15 09:00:00";
+    fwd.entries = {
+        TransactionEntry("1200", 1000.0, 0.0, "EUR leg"),
+        TransactionEntry("1101", 0.0, 1000.0, "USD leg")
+    };
+
+    // Reverse: 1100 USD -> 1030 EUR (implied 1030/1100 = 0.9364)
+    // product = 1.10 * 0.9364 = 1.03 -> 3% round-trip gain
+    Transaction rev;
+    rev.id = "TX-RT-2";
+    rev.description = "Sell USD for EUR";
+    rev.timestamp = "2025-01-15 09:05:00";
+    rev.entries = {
+        TransactionEntry("1300", 1100.0, 0.0, "USD leg"),
+        TransactionEntry("3100", 0.0, 1100.0, "EUR leg")
+    };
+
+    std::vector<Transaction> txs = {fwd, rev};
+    auto findings = validator.validate_currency_conversion(txs);
+
+    bool found_arbitrage = false;
+    for (const auto & f : findings) {
+        if (f.type == ValidationType::CURRENCY_CONVERSION &&
+            f.severity == ValidationSeverity::WARNING &&
+            f.description.find("round-trip") != std::string::npos) {
+            found_arbitrage = true;
+            ASSERT_EQ(f.context.at("forward_transaction"), "TX-RT-1");
+            ASSERT_EQ(f.context.at("reverse_transaction"), "TX-RT-2");
+        }
+    }
+    ASSERT_TRUE(found_arbitrage);
+}
+
+// ============================================================================
+// Tests: Validation Type Strings
+// ============================================================================
+
+TEST(validation_type_strings) {
+    ASSERT_EQ(validation_type_to_string(ValidationType::DOUBLE_ENTRY_BALANCE),
+              "DOUBLE_ENTRY_BALANCE");
+    ASSERT_EQ(validation_type_to_string(ValidationType::TRIAL_BALANCE),
+              "TRIAL_BALANCE");
+    ASSERT_EQ(validation_type_to_string(ValidationType::TRANSACTION_GAP),
+              "TRANSACTION_GAP");
+    ASSERT_EQ(validation_type_to_string(ValidationType::DUPLICATE_DETECTION),
+              "DUPLICATE_DETECTION");
+    ASSERT_EQ(validation_type_to_string(ValidationType::CURRENCY_CONVERSION),
+              "CURRENCY_CONVERSION");
+    ASSERT_EQ(validation_type_to_string(ValidationType::HASH_CHAIN_INTEGRITY),
+              "HASH_CHAIN_INTEGRITY");
+    ASSERT_EQ(validation_type_to_string(ValidationType::ACCOUNT_EXISTENCE),
+              "ACCOUNT_EXISTENCE");
+    ASSERT_EQ(validation_type_to_string(ValidationType::SEQUENCE_CONTINUITY),
+              "SEQUENCE_CONTINUITY");
+    ASSERT_EQ(validation_type_to_string(ValidationType::AMOUNT_REASONABLENESS),
+              "AMOUNT_REASONABLENESS");
+    ASSERT_EQ(validation_type_to_string(ValidationType::INTERCOMPANY_RECONCILIATION),
+              "INTERCOMPANY_RECONCILIATION");
+}
+
+TEST(validate_all_includes_new_validations) {
+    TransactionValidator validator;
+    validator.register_entity_account("E1", "1900");
+    validator.register_entity_account("E2", "2900");
+    validator.register_transaction_currency("TX-FX-1", "USD");
+    validator.register_account_currency("1200", "EUR");
+    validator.register_exchange_rate("EUR", "USD", "2025-01-15", 1.08, "ECB");
+    validator.register_rate_source("TX-FX-1", "ECB");
+
+    ValidatorConfig config;
+    config.min_gap_duration = std::chrono::hours(24 * 30);
+    validator.set_config(config);
+    // Re-register after config set
+    validator.register_entity_account("E1", "1900");
+    validator.register_entity_account("E2", "2900");
+    validator.register_transaction_currency("TX-FX-1", "USD");
+    validator.register_account_currency("1200", "EUR");
+    validator.register_exchange_rate("EUR", "USD", "2025-01-15", 1.08, "ECB");
+    validator.register_rate_source("TX-FX-1", "ECB");
+
+    // One reconciled inter-company transaction and one in-tolerance conversion
+    Transaction ic = make_balanced_tx("TX-IC-1", 500.0, "1900", "2900");
+
+    Transaction fx;
+    fx.id = "TX-FX-1";
+    fx.description = "EUR settlement";
+    fx.timestamp = "2025-01-15 10:00:00";
+    fx.entries = {
+        TransactionEntry("1200", 1000.0, 0.0, "EUR receivable"),
+        TransactionEntry("1101", 0.0, 1000.0, "USD cash")
+    };
+
+    std::vector<Transaction> txs = {ic, fx};
+    auto report = validator.validate_all(txs);
+
+    ASSERT_EQ(report.transactions_checked, 2u);
+    ASSERT_FALSE(report.has_errors());
+    ASSERT_EQ(report.intercompany_transactions_checked, 1u);
+    ASSERT_EQ(report.intercompany_unreconciled, 0u);
+    ASSERT_EQ(report.intercompany_balances.size(), 1u);
+    ASSERT_EQ(report.currency_conversions.size(), 1u);
+
+    bool found_ic = false;
+    bool found_fx = false;
+    for (const auto & f : report.findings) {
+        if (f.type == ValidationType::INTERCOMPANY_RECONCILIATION) found_ic = true;
+        if (f.type == ValidationType::CURRENCY_CONVERSION) found_fx = true;
+    }
+    ASSERT_TRUE(found_ic);
+    ASSERT_TRUE(found_fx);
+
+    // Report serialization includes new sections
+    std::string text = report.to_string();
+    ASSERT_TRUE(text.find("Inter-company Balances") != std::string::npos);
+    ASSERT_TRUE(text.find("Currency Conversions") != std::string::npos);
+
+    std::string json = report.to_json();
+    ASSERT_TRUE(json.find("intercompany") != std::string::npos);
+    ASSERT_TRUE(json.find("currency_conversions_found") != std::string::npos);
+}
+
+// ============================================================================
 // Main
 // ============================================================================
 
