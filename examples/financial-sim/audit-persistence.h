@@ -125,6 +125,14 @@ public:
         const std::vector<SignedAuditEntry> & entries,
         const std::string & report_title = "Audit Trail Report") const;
 
+    // Export directly to a self-contained PDF document (Phase A.1).
+    // Renders the structured-text report through the dependency-free PDF
+    // writer so the audit trail can be handed to external auditors as a
+    // portable document. Returns the complete PDF byte stream.
+    std::string export_to_pdf(
+        const std::vector<SignedAuditEntry> & entries,
+        const std::string & report_title = "Audit Trail Report") const;
+
     // ---- Statistics ----
     AuditPersistenceStats get_stats() const;
 

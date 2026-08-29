@@ -125,9 +125,21 @@ add_executable(${DATA_CONNECTOR_TEST_TARGET}
     test-financial-data-connector.cpp
     financial-data-connector.cpp
     transaction-engine.cpp
+    avro-serializer.cpp
 )
 target_link_libraries(${DATA_CONNECTOR_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 target_compile_features(${DATA_CONNECTOR_TEST_TARGET} PRIVATE cxx_std_17)
+
+# Test for Avro serializer (Phase A.2 - no model required)
+set(AVRO_TEST_TARGET test-avro-serializer)
+add_executable(${AVRO_TEST_TARGET}
+    test-avro-serializer.cpp
+    avro-serializer.cpp
+    financial-data-connector.cpp
+    transaction-engine.cpp
+)
+target_link_libraries(${AVRO_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${AVRO_TEST_TARGET} PRIVATE cxx_std_17)
 
 # Test for audit persistence adapter (Phase A.1 DB integration - no model required)
 set(AUDIT_PERSIST_TEST_TARGET test-audit-persistence)
@@ -136,6 +148,85 @@ add_executable(${AUDIT_PERSIST_TEST_TARGET}
     audit-persistence.cpp
     audit-trail.cpp
     transaction-engine.cpp
+    pdf-report.cpp
 )
 target_link_libraries(${AUDIT_PERSIST_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 target_compile_features(${AUDIT_PERSIST_TEST_TARGET} PRIVATE cxx_std_17)
+
+# Test for minimal PDF report writer (Phase A.1 - no model required)
+set(PDF_REPORT_TEST_TARGET test-pdf-report)
+add_executable(${PDF_REPORT_TEST_TARGET}
+    test-pdf-report.cpp
+    pdf-report.cpp
+)
+target_link_libraries(${PDF_REPORT_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${PDF_REPORT_TEST_TARGET} PRIVATE cxx_std_17)
+
+# Test for financial tensor kernels (Phase 1, Issue #002 Task 2.1 - no model required)
+set(FIN_TENSORS_TEST_TARGET test-financial-tensors)
+add_executable(${FIN_TENSORS_TEST_TARGET}
+    test-financial-tensors.cpp
+    financial-tensors.cpp
+)
+target_link_libraries(${FIN_TENSORS_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${FIN_TENSORS_TEST_TARGET} PRIVATE cxx_std_17)
+
+# Test for backend selection + memory pool (Issue #002 Tasks 2.2/2.3 - no model required)
+set(FIN_BACKEND_TEST_TARGET test-financial-backend)
+add_executable(${FIN_BACKEND_TEST_TARGET}
+    test-financial-backend.cpp
+    financial-backend.cpp
+    financial-memory-pool.cpp
+)
+target_link_libraries(${FIN_BACKEND_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${FIN_BACKEND_TEST_TARGET} PRIVATE cxx_std_17)
+
+# Test for market data integration (Phase 1, Issue #003 - no model required)
+set(MARKET_DATA_TEST_TARGET test-market-data)
+add_executable(${MARKET_DATA_TEST_TARGET}
+    test-market-data.cpp
+    market-data.cpp
+)
+target_link_libraries(${MARKET_DATA_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${MARKET_DATA_TEST_TARGET} PRIVATE cxx_std_17)
+
+# Test for transaction flow analytics + entity resolution (Phase B.1/B.2 - no model required)
+set(FLOW_ANALYTICS_TEST_TARGET test-flow-analytics)
+add_executable(${FLOW_ANALYTICS_TEST_TARGET}
+    test-flow-analytics.cpp
+    flow-analytics.cpp
+)
+target_link_libraries(${FLOW_ANALYTICS_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${FLOW_ANALYTICS_TEST_TARGET} PRIVATE cxx_std_17)
+
+# Test for quantitative finance models (Phase 2, Issue #004 - no model required)
+set(QUANT_MODELS_TEST_TARGET test-quant-models)
+add_executable(${QUANT_MODELS_TEST_TARGET}
+    test-quant-models.cpp
+    quant-models.cpp
+    financial-tensors.cpp
+)
+target_link_libraries(${QUANT_MODELS_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${QUANT_MODELS_TEST_TARGET} PRIVATE cxx_std_17)
+
+# Test for regulatory compliance engine (Issue #006 - no model required)
+set(COMPLIANCE_TEST_TARGET test-compliance)
+add_executable(${COMPLIANCE_TEST_TARGET}
+    test-compliance.cpp
+    compliance.cpp
+    audit-trail.cpp
+    transaction-validator.cpp
+    transaction-engine.cpp
+    financial-tensors.cpp
+)
+target_link_libraries(${COMPLIANCE_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${COMPLIANCE_TEST_TARGET} PRIVATE cxx_std_17)
+
+# Test for fraud detection & anomaly detection (Issue #005 Task 5.3 / Phase C.1 - no model required)
+set(FRAUD_TEST_TARGET test-fraud-detection)
+add_executable(${FRAUD_TEST_TARGET}
+    test-fraud-detection.cpp
+    fraud-detection.cpp
+)
+target_link_libraries(${FRAUD_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${FRAUD_TEST_TARGET} PRIVATE cxx_std_17)

@@ -55,6 +55,14 @@
 /tmp/
 /autogen-*.md
 
+# Agent scratch / build-output directories (never commit)
+examples/financial-sim/.a2-build/
+examples/financial-sim/.a3-build/
+examples/financial-sim/.i00*-build/
+examples/financial-sim/.*-build/
+examples/financial-sim/i004/
+examples/financial-sim/probe*
+
 # Deprecated
 
 /main
