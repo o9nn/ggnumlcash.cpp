@@ -293,6 +293,87 @@ TEST(report_explains_every_sediment_token) {
 }
 
 // ============================================================================
+// accospace balance-schedule loader (records/atomese/balances/<RECORD>.csv)
+// ============================================================================
+
+// Seven rows of the JF_CC_4483810003373008 schedule: a credit-card chain whose
+// statement numbers skip (300, 304, 315, 327, 328, 329, 331), so four links are
+// MISSING_WINDOW and two are CONSECUTIVE.  Every statement is internally
+// reconciled.
+static const char * kJfSchedule =
+    "record,entity,account_number,currency,statement,statement_number,statement_date,period_start,period_end,"
+    "opening_balance,closing_balance,total_credits,total_debits,net_change,transactions,internal_check,"
+    "internal_discrepancy,extractor_balance_reconciled,previous_statement,previous_closing,carry_delta,"
+    "carry_check,link_class,placeable,source_folder,source_file\n"
+    "JF,JF,4483810003373008,ZAR,STMT_300,300,2015-03-30,,,-1549.82,-3615.76,1549.82,-3615.76,-2065.94,4,OK,0.00,true,,,,FIRST,,true,d,f\n"
+    "JF,JF,4483810003373008,ZAR,STMT_304,304,2015-07-29,,,-6349.40,-1682.02,6349.40,-1682.02,4667.38,4,OK,0.00,true,STMT_300,-3615.76,-2733.64,BREAK,MISSING_WINDOW,true,d,f\n"
+    "JF,JF,4483810003373008,ZAR,STMT_315,315,2016-06-28,,,-1748.00,-1988.79,1748.00,-1988.79,-240.79,4,OK,0.00,true,STMT_304,-1682.02,-65.98,BREAK,MISSING_WINDOW,true,d,f\n"
+    "JF,JF,4483810003373008,ZAR,STMT_327,327,2017-06-29,,,-1005.10,-10672.21,1005.10,-10672.21,-9667.11,35,OK,0.00,true,STMT_315,-1988.79,983.69,BREAK,MISSING_WINDOW,true,d,f\n"
+    "JF,JF,4483810003373008,ZAR,STMT_328,328,2017-07-28,,,-10672.21,-9285.30,10672.21,-9285.30,1386.91,19,OK,0.00,true,STMT_327,-10672.21,0.00,OK,CONSECUTIVE,true,d,f\n"
+    "JF,JF,4483810003373008,ZAR,STMT_329,329,2017-08-29,,,-9285.30,-1500.00,9285.30,-1500.00,7785.30,2,OK,0.00,true,STMT_328,-9285.30,0.00,OK,CONSECUTIVE,true,d,f\n"
+    "JF,JF,4483810003373008,ZAR,STMT_331,331,2017-10-30,,,-7492.78,-3380.78,7492.78,-3380.78,4112.00,7,OK,0.00,true,STMT_329,-1500.00,-5992.78,BREAK,MISSING_WINDOW,true,d,f\n";
+
+TEST(balance_schedule_parses_accospace_csv) {
+    std::vector<schedule_row> rows = parse_balance_schedule(kJfSchedule);
+    ASSERT_EQ(rows.size(), (size_t) 7);
+    ASSERT_EQ(rows[0].number, 300);
+    ASSERT_EQ(rows[0].opening, -154982);
+    ASSERT_EQ(rows[0].closing, -361576);
+    ASSERT_EQ(rows[0].credits, 154982);
+    ASSERT_EQ(rows[0].debits, 361576);
+    ASSERT_TRUE(rows[0].placeable);
+    ASSERT_EQ(rows[1].link_class, std::string("MISSING_WINDOW"));
+    ASSERT_EQ(rows[4].link_class, std::string("CONSECUTIVE"));
+}
+
+// The credit-card schedule holds negative balances.  add_balance_schedule
+// translates every balance of the account by one constant so that all tokens are
+// non-negative; the residuals are unchanged because both checked identities are
+// translation invariant.
+TEST(balance_schedule_chain_follows_recorded_link_classes) {
+    membrane_reconciler r;
+    int64_t shift = 0;
+    int added = add_balance_schedule(r, "JF", "4483810003373008", kJfSchedule, -1, &shift);
+    ASSERT_EQ(added, 7);
+    ASSERT_EQ(shift, 1067221);               // the lowest balance is -10672.21
+    r.run();
+    const multiset & sed = r.sediment();
+    // no statement is internally out of balance
+    for (int s = 1; s <= 7; ++s) {
+        ASSERT_EQ(count(sed, tok("o", s)) + count(sed, tok("c", s)) + count(sed, tok("z", s)) + count(sed, tok("d", s)), 0);
+    }
+    // the two CONSECUTIVE links (327->328, 328->329) annihilate completely ...
+    ASSERT_EQ(count(sed, "zc{4}"), 0);
+    ASSERT_EQ(count(sed, "oc{5}"), 0);
+    ASSERT_EQ(count(sed, "zc{5}"), 0);
+    ASSERT_EQ(count(sed, "oc{6}"), 0);
+    // ... and the four MISSING_WINDOW links leave both (shifted) copies as sediment
+    ASSERT_EQ(count(sed, "zc{1}"), -361576 + shift);   // 300 closes -3615.76
+    ASSERT_EQ(count(sed, "oc{2}"),  -634940 + shift);  // 304 opens  -6349.40
+    ASSERT_EQ(count(sed, "zc{6}"),  -150000 + shift);  // 329 closes -1500.00
+    ASSERT_EQ(count(sed, "oc{7}"),  -749278 + shift);  // 331 opens  -7492.78
+}
+
+TEST(add_balance_schedule_loads_a_continuous_account) {
+    // A hand-made schedule in the accospace column layout: three consecutive
+    // statements, one unplaced re-extraction, a master closing that agrees.
+    const char * csv =
+        "record,entity,account_number,currency,statement,statement_number,statement_date,period_start,period_end,"
+        "opening_balance,closing_balance,total_credits,total_debits,net_change,transactions,internal_check,"
+        "internal_discrepancy,extractor_balance_reconciled,previous_statement,previous_closing,carry_delta,"
+        "carry_check,link_class,placeable,source_folder,source_file\n"
+        "A,AYM,62012990132,ZAR,S202,202,2019-01-31,2018-12-31,2019-01-31,100.00,89.50,0.00,-10.50,-10.50,1,OK,0.00,true,,,,FIRST,,true,d,f\n"
+        "A,AYM,62012990132,ZAR,S203,203,2019-02-28,2019-01-31,2019-02-28,89.50,339.75,250.25,0.00,250.25,1,OK,0.00,true,S202,89.50,0.00,OK,CONSECUTIVE,true,d,f\n"
+        "A,AYM,62012990132,ZAR,S204,204,2019-03-30,2019-02-28,2019-03-30,339.75,339.75,0.00,0.00,0.00,0,OK,0.00,true,S203,339.75,0.00,OK,CONSECUTIVE,true,d,f\n"
+        "A,AYM,62012990132,ZAR,S900,900,,,,0.00,0.00,0.00,-10.50,-10.50,1,BREAK,-10.50,false,,,,,,false,d,f\n";
+    membrane_reconciler r;
+    int added = add_balance_schedule(r, "AYM", "62012990132", csv, 33975);
+    ASSERT_EQ(added, 3);                     // the unplaced statement 900 is not loaded
+    r.run();
+    ASSERT_TRUE(r.sediment().empty());
+}
+
+// ============================================================================
 // Main
 // ============================================================================
 

@@ -34,7 +34,9 @@
 // ============================================================================
 
 #include <algorithm>
+#include <cmath>
 #include <cstdint>
+#include <cstdlib>
 #include <functional>
 #include <map>
 #include <sstream>
@@ -294,6 +296,12 @@ public:
                 if (mc != master_closing_.end()) {
                     put(acc.contents, tok("mz", acc.index), mc->second);
                     acc.rules.push_back(annihilation(tok("zc", last), tok("mz", acc.index)));
+                } else {
+                    // no inventory balance to check the last closing against: an open end, not a break
+                    evolution_rule drop_last;
+                    drop_last.lhs[tok("zc", last)] = 1;
+                    drop_last.label = "[" + tok("zc", last) + " --> #]";
+                    acc.rules.push_back(drop_last);
                 }
             }
             add_clock_rules(acc, "ka", schedule_.account_clock);
@@ -624,6 +632,156 @@ private:
     bool                                built_ = false;
     int                                 time_  = 0;
 };
+
+// ============================================================================
+// accospace balance-schedule loader
+//
+// `accospace records` writes one CSV per account (records/atomese/balances/
+// <RECORD>.csv) listing every statement with its opening and closing balance,
+// credit and debit totals, placeability and the link class to the previous
+// statement.  This loads such a schedule straight into a reconciler: every
+// placeable statement becomes a statement membrane, and the schedule's own link
+// classes decide the chain pairings (CONSECUTIVE, NIL_WINDOW, NUMBERING_ARTEFACT
+// and BALANCE_BREAK pair; MISSING_WINDOW and DUPLICATE_NUMBER leave both copies
+// unpaired).  Statement numbers are taken from the schedule; an unpaired link is
+// forced by giving the next statement a non-consecutive number.
+// ============================================================================
+
+struct schedule_row {
+    std::string statement;
+    int64_t     number  = -1;
+    int64_t     opening = 0;
+    int64_t     closing = 0;
+    int64_t     credits = 0;
+    int64_t     debits  = 0;
+    bool        placeable = true;
+    std::string link_class;
+};
+
+inline int64_t schedule_cents(const std::string & text) {
+    if (text.empty()) {
+        return 0;
+    }
+    double v = std::strtod(text.c_str(), nullptr);
+    double scaled = std::fabs(v) * 100.0;
+    int64_t q = static_cast<int64_t>(scaled + 0.5);
+    return v < 0 ? -q : q;
+}
+
+inline std::vector<std::string> schedule_split(const std::string & line) {
+    std::vector<std::string> out;
+    std::string cur;
+    bool quoted = false;
+    for (char ch : line) {
+        if (ch == '"') {
+            quoted = !quoted;
+        } else if (ch == ',' && !quoted) {
+            out.push_back(cur);
+            cur.clear();
+        } else if (ch != '\r') {
+            cur += ch;
+        }
+    }
+    out.push_back(cur);
+    return out;
+}
+
+// Parse the CSV text of one accospace balance schedule.  Rows without an
+// opening or closing balance (UNTESTABLE) are dropped.
+inline std::vector<schedule_row> parse_balance_schedule(const std::string & csv) {
+    std::vector<schedule_row> rows;
+    std::istringstream in(csv);
+    std::string line;
+    std::map<std::string, size_t> col;
+    bool header = true;
+    while (std::getline(in, line)) {
+        if (line.empty()) {
+            continue;
+        }
+        std::vector<std::string> f = schedule_split(line);
+        if (header) {
+            for (size_t i = 0; i < f.size(); ++i) {
+                col[f[i]] = i;
+            }
+            header = false;
+            continue;
+        }
+        auto get = [&](const char * name) -> std::string {
+            auto it = col.find(name);
+            return it == col.end() || it->second >= f.size() ? std::string() : f[it->second];
+        };
+        if (get("opening_balance").empty() || get("closing_balance").empty()) {
+            continue;
+        }
+        schedule_row r;
+        r.statement  = get("statement");
+        std::string num = get("statement_number");
+        r.number     = num.empty() ? -1 : std::strtoll(num.c_str(), nullptr, 10);
+        r.opening    = schedule_cents(get("opening_balance"));
+        r.closing    = schedule_cents(get("closing_balance"));
+        r.credits    = std::llabs(schedule_cents(get("total_credits")));
+        r.debits     = std::llabs(schedule_cents(get("total_debits")));
+        r.placeable  = get("placeable") != "false";
+        r.link_class = get("link_class");
+        rows.push_back(r);
+    }
+    return rows;
+}
+
+inline bool schedule_link_pairs(const std::string & link_class) {
+    return link_class == "CONSECUTIVE" || link_class == "NIL_WINDOW" || link_class == "NUMBERING_ARTEFACT" ||
+           link_class == "BALANCE_BREAK";
+}
+
+// Add every placeable statement of a schedule to the reconciler under the given
+// entity and account, using the schedule's link classes for the chain.
+//
+// Negative balances (credit cards, overdrafts) cannot be token counts, so every
+// opening, closing and the master closing of the account are translated by one
+// constant that makes them all non-negative.  Both checked identities are
+// translation invariant (o + c = z + d shifts o and z together; z_s = o_{s+1}
+// shifts both sides), so every residual is unchanged.  The shift applied is
+// returned through `shift_out` when given.
+// Returns the number of statements added.
+inline int add_balance_schedule(membrane_reconciler & r, const std::string & entity, const std::string & account,
+                                const std::string & csv, int64_t master_closing = -1, int64_t * shift_out = nullptr) {
+    std::vector<schedule_row> rows = parse_balance_schedule(csv);
+    int64_t low = master_closing >= 0 ? 0 : master_closing;
+    if (master_closing < 0 && master_closing != -1) {
+        low = master_closing;   // -1 means "no master closing"
+    } else {
+        low = 0;
+    }
+    for (const schedule_row & row : rows) {
+        low = std::min(low, std::min(row.opening, row.closing));
+    }
+    const int64_t shift = low < 0 ? -low : 0;
+    if (shift_out) {
+        *shift_out = shift;
+    }
+    r.add_account(entity, account, master_closing == -1 ? -1 : master_closing + shift);
+    int64_t synthetic = 0;   // renumber so that linkable() follows the recorded link classes
+    int     added = 0;
+    for (size_t i = 0; i < rows.size(); ++i) {
+        const schedule_row & row = rows[i];
+        if (!row.placeable) {
+            continue;   // recorded outside the chain; the P-Lingua export keeps its internal check only
+        }
+        bool pairs = added == 0 || schedule_link_pairs(row.link_class);
+        synthetic += pairs ? 1 : 2;   // a skipped number breaks the pairing
+        statement_spec s;
+        s.entity  = entity;
+        s.account = account;
+        s.number  = synthetic;
+        s.opening = row.opening + shift;
+        s.credits = row.credits;
+        s.debits  = row.debits;
+        s.closing = row.closing + shift;
+        r.add_statement(s);
+        ++added;
+    }
+    return added;
+}
 
 } // namespace membrane
 } // namespace ggnucash
