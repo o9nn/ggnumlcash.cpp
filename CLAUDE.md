@@ -209,6 +209,17 @@ enum llama_vocab_type {
   - ConnectorFactory with auto-detection from file extension
 - **Task A.3** - Transaction Integrity Validator (`transaction-validator.h/.cpp`) - 20 tests passing
 
+### Membrane Reconciler (accospace + isabellex + fincosys finops)
+- `examples/financial-sim/membrane-reconciler.h` (header-only) + `test-membrane-reconciler` (18 tests)
+- The accospace metagraph as nested membranes: ECOSYSTEM > ENTITY > ACCOUNT > STATEMENT
+- Every cent is a token; every check is an annihilation `L, R --> #`; the residual of a
+  membrane is exactly its imbalance (`cogpy/isabellex` `src/HOL/Fin/Fin_Membrane.thy`)
+- All membranes of a kind fire the same rule set in the same step (thread per chunk);
+  reconciled membranes dissolve and the skin's halting multiset is the exception report
+- `add_balance_schedule()` loads an `accospace records` balance schedule CSV (translating negative
+  balances so every token count is non-negative); `to_plingua()` emits the same system for the `ReZorg/plingua` simulator
+  (`examples/finops/`); the generator is `fincosys/accospace` `scripts/export_membrane_psystem.py`
+
 ### Chart of Accounts
 - Header-only design in `examples/financial-sim/`
 - `chart-of-accounts.h` - Core structures
