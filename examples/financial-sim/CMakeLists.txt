@@ -230,3 +230,9 @@ add_executable(${FRAUD_TEST_TARGET}
 )
 target_link_libraries(${FRAUD_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 target_compile_features(${FRAUD_TEST_TARGET} PRIVATE cxx_std_17)
+
+# Test for membrane reconciler (accospace + isabellex + fincosys finops - no model required)
+set(MEMBRANE_TEST_TARGET test-membrane-reconciler)
+add_executable(${MEMBRANE_TEST_TARGET} test-membrane-reconciler.cpp)
+target_link_libraries(${MEMBRANE_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${MEMBRANE_TEST_TARGET} PRIVATE cxx_std_17)
