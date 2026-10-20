@@ -15,6 +15,9 @@ static int parse_u32(const char *text, __u32 *value)
     char *end = NULL;
     unsigned long parsed;
 
+    if (text[0] == '-') {
+        return -1;
+    }
     errno = 0;
     parsed = strtoul(text, &end, 10);
     if (errno || end == text || *end != '\0' || parsed > UINT32_MAX) {
@@ -29,6 +32,9 @@ static int parse_u64(const char *text, __u64 *value)
     char *end = NULL;
     unsigned long long parsed;
 
+    if (text[0] == '-') {
+        return -1;
+    }
     errno = 0;
     parsed = strtoull(text, &end, 10);
     if (errno || end == text || *end != '\0' || parsed == 0) {
@@ -71,7 +77,7 @@ static int submit_transaction(int fd, int argc, char **argv)
 {
     struct ggnucash_submit request = { 0 };
 
-    if (argc != 7 ||
+    if (argc != 8 ||
         parse_u64(argv[3], &request.record.transaction_id) ||
         parse_u32(argv[4], &request.record.debit_account) ||
         parse_u32(argv[5], &request.record.credit_account) ||

@@ -1,4 +1,5 @@
 #include <linux/iopoll.h>
+#include <linux/kref.h>
 #include <linux/miscdevice.h>
 #include <linux/module.h>
 #include <linux/mutex.h>
@@ -13,8 +14,10 @@ struct ggnucash_pci {
     struct pci_dev *pdev;
     void __iomem *bar;
     struct miscdevice misc;
+    struct kref references;
     struct mutex lock;
     char misc_name[32];
+    bool removed;
 };
 
 static const struct pci_device_id ggnucash_pci_ids[] = {
@@ -23,15 +26,20 @@ static const struct pci_device_id ggnucash_pci_ids[] = {
 };
 MODULE_DEVICE_TABLE(pci, ggnucash_pci_ids);
 
+static void ggnucash_release_device(struct kref *references);
+
 static long ggnucash_get_info(struct ggnucash_pci *device, unsigned long arg)
 {
-    struct ggnucash_device_info info = {
-        .abi_version = ioread32(device->bar + GGNUCASH_PCI_REG_ABI_VERSION),
-        .capabilities = ioread32(device->bar + GGNUCASH_PCI_REG_CAPABILITIES),
-        .status = ioread32(device->bar + GGNUCASH_PCI_REG_STATUS),
-        .error = ioread32(device->bar + GGNUCASH_PCI_REG_ERROR),
-        .transaction_count = ioread32(device->bar + GGNUCASH_PCI_REG_TX_COUNT),
-    };
+    struct ggnucash_device_info info;
+
+    if (device->removed) {
+        return -ENODEV;
+    }
+    info.abi_version = ioread32(device->bar + GGNUCASH_PCI_REG_ABI_VERSION);
+    info.capabilities = ioread32(device->bar + GGNUCASH_PCI_REG_CAPABILITIES);
+    info.status = ioread32(device->bar + GGNUCASH_PCI_REG_STATUS);
+    info.error = ioread32(device->bar + GGNUCASH_PCI_REG_ERROR);
+    info.transaction_count = ioread32(device->bar + GGNUCASH_PCI_REG_TX_COUNT);
 
     if (copy_to_user((void __user *) arg, &info, sizeof(info))) {
         return -EFAULT;
@@ -75,6 +83,10 @@ static long ggnucash_submit(struct ggnucash_pci *device, unsigned long arg)
     }
 
     mutex_lock(&device->lock);
+    if (device->removed) {
+        ret = -ENODEV;
+        goto out_unlock;
+    }
     status = ioread32(device->bar + GGNUCASH_PCI_REG_STATUS);
     if (!(status & GGNUCASH_PCI_STATUS_READY) || (status & GGNUCASH_PCI_STATUS_BUSY)) {
         ret = -EBUSY;
@@ -131,17 +143,45 @@ static int ggnucash_open(struct inode *inode, struct file *file)
 {
     struct miscdevice *misc = file->private_data;
     struct ggnucash_pci *device = container_of(misc, struct ggnucash_pci, misc);
+    int ret;
 
+    mutex_lock(&device->lock);
+    if (device->removed) {
+        mutex_unlock(&device->lock);
+        return -ENODEV;
+    }
+    kref_get(&device->references);
+    mutex_unlock(&device->lock);
     file->private_data = device;
-    return nonseekable_open(inode, file);
+    ret = nonseekable_open(inode, file);
+    if (ret) {
+        kref_put(&device->references, ggnucash_release_device);
+    }
+    return ret;
+}
+
+static void ggnucash_release_device(struct kref *references)
+{
+    struct ggnucash_pci *device = container_of(references, struct ggnucash_pci, references);
+
+    kfree(device);
+}
+
+static int ggnucash_release_file(struct inode *inode, struct file *file)
+{
+    struct ggnucash_pci *device = file->private_data;
+
+    kref_put(&device->references, ggnucash_release_device);
+    return 0;
 }
 
 static const struct file_operations ggnucash_fops = {
     .owner = THIS_MODULE,
     .open = ggnucash_open,
+    .release = ggnucash_release_file,
     .unlocked_ioctl = ggnucash_ioctl,
     .compat_ioctl = ggnucash_ioctl,
-    .llseek = no_llseek,
+    .llseek = noop_llseek,
 };
 
 static int ggnucash_probe(struct pci_dev *pdev, const struct pci_device_id *id)
@@ -164,17 +204,18 @@ static int ggnucash_probe(struct pci_dev *pdev, const struct pci_device_id *id)
         goto err_disable;
     }
 
-    device = devm_kzalloc(&pdev->dev, sizeof(*device), GFP_KERNEL);
+    device = kzalloc(sizeof(*device), GFP_KERNEL);
     if (!device) {
         ret = -ENOMEM;
         goto err_release_region;
     }
     device->pdev = pdev;
+    kref_init(&device->references);
     mutex_init(&device->lock);
     device->bar = pci_iomap(pdev, GGNUCASH_PCI_BAR, GGNUCASH_PCI_BAR_SIZE);
     if (!device->bar) {
         ret = -ENOMEM;
-        goto err_release_region;
+        goto err_free_device;
     }
 
     if (ioread32(device->bar + GGNUCASH_PCI_REG_ID) != GGNUCASH_PCI_ID ||
@@ -207,6 +248,8 @@ static int ggnucash_probe(struct pci_dev *pdev, const struct pci_device_id *id)
 
 err_iounmap:
     pci_iounmap(pdev, device->bar);
+err_free_device:
+    kfree(device);
 err_release_region:
     pci_release_region(pdev, GGNUCASH_PCI_BAR);
 err_disable:
@@ -219,9 +262,13 @@ static void ggnucash_remove(struct pci_dev *pdev)
     struct ggnucash_pci *device = pci_get_drvdata(pdev);
 
     misc_deregister(&device->misc);
+    mutex_lock(&device->lock);
+    device->removed = true;
     pci_iounmap(pdev, device->bar);
     pci_release_region(pdev, GGNUCASH_PCI_BAR);
     pci_disable_device(pdev);
+    mutex_unlock(&device->lock);
+    kref_put(&device->references, ggnucash_release_device);
 }
 
 static struct pci_driver ggnucash_driver = {
