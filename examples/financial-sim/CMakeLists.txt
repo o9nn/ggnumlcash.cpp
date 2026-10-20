@@ -35,6 +35,24 @@ add_executable(${VDEV_TEST_TARGET}
 target_link_libraries(${VDEV_TEST_TARGET} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 target_compile_features(${VDEV_TEST_TARGET} PRIVATE cxx_std_17)
 
+# Financial PCI protocol model and ABI tests (no Bochs or kernel headers required)
+set(FINANCIAL_PCI_MODEL_TARGET test-financial-pci-model)
+add_executable(${FINANCIAL_PCI_MODEL_TARGET}
+    bochs/test-financial-pci-model.cpp
+    bochs/financial-pci-model.cpp
+)
+target_include_directories(${FINANCIAL_PCI_MODEL_TARGET} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/bochs
+)
+target_compile_features(${FINANCIAL_PCI_MODEL_TARGET} PRIVATE cxx_std_17)
+
+set(FINANCIAL_PCI_ABI_TARGET test-financial-pci-abi)
+add_executable(${FINANCIAL_PCI_ABI_TARGET} bochs/test-financial-pci-abi.c)
+target_include_directories(${FINANCIAL_PCI_ABI_TARGET} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/bochs
+)
+target_compile_features(${FINANCIAL_PCI_ABI_TARGET} PRIVATE c_std_11)
+
 # Test for financial logic (no model required)
 set(TEST_TARGET test-financial-logic)
 add_executable(${TEST_TARGET} test-financial-logic.cpp)
